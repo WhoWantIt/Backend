@@ -108,7 +108,7 @@ jobs:
                     sudo docker pull ${{ secrets.DOCKER_USERNAME }}/whowantit || exit 1
             # Run the new container
                     sudo docker run -d --name whowantit \
-                    -p 8080:8080 \
+                    -p 8081:8081 \
                     -e DB_URL=database-1.clqwo2gs83ac.ap-northeast-2.rds.amazonaws.com \
                     -e DB_USERNAME=${{ secrets.MYSQL_USER }} \
                     -e DB_PASSWORD=${{ secrets.MYSQL_PW }} \
