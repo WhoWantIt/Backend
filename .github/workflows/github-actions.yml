@@ -95,29 +95,29 @@ jobs:
         if: contains(github.ref, 'dev')
         with:
           host: ${{ secrets.HOST_DEV }} ## EC2 퍼블릭 IPv4 DNS
-          username: ${{ secrets.USERNAME }} # #ubuntu
+          username: ubuntu # #ubuntu
           port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             #           Stop and remove existing container
-                    sudo docker stop checkit || true
-                    sudo docker rm checkit || true
-                    sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/checkit || true
+                    sudo docker stop whowantit || true
+                    sudo docker rm whowantit || true
+                    sudo docker image rm ${{ secrets.DOCKER_USERNAME }}/whowantit || true
             
             # Pull the latest image
-                    sudo docker pull ${{ secrets.DOCKER_USERNAME }}/checkit || exit 1
+                    sudo docker pull ${{ secrets.DOCKER_USERNAME }}/whowantit || exit 1
             # Run the new container
-                    sudo docker run -d --name checkit \
-                    -p 8081:8081 \
-                    -e DB_URL=capDB.cbk6kgck2fjy.ap-northeast-2.rds.amazonaws.com \
+                    sudo docker run -d --name whowantit \
+                    -p 8080:8080 \
+                    -e DB_URL=database-1.clqwo2gs83ac.ap-northeast-2.rds.amazonaws.com \
                     -e DB_USERNAME=${{ secrets.MYSQL_USER }} \
                     -e DB_PASSWORD=${{ secrets.MYSQL_PW }} \
 #                    -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
 #                    -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY}} \
-                    ${{ secrets.DOCKER_USERNAME }}/checkit
+                    ${{ secrets.DOCKER_USERNAME }}/whowantit
             # Clean up unused images
                     sudo docker image prune -f
             # Check logs
-                    sudo docker logs checkit
+                    sudo docker logs whowantit
 
 
