@@ -88,7 +88,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/whowantit:latest
       
 
-      ## deploy to develop
+      ## deploy to develop#
       - name: Deploy to dev
         uses: appleboy/ssh-action@master
         id: deploy-dev
