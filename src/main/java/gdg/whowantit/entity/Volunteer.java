@@ -44,4 +44,7 @@ public class Volunteer extends BaseEntity {
 
     @OneToMany(mappedBy = "volunteer", cascade = CascadeType.ALL)
     private List<VolunteerRelation> volunteerRelations;
+
+    @OneToMany(mappedBy = "volunteer", cascade = CascadeType.ALL)
+    private List<Scrap> scraps;
 }

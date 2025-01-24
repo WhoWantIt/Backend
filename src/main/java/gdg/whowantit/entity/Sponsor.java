@@ -19,6 +19,9 @@ public class Sponsor {
     private User user;
 
     @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
+    private List<Scrap> scraps;
+
+    @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
     private List<VolunteerRelation> volunteerRelations;
 
     @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
