@@ -13,7 +13,7 @@ public class Volunteer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private String volunteerId;
+    private Long volunteerId;
 
     @Enumerated(EnumType.STRING)
     private Field field;

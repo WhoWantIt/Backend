@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Funding {
     @Id
-    private int fundingId;
+    private Long fundingId;
 
     private String content;
 
