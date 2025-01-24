@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 
-public class Funding {
+public class Funding extends BaseEntity {
     @Id
     private Long fundingId;
 
@@ -25,20 +25,6 @@ public class Funding {
 
     private boolean approval;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiary_id")

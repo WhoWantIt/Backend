@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 @Setter
 @Getter
-public class Volunteer {
+public class Volunteer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -37,20 +37,6 @@ public class Volunteer {
 
     private LocalDateTime startTime;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiary_id")
