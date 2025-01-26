@@ -34,4 +34,5 @@ public class SwaggerConfig {
                 .info(info)
                 .components(authComponent());
     }
+
 }
