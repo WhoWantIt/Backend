@@ -10,7 +10,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 카멜 -> 스네이크 표기법 변환
         show_sql: true
         format_sql: true
@@ -18,3 +18,7 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+spring-doc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
