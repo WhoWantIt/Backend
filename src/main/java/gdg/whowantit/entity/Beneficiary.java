@@ -20,7 +20,16 @@ public class Beneficiary {
     private User user;
 
     private String info;
+
     private String image;
+
+    private Long toddler;
+
+    private Long child;
+
+    private Long adolescent;
+
+    private Long youth;
 
     @OneToMany(mappedBy = "beneficiary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>(); //beneficiary와 Post 간의 1:N 관계
