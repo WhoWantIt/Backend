@@ -29,7 +29,7 @@ public class Volunteer extends BaseEntity {
 
     private String attachedImage;
 
-    private boolean approval;
+    private ApprovalStatus approvalStatus;
 
     private Long maxCapacity;
 

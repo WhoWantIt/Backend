@@ -25,7 +25,7 @@ public class Funding extends BaseEntity {
 
     private String attachedImage;
 
-    private boolean approval;
+    private ApprovalStatus approvalStatus;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
