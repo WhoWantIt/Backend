@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sponsors")
 @RequiredArgsConstructor
 @Tag(name = "${swagger.tag.my-sponsor}")
-public class sponsorMyController {
+public class SponsorMyController {
 
 }
