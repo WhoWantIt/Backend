@@ -1,5 +1,6 @@
 package gdg.whowantit.repository;
 
+<<<<<<< HEAD
 import gdg.whowantit.entity.RefreshToken;
 import gdg.whowantit.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
