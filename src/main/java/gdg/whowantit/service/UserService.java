@@ -48,7 +48,7 @@ public class UserService {
             throw new IllegalArgumentException("Invalid email or password");
         }
 
-        String accessToken = tokenService.generateAccessToken(user.getEmail());
+        String accessToken = tokenService.generateAccessToken(user.getEmail(), user.getRole());
         String refreshToken = tokenService.generateRefreshToken(user.getEmail());
 
         return new TokenResponse(accessToken, refreshToken);
