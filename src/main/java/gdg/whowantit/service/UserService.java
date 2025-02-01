@@ -1,4 +1,6 @@
 package gdg.whowantit.service;
+import gdg.whowantit.apiPayload.code.status.ErrorStatus;
+import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.UserConverter;
 import gdg.whowantit.dto.TokenResponse;
 import gdg.whowantit.dto.request.SignInRequestDto;
@@ -12,6 +14,8 @@ import gdg.whowantit.repository.BeneficiaryRepository;
 import gdg.whowantit.repository.SponsorRepository;
 import gdg.whowantit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -52,5 +56,19 @@ public class UserService {
         String refreshToken = tokenService.generateRefreshToken(user.getEmail());
 
         return new TokenResponse(accessToken, refreshToken);
+    }
+
+    public UserResponseDto getMyInfo(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+
+        // Refresh Token 삭제
+        String email = authentication.getName(); // 현재 로그인된 사용자의 이메일
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        return UserConverter.toResponseDto(user);
     }
 }
