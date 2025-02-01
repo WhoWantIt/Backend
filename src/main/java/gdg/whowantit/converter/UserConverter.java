@@ -10,10 +10,7 @@ public class UserConverter {
     // entity -> Dto
     public static UserResponseDto toResponseDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
-        userResponseDto.setId(user.getId());
-        userResponseDto.setName(user.getName());
-        userResponseDto.setEmail(user.getEmail());
-        userResponseDto.setPassword(user.getPassword());
+        BeanUtils.copyProperties(user, userResponseDto);
         return userResponseDto;
     }
 
