@@ -1,5 +1,7 @@
 package gdg.whowantit.controller;
 import gdg.whowantit.apiPayload.ApiResponse;
+import gdg.whowantit.apiPayload.code.status.ErrorStatus;
+import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.dto.TokenResponse;
 import gdg.whowantit.dto.request.SignInRequestDto;
 import gdg.whowantit.dto.request.SignUpRequestDto;
@@ -7,6 +9,7 @@ import gdg.whowantit.dto.response.UserResponseDto;
 import gdg.whowantit.service.TokenService;
 import gdg.whowantit.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +50,21 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.onSuccess(userResponseDto));
     }
 
+
+    @Operation(summary = "access 토큰 갱신", description = "refreshToken을 이용한 accessToken 갱신입니다.")
+    @GetMapping("/tokens/update")
+    public ResponseEntity<ApiResponse<TokenResponse>> refreshToken(HttpServletRequest request) {
+        String refreshToken = (String) request.getAttribute("refreshToken");
+        if (refreshToken == null) {
+            throw new TempHandler(ErrorStatus.TOKEN_NOT_FOUND);
+        }
+
+        System.out.println("UserController.refreshToken");
+        TokenResponse tokenResponse = tokenService.regenerateAccessToken(request);
+        System.out.println("UserController.refreshToken");
+        System.out.println("refreshToken: " + tokenResponse.getAccessToken() + "accessToken: " + tokenResponse.getRefreshToken());
+        return ResponseEntity.ok(ApiResponse.onSuccess(tokenResponse));
+    }
 
 
 
