@@ -11,20 +11,24 @@ import gdg.whowantit.entity.Role;
 import gdg.whowantit.entity.Sponsor;
 import gdg.whowantit.entity.User;
 import gdg.whowantit.repository.BeneficiaryRepository;
+import gdg.whowantit.repository.RefreshTokenRepository;
 import gdg.whowantit.repository.SponsorRepository;
 import gdg.whowantit.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
     private final SponsorRepository sponsorRepository;
     private final BeneficiaryRepository beneficiaryRepository;
     private final TokenService tokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserResponseDto signUp(SignUpRequestDto signUpRequestDto){
         User savedUser = userRepository.save(UserConverter.toUser(signUpRequestDto));
@@ -71,4 +75,20 @@ public class UserService {
 
         return UserConverter.toResponseDto(user);
     }
+
+    public void deleteUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).
+                orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        userRepository.delete(user);
+        refreshTokenRepository.deleteByEmail(email);
+    }
+
+
 }
+
