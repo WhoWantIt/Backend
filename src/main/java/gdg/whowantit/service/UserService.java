@@ -53,7 +53,7 @@ public class UserService {
         }
 
         String accessToken = tokenService.generateAccessToken(user.getEmail(), user.getRole());
-        String refreshToken = tokenService.generateRefreshToken(user.getEmail());
+        String refreshToken = tokenService.generateRefreshToken(user.getEmail(), user.getRole());
 
         return new TokenResponse(accessToken, refreshToken);
     }
