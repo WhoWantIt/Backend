@@ -66,8 +66,12 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.onSuccess(tokenResponse));
     }
 
-
-
+    @Operation(summary = "유저 회원 탈퇴", description = "유저 회원 탈퇴 기능입니다.")
+    @DeleteMapping("")
+    public ResponseEntity<ApiResponse<UserResponseDto>> deleteUser(HttpServletRequest request) {
+        userService.deleteUser();
+        return ResponseEntity.noContent().build();
+    }
 
 
 }
