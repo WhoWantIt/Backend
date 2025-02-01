@@ -40,6 +40,13 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(summary = "개인 정보 조회", description = "유저 개인 정보 조회 입니다.")
+    @GetMapping("/me")
+    public ResponseEntity<ApiResponse<UserResponseDto>> me() {
+        UserResponseDto userResponseDto = userService.getMyInfo();
+        return ResponseEntity.ok(ApiResponse.onSuccess(userResponseDto));
+    }
+
 
 
 
