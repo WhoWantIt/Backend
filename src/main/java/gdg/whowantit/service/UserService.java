@@ -31,6 +31,10 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public UserResponseDto signUp(SignUpRequestDto signUpRequestDto){
+        if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
+            throw new TempHandler(ErrorStatus.EMAIL_ALREADY_EXIST);
+        }
+
         User savedUser = userRepository.save(UserConverter.toUser(signUpRequestDto));
 
         if (savedUser.getRole() == Role.SPONSOR){
@@ -50,10 +54,10 @@ public class UserService {
 
     public TokenResponse signIn(SignInRequestDto signInRequestDto){
         User user = userRepository.findByEmail(signInRequestDto.getEmail())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+                .orElseThrow(() -> new TempHandler(ErrorStatus.LOGIN_ERROR_ID));
 
         if (!user.getPassword().equals(signInRequestDto.getPassword())) {
-            throw new IllegalArgumentException("Invalid email or password");
+            throw new TempHandler(ErrorStatus.LOGIN_ERROR_PW);
         }
 
         String accessToken = tokenService.generateAccessToken(user.getEmail(), user.getRole());
