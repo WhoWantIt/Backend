@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/my")
 @RequiredArgsConstructor
-@Tag(name = "${swagger.tag.my-sponsor}")
+@Tag(name = "${swagger.tag.auth}")
 public class MyController {
     private final MyService myService;
 

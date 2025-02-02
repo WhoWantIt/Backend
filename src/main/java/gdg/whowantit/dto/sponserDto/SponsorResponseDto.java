@@ -3,6 +3,8 @@ package gdg.whowantit.dto.sponserDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 public class SponsorResponseDto {
 
     @Getter
@@ -12,7 +14,23 @@ public class SponsorResponseDto {
         private Long fundingId;
 
 
+    }
 
+    @Getter
+    @Builder
+    public static class volunteerResponse {
+
+        private Long volunteerId;
+
+        private String title;
+
+        private String address;
+
+        private LocalDateTime deadline;
+
+        private Long beneficiaryId;
+
+        private String beneficiaryName;
 
     }
 
