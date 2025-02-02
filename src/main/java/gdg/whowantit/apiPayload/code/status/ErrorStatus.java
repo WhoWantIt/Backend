@@ -15,7 +15,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _FORBIDDEN(HttpStatus.FORBIDDEN, "COMMON403", "금지된 요청입니다."),
     // For test
     TEMP_EXCEPTION(HttpStatus.BAD_REQUEST, "TEMP4001", "이거는 테스트"),
-    LOGIN_ERROR_ID(HttpStatus.BAD_REQUEST, "LOGIN4001", "존재하지 않는 유저입니다"),
+    LOGIN_ERROR_ID(HttpStatus.BAD_REQUEST, "LOGIN4001", "올바르지 않은 이메일입니다."),
     LOGIN_ERROR_PW(HttpStatus.BAD_REQUEST, "LOGIN4002", "올바르지 않은 비밀번호입니다."),
     TOKEN_UNVALID(HttpStatus.UNAUTHORIZED, "TOKEN4001", "유효하지 않은 토큰입니다"),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "TOKEN4002", "토큰이 만료되었습니다"),
@@ -25,6 +25,7 @@ public enum ErrorStatus implements BaseErrorCode {
     TOKEN_UNSUPPORTED_ERROR(HttpStatus.BAD_REQUEST, "TOKEN4007", "변조된 토큰입니다."),
     JSON_PARSING_ERROR(HttpStatus.BAD_REQUEST, "JSON4001", "JSON 파싱이 잘못되었습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4041", "존재하지 않는 유저 정보입니다"),
+    EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4001", "이미 존재하는 유저입니다.")
     ;
 
     private final HttpStatus httpStatus;
