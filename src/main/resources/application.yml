@@ -22,3 +22,17 @@ spring-doc:
   swagger-ui:
     tags-sorter: alpha
     operations-sorter: method
+
+cloud:
+  aws:
+    s3:
+      bucket: whowantitbucket
+      path:
+        picture : picture
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
