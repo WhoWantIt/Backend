@@ -20,19 +20,18 @@ public class MyController {
 
     @GetMapping("/info")
     @Operation(summary="후원자, 수혜자 - 사용자 개인정보 조회 API",
-            description="후원자, 수혜자 - 사용자 개인정보 조회 API",security = {@SecurityRequirement(name="session-token")})
-    public ApiResponse<MyResponseDto.MyResponse> getProfile (/*HttpServletRequest token*/ @RequestParam Long userId){
-        //String accessToken=jwtManager.getToken(token);
-        //MyResponseDto.MyResponse response=myService.getProfile(accessToken);
-        MyResponseDto.MyResponse response=myService.getProfile(userId);
+            description="후원자, 수혜자 - 사용자 개인정보 조회 API")
+    public ApiResponse<MyResponseDto.MyResponse> getProfile (){
+
+        MyResponseDto.MyResponse response=myService.getProfile();
         return ApiResponse.onSuccess(response);
     }
 
     @PutMapping("/info")
     @Operation(summary="후원자, 수혜자 - 사용자 개인정보 수정 API",
-            description="후원자, 수혜자 - 사용자 개인정보 수정 API",security = {@SecurityRequirement(name="session-token")})
-    public ApiResponse<MyResponseDto.MyResponse> updateProfile(@RequestParam Long userId, MyRequestDto.MyRequest request){
-        MyResponseDto.MyResponse response=myService.updateProfile(userId, request);
+            description="후원자, 수혜자 - 사용자 개인정보 수정 API")
+    public ApiResponse<MyResponseDto.MyResponse> updateProfile(MyRequestDto.MyRequest request){
+        MyResponseDto.MyResponse response=myService.updateProfile(request);
         return ApiResponse.onSuccess(response);
     }
 
