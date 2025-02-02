@@ -2,10 +2,13 @@ package gdg.whowantit.service.SponsorService;
 
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
+import gdg.whowantit.converter.FundingRelationConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
+import gdg.whowantit.entity.FundingRelation;
 import gdg.whowantit.entity.User;
 import gdg.whowantit.entity.VolunteerRelation;
+import gdg.whowantit.repository.FundingRelationRepository;
 import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.repository.VolunteerRelationRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +27,7 @@ public class SponsorServiceImpl implements SponsorService{
     private final UserRepository userRepository;
 
     private final VolunteerRelationRepository volunteerRelationRepository;
+    private final FundingRelationRepository fundingRelationRepository;
 
     @Override
     @Transactional
@@ -42,6 +46,26 @@ public class SponsorServiceImpl implements SponsorService{
         return volunteerRelations.stream()
                 .map(VolunteerRelationConverter::toVolunteerResponse)  // 여기서 변환
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<SponsorResponseDto.fundingResponse> getFundingList(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+
+        String email = authentication.getName(); // 현재 로그인된 사용자의 이메일
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findByUserId(user.getId());
+
+        return fundingRelations.stream()
+                .map(FundingRelationConverter::toFundingResponse)  // 여기서 변환
+                .collect(Collectors.toList());
+
     }
 
 }

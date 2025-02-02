@@ -28,6 +28,15 @@ public class SponsorController {
         return ApiResponse.onSuccess(volunteerResponses);
     }
 
+    @GetMapping({"/fundings"})
+    @Operation(summary="후원자 - 후원 내역 리스트 조회 API",
+            description="후원자 - 후원 내역 리스트 조회 API")
+    public ApiResponse<List<SponsorResponseDto.fundingResponse>> getFundingList() {
+        List<SponsorResponseDto.fundingResponse> fundingResponses = sponsorService.getFundingList();
+
+        return ApiResponse.onSuccess(fundingResponses);
+    }
+
 
 
 }

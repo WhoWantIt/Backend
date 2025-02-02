@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface SponsorService {
     List<SponsorResponseDto.volunteerResponse> getVolunteerList();
+    List<SponsorResponseDto.fundingResponse> getFundingList();
 }

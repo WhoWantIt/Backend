@@ -13,6 +13,15 @@ public class SponsorResponseDto {
 
         private Long fundingId;
 
+        private String title;
+
+        private String attachedImage;
+
+        private Long fundingAmount;
+
+        private Long beneficiaryId;
+
+        private String beneficiaryName;
 
     }
 
