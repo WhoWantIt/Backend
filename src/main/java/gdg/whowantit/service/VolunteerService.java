@@ -14,6 +14,7 @@ import gdg.whowantit.repository.VolunteerRelationRepository;
 import gdg.whowantit.repository.VolunteerRepository;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
@@ -100,8 +101,10 @@ public class VolunteerService {
     }
 
     public Page<VolunteerResponseDto> getAllVolunteers(Pageable pageable) {
-        return volunteerRepository
-                .findByApprovalStatus(ApprovalStatus.APPROVED, pageable)
-                .map(VolunteerConverter::convertToVolunteerResponseDto);
+        Page<Volunteer> volunteerPage = volunteerRepository.
+                findByApprovalStatus(ApprovalStatus.APPROVED, pageable);
+
+        return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
+
     }
 }
