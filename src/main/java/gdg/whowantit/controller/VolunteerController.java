@@ -12,8 +12,13 @@ import gdg.whowantit.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/volunteers")
@@ -23,7 +28,7 @@ public class VolunteerController {
 
     @Operation(summary = "자원봉사 공고글 게시", description = "복지시설에서 자원봉사 공고글 게시 요청 기능입니다.")
     @PostMapping("")
-    public ResponseEntity<ApiResponse<VolunteerResponseDto>> postVolunteer(VolunteerRequestDto volunteerRequestDto) {
+    public ResponseEntity<ApiResponse<VolunteerResponseDto>> postVolunteer(@RequestBody VolunteerRequestDto volunteerRequestDto) {
         VolunteerResponseDto volunteerResponseDto =
                 volunteerService.postVolunteer(volunteerRequestDto);
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteerResponseDto));
@@ -43,5 +48,17 @@ public class VolunteerController {
         volunteerService.cancelVolunteerApplication(volunteerId);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "자원봉사 전체 게시글 조회", description = "자원봉사 전체 공고글 조회하는 기능입니다.")
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<Page<VolunteerResponseDto>>> getAllVolunteers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VolunteerResponseDto> volunteers = volunteerService.getAllVolunteers(pageable);
+        return ResponseEntity.ok(ApiResponse.onSuccess(volunteers));
+    }
+
 
 }
