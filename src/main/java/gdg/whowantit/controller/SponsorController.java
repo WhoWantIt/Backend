@@ -22,8 +22,8 @@ public class SponsorController {
     @GetMapping("/volunteers")
     @Operation(summary="후원자 - 봉사 내역 리스트 조회 API",
             description="후원자 - 봉사 내역 리스트 조회 API")
-    public ApiResponse<List<SponsorResponseDto.volunteerResponse>> getVolunteerList() {
-        List<SponsorResponseDto.volunteerResponse> volunteerResponses =sponsorService.getVolunteerList();
+    public ApiResponse<SponsorResponseDto.volunteerListResponse> getVolunteerList() {
+        SponsorResponseDto.volunteerListResponse volunteerResponses =sponsorService.getVolunteerList();
 
         return ApiResponse.onSuccess(volunteerResponses);
     }
@@ -31,8 +31,8 @@ public class SponsorController {
     @GetMapping({"/fundings"})
     @Operation(summary="후원자 - 후원 내역 리스트 조회 API",
             description="후원자 - 후원 내역 리스트 조회 API")
-    public ApiResponse<List<SponsorResponseDto.fundingResponse>> getFundingList() {
-        List<SponsorResponseDto.fundingResponse> fundingResponses = sponsorService.getFundingList();
+    public ApiResponse<SponsorResponseDto.fundingListResponse> getFundingList() {
+        SponsorResponseDto.fundingListResponse fundingResponses = sponsorService.getFundingList();
 
         return ApiResponse.onSuccess(fundingResponses);
     }

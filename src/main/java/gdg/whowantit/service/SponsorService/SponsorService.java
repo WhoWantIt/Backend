@@ -5,6 +5,6 @@ import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import java.util.List;
 
 public interface SponsorService {
-    List<SponsorResponseDto.volunteerResponse> getVolunteerList();
-    List<SponsorResponseDto.fundingResponse> getFundingList();
+    SponsorResponseDto.volunteerListResponse getVolunteerList();
+    SponsorResponseDto.fundingListResponse getFundingList();
 }

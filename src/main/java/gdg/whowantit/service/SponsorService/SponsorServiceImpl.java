@@ -31,7 +31,7 @@ public class SponsorServiceImpl implements SponsorService{
 
     @Override
     @Transactional
-    public List<SponsorResponseDto.volunteerResponse> getVolunteerList(){
+    public SponsorResponseDto.volunteerListResponse getVolunteerList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
@@ -41,16 +41,24 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<VolunteerRelation> volunteerRelations=volunteerRelationRepository.findByUserId(user.getId());
+        List<VolunteerRelation> volunteerRelations=volunteerRelationRepository.findBySponsorId(user.getId());
 
-        return volunteerRelations.stream()
-                .map(VolunteerRelationConverter::toVolunteerResponse)  // 여기서 변환
+        int volunteerListCount =volunteerRelations.size();
+
+        List<SponsorResponseDto.volunteerResponse> volunteerResponses= volunteerRelations.stream()
+                .map(VolunteerRelationConverter::toVolunteerResponse)
                 .collect(Collectors.toList());
+
+        return SponsorResponseDto.volunteerListResponse.builder()
+                .sponsorName(user.getName())
+                .volunteerListCount(volunteerListCount)
+                .volunteerList(volunteerResponses)
+                .build();
     }
 
     @Override
     @Transactional
-    public List<SponsorResponseDto.fundingResponse> getFundingList(){
+    public SponsorResponseDto.fundingListResponse getFundingList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
@@ -60,11 +68,21 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<FundingRelation> fundingRelations=fundingRelationRepository.findByUserId(user.getId());
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findBySponsorId(user.getId());
 
-        return fundingRelations.stream()
-                .map(FundingRelationConverter::toFundingResponse)  // 여기서 변환
+        long totalAmount= fundingRelations.stream()
+                .mapToLong(FundingRelation::getPaymentAmount)
+                .sum();
+
+        List<SponsorResponseDto.fundingResponse> fundingResponses= fundingRelations.stream()
+                .map(FundingRelationConverter::toFundingResponse)
                 .collect(Collectors.toList());
+
+        return SponsorResponseDto.fundingListResponse.builder()
+                .sponsorName(user.getName())
+                .totalAmount(totalAmount)
+                .fundingList(fundingResponses)
+                .build();
 
     }
 

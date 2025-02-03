@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class SponsorResponseDto {
 
@@ -27,6 +28,16 @@ public class SponsorResponseDto {
 
     @Getter
     @Builder
+    public static class fundingListResponse {
+        private String sponsorName;
+
+        private Long totalAmount;
+
+        private List<fundingResponse> fundingList;
+    }
+
+    @Getter
+    @Builder
     public static class volunteerResponse {
 
         private Long volunteerId;
@@ -40,6 +51,17 @@ public class SponsorResponseDto {
         private Long beneficiaryId;
 
         private String beneficiaryName;
+
+    }
+
+    @Getter
+    @Builder
+    public static class volunteerListResponse {
+        private String sponsorName;
+
+        private int volunteerListCount;
+
+        private List<volunteerResponse> volunteerList;
 
     }
 
