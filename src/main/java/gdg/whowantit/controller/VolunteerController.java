@@ -60,5 +60,13 @@ public class VolunteerController {
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteers));
     }
 
+    @Operation(summary = "자원봉사 게시글 상세 조회", description = "후원자가 자원봉사 공고글 상세 조회하는 기능입니다.")
+    @GetMapping("/{volunteerId}")
+    public ResponseEntity<ApiResponse<VolunteerResponseDto>> getVolunteerDetail(@PathVariable Long volunteerId) {
+        VolunteerResponseDto volunteerResponseDto = volunteerService.getVolunteerDetail(volunteerId);
+        return ResponseEntity.ok(ApiResponse.onSuccess(volunteerResponseDto));
+    }
+
+    @Operation(summary = "봉사 신청한 후원자 리스트 조회", description = "복지시설에서 게시한 봉사에 신청한 후원자 리스트들을 조회하는 기능입니다.")
 
 }

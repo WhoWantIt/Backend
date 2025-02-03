@@ -107,4 +107,17 @@ public class VolunteerService {
         return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
 
     }
+
+    public VolunteerResponseDto getVolunteerDetail(Long volunteerId) {
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
+
+        VolunteerResponseDto volunteerResponseDto =
+                VolunteerConverter.convertToVolunteerResponseDto(volunteer);
+
+        volunteerResponseDto.setBeneficiaryId(volunteer.getBeneficiary().getBeneficiaryId());
+        volunteerResponseDto.setNickname(volunteer.getBeneficiary().getUser().getNickname());
+
+        return volunteerResponseDto;
+    }
 }
