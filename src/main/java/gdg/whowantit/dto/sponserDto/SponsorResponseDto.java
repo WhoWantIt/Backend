@@ -46,7 +46,7 @@ public class SponsorResponseDto {
 
         private String address;
 
-        private LocalDateTime deadline;
+        private String dDay;
 
         private Long beneficiaryId;
 
@@ -76,7 +76,7 @@ public class SponsorResponseDto {
 
         private LocalDateTime startTime;
 
-        private LocalDateTime deadline;
+        private String dDay;
 
         private String address;
 
