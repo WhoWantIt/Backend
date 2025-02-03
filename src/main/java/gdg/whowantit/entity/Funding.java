@@ -35,4 +35,7 @@ public class Funding extends BaseEntity {
 
     @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
     private List<FundingRelation> fundingRelations;
+
+    @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
+    private List<FundingScrap> fundingScraps;
 }
