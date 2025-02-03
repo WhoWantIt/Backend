@@ -37,6 +37,15 @@ public class SponsorController {
         return ApiResponse.onSuccess(fundingResponses);
     }
 
+    @GetMapping("/scraps/volunteers")
+    @Operation(summary="후원자 - 스크랩한 봉사 리스트 조회 API",
+            description="후원자 - 스크랩한 봉사 리스트 조회 API")
+    public ApiResponse<List<SponsorResponseDto.scrapedVolunteerResponse>> getScrapedVolunteers(){
+        List<SponsorResponseDto.scrapedVolunteerResponse> scrapedVolunteerResponses = sponsorService.getScrapedVolunteers();
+
+        return ApiResponse.onSuccess(scrapedVolunteerResponses);
+    }
+
 
 
 }

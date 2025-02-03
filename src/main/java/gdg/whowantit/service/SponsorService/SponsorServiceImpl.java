@@ -3,12 +3,15 @@ package gdg.whowantit.service.SponsorService;
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.FundingRelationConverter;
+import gdg.whowantit.converter.ScrapConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.FundingRelation;
+import gdg.whowantit.entity.Scrap;
 import gdg.whowantit.entity.User;
 import gdg.whowantit.entity.VolunteerRelation;
 import gdg.whowantit.repository.FundingRelationRepository;
+import gdg.whowantit.repository.ScrapRepository;
 import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.repository.VolunteerRelationRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class SponsorServiceImpl implements SponsorService{
 
     private final VolunteerRelationRepository volunteerRelationRepository;
     private final FundingRelationRepository fundingRelationRepository;
+    private final ScrapRepository scrapRepository;
 
     @Override
     @Transactional
@@ -84,6 +88,25 @@ public class SponsorServiceImpl implements SponsorService{
                 .fundingList(fundingResponses)
                 .build();
 
+    }
+
+    @Override
+    @Transactional
+    public List<SponsorResponseDto.scrapedVolunteerResponse> getScrapedVolunteers(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+               .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        List<Scrap> scrapList = scrapRepository.findBySponsorId(user.getId());
+
+        return scrapList.stream()
+                .map(ScrapConverter::toScrapedVolunteerResponse)
+                .collect(Collectors.toList());
     }
 
 }

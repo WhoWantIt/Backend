@@ -65,4 +65,26 @@ public class SponsorResponseDto {
 
     }
 
+    @Getter
+    @Builder
+    public static class scrapedVolunteerResponse {
+        private Long volunteerId;
+
+        private Long scrapId;
+
+        private String title;
+
+        private LocalDateTime startTime;
+
+        private LocalDateTime deadline;
+
+        private String address;
+
+        private Long currentCapacity;
+
+        private Long beneficiaryId;
+
+        private String beneficiaryName;
+    }
+
 }

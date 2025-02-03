@@ -7,4 +7,5 @@ import java.util.List;
 public interface SponsorService {
     SponsorResponseDto.volunteerListResponse getVolunteerList();
     SponsorResponseDto.fundingListResponse getFundingList();
+    List<SponsorResponseDto.scrapedVolunteerResponse> getScrapedVolunteers();
 }
