@@ -18,6 +18,8 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+  config:
+    import: optional:file:.env[.properties]
 spring-doc:
   swagger-ui:
     tags-sorter: alpha
