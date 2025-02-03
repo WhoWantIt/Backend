@@ -77,4 +77,22 @@ public class VolunteerService {
         return VolunteerRelationConverter.
                 convertVolunteerRelationToVolunteerResponseDto(volunteerRelation);
     }
+
+    public void cancelVolunteerApplication(Long volunteerId) {
+        String email = SecurityUtil.getCurrentUserEmail();
+
+        User user = userRepository.findByEmail(email).
+                orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId).
+                orElseThrow(()->new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
+
+        VolunteerRelation volunteerRelation = volunteerRelationRepository.findByVolunteerAndSponsor(volunteer, user.getSponsor()).
+                orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_APPLICATION_NOT_FOUND));
+
+
+        volunteerRelationRepository.
+                deleteVolunteerRelationByVolunteerRelationId(volunteerRelation.getVolunteerRelationId());
+
+    }
 }
