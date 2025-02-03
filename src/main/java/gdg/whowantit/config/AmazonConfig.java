@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @Getter
-@PropertySource("classpath:application.yml")
+
 public class AmazonConfig {
     private AWSCredentials awsCredentials;
 
