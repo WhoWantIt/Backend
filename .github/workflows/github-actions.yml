@@ -113,7 +113,7 @@ jobs:
                     -e DB_USERNAME=${{ secrets.MYSQL_USER }} \
                     -e DB_PASSWORD=${{ secrets.MYSQL_PW }} \
                     -e cloud.aws.credentials.accessKey="${{ secrets.AWS_ACCESS_KEY_ID }}" \
-                    -e cloud.aws.credentials.secretKey="${{ secrets.AWS_SECRET_ACCESS_KEY}}" \
+                    -e cloud.aws.credentials.secretKey="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
                     -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
                     ${{ secrets.DOCKER_USERNAME }}/whowantit
             # Clean up unused images

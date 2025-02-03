@@ -18,13 +18,13 @@ import org.springframework.context.annotation.PropertySource;
 
 public class AmazonConfig {
     private AWSCredentials awsCredentials;
-    private final String accessKey;
-    private final String secretKey;
 
-    public AmazonConfig() {
-        this.accessKey = System.getenv("cloud.aws.credentials.accessKey");
-        this.secretKey = System.getenv("cloud.aws.credentials.secretKey");
-    }
+
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
