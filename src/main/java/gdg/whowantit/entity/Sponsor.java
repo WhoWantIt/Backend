@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class Sponsor {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sponsorId;
 
     @OneToOne

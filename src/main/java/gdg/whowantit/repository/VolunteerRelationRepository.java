@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface VolunteerRelationRepository extends JpaRepository<VolunteerRelation, Long> {
-    List<VolunteerRelation> findBySponsorId(Long SponsorId);
+    List<VolunteerRelation> findBySponsor_SponsorId(Long SponsorId);
 }

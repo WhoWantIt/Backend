@@ -28,6 +28,8 @@ public class Funding extends BaseEntity {
 
     private ApprovalStatus approvalStatus;
 
+    private LocalDateTime deadline;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiary_id")

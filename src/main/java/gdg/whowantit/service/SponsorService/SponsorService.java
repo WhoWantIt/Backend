@@ -8,4 +8,5 @@ public interface SponsorService {
     SponsorResponseDto.volunteerListResponse getVolunteerList();
     SponsorResponseDto.fundingListResponse getFundingList();
     List<SponsorResponseDto.scrapedVolunteerResponse> getScrapedVolunteers();
+    List<SponsorResponseDto.scrapedFundingResponse> getScrapedFundings();
 }

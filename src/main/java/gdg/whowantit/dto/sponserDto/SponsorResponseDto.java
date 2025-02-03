@@ -18,6 +18,8 @@ public class SponsorResponseDto {
 
         private String attachedImage;
 
+        private String dDay;
+
         private Long fundingAmount;
 
         private Long beneficiaryId;
@@ -34,6 +36,30 @@ public class SponsorResponseDto {
         private Long totalAmount;
 
         private List<fundingResponse> fundingList;
+    }
+
+    @Getter
+    @Builder
+    public static class scrapedFundingResponse {
+
+        private Long fundingId;
+
+        private Long fundingScrapId;
+
+        private float currentAmount;
+
+        private float targetAmount;
+
+        private String title;
+
+        private String attachedImage;
+
+        private String dDay;
+
+        private Long beneficiaryId;
+
+        private String beneficiaryName;
+
     }
 
     @Getter

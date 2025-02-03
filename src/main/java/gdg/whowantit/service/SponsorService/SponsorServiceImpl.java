@@ -6,14 +6,8 @@ import gdg.whowantit.converter.FundingRelationConverter;
 import gdg.whowantit.converter.ScrapConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
-import gdg.whowantit.entity.FundingRelation;
-import gdg.whowantit.entity.Scrap;
-import gdg.whowantit.entity.User;
-import gdg.whowantit.entity.VolunteerRelation;
-import gdg.whowantit.repository.FundingRelationRepository;
-import gdg.whowantit.repository.ScrapRepository;
-import gdg.whowantit.repository.UserRepository;
-import gdg.whowantit.repository.VolunteerRelationRepository;
+import gdg.whowantit.entity.*;
+import gdg.whowantit.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +26,7 @@ public class SponsorServiceImpl implements SponsorService{
     private final VolunteerRelationRepository volunteerRelationRepository;
     private final FundingRelationRepository fundingRelationRepository;
     private final ScrapRepository scrapRepository;
+    private final FundingScrapRepository fundingScrapRepository;
 
     @Override
     @Transactional
@@ -45,7 +40,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<VolunteerRelation> volunteerRelations=volunteerRelationRepository.findBySponsorId(user.getId());
+        List<VolunteerRelation> volunteerRelations=volunteerRelationRepository.findBySponsor_SponsorId(user.getId());
 
         int volunteerListCount =volunteerRelations.size();
 
@@ -72,7 +67,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<FundingRelation> fundingRelations=fundingRelationRepository.findBySponsorId(user.getId());
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findBySponsor_SponsorId(user.getId());
 
         long totalAmount= fundingRelations.stream()
                 .mapToLong(FundingRelation::getPaymentAmount)
@@ -102,10 +97,29 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Scrap> scrapList = scrapRepository.findBySponsorId(user.getId());
+        List<Scrap> scrapList = scrapRepository.findBySponsor_SponsorId(user.getId());
 
         return scrapList.stream()
                 .map(ScrapConverter::toScrapedVolunteerResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public List<SponsorResponseDto.scrapedFundingResponse> getScrapedFundings(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        List<FundingScrap> scrapList = fundingScrapRepository.findBySponsor_SponsorId(user.getId());
+
+        return scrapList.stream()
+                .map(ScrapConverter::toScrapFundingResponse)
                 .collect(Collectors.toList());
     }
 
