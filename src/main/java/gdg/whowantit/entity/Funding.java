@@ -1,11 +1,12 @@
 package gdg.whowantit.entity;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-
+@Getter
 public class Funding extends BaseEntity {
     @Id
     private Long fundingId;
@@ -27,6 +28,8 @@ public class Funding extends BaseEntity {
 
     private ApprovalStatus approvalStatus;
 
+    private LocalDateTime deadline;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiary_id")
@@ -34,4 +37,7 @@ public class Funding extends BaseEntity {
 
     @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
     private List<FundingRelation> fundingRelations;
+
+    @OneToMany(mappedBy = "funding", cascade = CascadeType.ALL)
+    private List<FundingScrap> fundingScraps;
 }

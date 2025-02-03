@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 public class Sponsor {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sponsorId;
 
     @OneToOne
@@ -26,6 +27,9 @@ public class Sponsor {
 
     @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
     private List<FundingRelation> fundingRelations;
+
+    @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
+    private List<FundingScrap> fundingScraps;
 
     private String image;
 }
