@@ -11,6 +11,8 @@ public class VolunteerRelationConverter {
             (VolunteerRelation volunteerRelation) {
         VolunteerRelationResponseDto volunteerRelationResponseDto = new VolunteerRelationResponseDto();
 
+        volunteerRelationResponseDto.setVolunteerRelationId
+                (volunteerRelation.getVolunteerRelationId());
         volunteerRelationResponseDto.setVolunteerId
                 (volunteerRelation.getVolunteer().getVolunteerId());
         volunteerRelationResponseDto.setBeneficiaryId
