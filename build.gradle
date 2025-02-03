@@ -63,7 +63,6 @@ dependencies {
     implementation 'software.amazon.awssdk:auth:2.20.100'
     implementation 'software.amazon.awssdk:s3:2.20.100'
 
-    implementation 'io.github.cdimascio:dotenv-java:5.2.2'
 
 }
 
