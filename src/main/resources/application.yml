@@ -46,7 +46,7 @@ cloud:
     s3:
       bucket: whowantitbucket
       path:
-        picture : picture
+        picture: picture
     region:
       static: ap-northeast-2
     stack:
@@ -54,3 +54,11 @@ cloud:
     credentials:
       accessKey: ${AWS_ACCESS_KEY_ID}
       secretKey: ${AWS_SECRET_ACCESS_KEY}
+
+jwt:
+  header: Authorization
+  #secret : 별도 문자열을 base64로 암호화한값
+  secret:
+    key: ${JWT_SECRET_KEY}
+  #토큰만료시간(ms)
+  token-validity-in-seconds: 3600
