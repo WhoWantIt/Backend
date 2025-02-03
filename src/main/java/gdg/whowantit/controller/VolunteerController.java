@@ -13,10 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/volunteers")
@@ -40,5 +37,11 @@ public class VolunteerController {
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteerRelationResponseDto));
     }
 
+    @Operation(summary = "자원봉사 지원 취소", description = "자원봉사 공고글에 신청했던 후원자가 다시 신청 취소하는 기능입니다.")
+    @DeleteMapping("/{volunteerId}")
+    public ResponseEntity<ApiResponse<Void>> cancelVolunteerApplication(@PathVariable Long volunteerId) {
+        volunteerService.cancelVolunteerApplication(volunteerId);
+        return ResponseEntity.noContent().build();
+    }
 
 }
