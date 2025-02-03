@@ -7,6 +7,7 @@ import gdg.whowantit.dto.response.VolunteerResponseDto;
 import gdg.whowantit.entity.User;
 import gdg.whowantit.entity.Volunteer;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -23,5 +24,20 @@ public class VolunteerConverter {
         volunteer.setStartTime(LocalDateTime.parse(volunteerRequestDto.getStartTime()));
         volunteer.setDeadline(LocalDateTime.parse(volunteerRequestDto.getDeadline()));
         return volunteer;
+    }
+
+    public static Page<VolunteerResponseDto> convertToVolunteerResponseDtoPage(Page<Volunteer> volunteerPage) {
+        return (volunteerPage.map(volunteer -> {
+            VolunteerResponseDto dto = new VolunteerResponseDto();
+            BeanUtils.copyProperties(volunteer, dto);  // 엔티티 필드 자동 복사
+
+            // 추가 정보 입력
+            if (volunteer.getBeneficiary() != null) {
+                dto.setBeneficiaryId(volunteer.getBeneficiary().getBeneficiaryId());
+                dto.setNickname(volunteer.getBeneficiary().getUser().getNickname());
+            }
+
+            return dto;
+        }));
     }
 }
