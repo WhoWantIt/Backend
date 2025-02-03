@@ -40,6 +40,7 @@ public enum ErrorStatus implements BaseErrorCode {
     VOLUNTEER_ALREADY_CLOSED(HttpStatus.BAD_REQUEST, "VOLUNTEER4002", "이미 마감된 자원봉사 공고입니다."),
     VOLUNTEER_ALREADY_APPLIED(HttpStatus.BAD_REQUEST, "VOLUNTEER4003", "이미 신청한 자원봉사입니다."),
     VOLUNTEER_CAPACITY_FULL(HttpStatus.BAD_REQUEST, "VOLUNTEER4004", "해당 자원봉사는 정원이 초과되었습니다."),
+    VOLUNTEER_APPLICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "VOLUNTEER4005", "해당 자원봉사 신청 내역이 존재하지 않습니다."),
 
     // 관리자 관련 에러
     VOLUNTEER_APPROVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5001", "자원봉사 승인 처리 중 오류가 발생했습니다."),
@@ -47,6 +48,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 기타 에러
     JSON_PARSING_ERROR(HttpStatus.BAD_REQUEST, "JSON4001", "JSON 파싱이 잘못되었습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
