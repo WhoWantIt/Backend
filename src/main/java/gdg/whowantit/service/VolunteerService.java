@@ -7,20 +7,21 @@ import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
-import gdg.whowantit.entity.ApprovalStatus;
-import gdg.whowantit.entity.User;
-import gdg.whowantit.entity.Volunteer;
-import gdg.whowantit.entity.VolunteerRelation;
+import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.BeneficiaryRepository;
 import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.repository.VolunteerRelationRepository;
 import gdg.whowantit.repository.VolunteerRepository;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class VolunteerService {
         volunteer.setBeneficiary(beneficiaryRepository.findByBeneficiaryId(user.getId()).
                 orElseThrow(() -> new TempHandler(ErrorStatus.BENEFICIARY_NOT_FOUND)));
         volunteer.setApprovalStatus(ApprovalStatus.UNDETERMINED);
+        volunteer.setStatus(Status.BEFORE_PROGRESS);
         volunteer.setCurrentCapacity(0L);
 
 
@@ -74,6 +76,7 @@ public class VolunteerService {
         volunteerRelation.setBeneficiary(volunteer.getBeneficiary());
         volunteerRelation.setSponsor(user.getSponsor());
         volunteerRelationRepository.save(volunteerRelation);
+
         return VolunteerRelationConverter.
                 convertVolunteerRelationToVolunteerResponseDto(volunteerRelation);
     }
@@ -94,5 +97,11 @@ public class VolunteerService {
         volunteerRelationRepository.
                 deleteVolunteerRelationByVolunteerRelationId(volunteerRelation.getVolunteerRelationId());
 
+    }
+
+    public Page<VolunteerResponseDto> getAllVolunteers(Pageable pageable) {
+        return volunteerRepository
+                .findByApprovalStatus(ApprovalStatus.APPROVED, pageable)
+                .map(VolunteerConverter::convertToVolunteerResponseDto);
     }
 }
