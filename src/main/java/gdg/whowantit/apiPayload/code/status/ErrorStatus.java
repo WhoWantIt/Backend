@@ -25,7 +25,8 @@ public enum ErrorStatus implements BaseErrorCode {
     TOKEN_UNSUPPORTED_ERROR(HttpStatus.BAD_REQUEST, "TOKEN4007", "변조된 토큰입니다."),
     JSON_PARSING_ERROR(HttpStatus.BAD_REQUEST, "JSON4001", "JSON 파싱이 잘못되었습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "USER4041", "존재하지 않는 유저 정보입니다"),
-    EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4001", "이미 존재하는 유저입니다.")
+    EMAIL_ALREADY_EXIST(HttpStatus.BAD_REQUEST, "USER4001", "이미 존재하는 유저입니다."),
+    BENEFICIARY_NOT_FOUND(HttpStatus.BAD_REQUEST, "BENE4001", "복지시설만 자원봉사 공고글 게시를 할 수 있습니다.")
     ;
 
     private final HttpStatus httpStatus;
