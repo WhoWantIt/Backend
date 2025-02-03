@@ -112,9 +112,9 @@ jobs:
                     -e DB_URL=database-1.clqwo2gs83ac.ap-northeast-2.rds.amazonaws.com \
                     -e DB_USERNAME=${{ secrets.MYSQL_USER }} \
                     -e DB_PASSWORD=${{ secrets.MYSQL_PW }} \
-                    -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-                    -e cloud.aws.credentials.accessKey=${{ secrets.AWS_SECRET_ACCESS_KEY}} \
-                    -e cloud.aws.credentials.secretKey=${{ secrets.JWT_SECRET_KEY }} \
+                    -e cloud.aws.credentials.accessKey=${{ secrets.AWS_ACCESS_KEY_ID }} \
+                    -e cloud.aws.credentials.secretKey=${{ secrets.AWS_SECRET_ACCESS_KEY}} \
+                    -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
                     ${{ secrets.DOCKER_USERNAME }}/whowantit
             # Clean up unused images
                     sudo docker image prune -f
