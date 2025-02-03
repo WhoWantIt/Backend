@@ -29,6 +29,7 @@ public class Volunteer extends BaseEntity {
 
     private String attachedImage;
 
+    @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus;
 
     private Long maxCapacity;
@@ -47,4 +48,5 @@ public class Volunteer extends BaseEntity {
 
     @OneToMany(mappedBy = "volunteer", cascade = CascadeType.ALL)
     private List<Scrap> scraps;
+
 }
