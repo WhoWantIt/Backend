@@ -88,4 +88,31 @@ public class BeneficiaryResponseDto {
 
     }
 
+    @Getter
+    @Builder
+    public static class profileResponse {
+
+        private Long beneficiaryId;
+
+        private String beneficiaryName;
+
+        private String image;
+
+        private String email;
+
+        private String phoneNumber;
+
+        private String address;
+
+        private String info;
+
+        private Long toddler;
+
+        private Long child;
+
+        private Long adolescent;
+
+        private Long youth;
+    }
+
 }

@@ -3,17 +3,16 @@ package gdg.whowantit.service.BeneficiaryService;
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.*;
+import gdg.whowantit.dto.beneficiaryDto.BeneficiaryRequestDto;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.*;
-import gdg.whowantit.repository.FundingRepository;
-import gdg.whowantit.repository.PostRepository;
-import gdg.whowantit.repository.UserRepository;
-import gdg.whowantit.repository.VolunteerRepository;
+import gdg.whowantit.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +24,10 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
     private final FundingRepository fundingRepository;
     private final VolunteerRepository volunteerRepository;
     private final PostRepository postRepository;
+    private final BeneficiaryRepository beneficiaryRepository;
 
+    @Override
+    @Transactional
     public BeneficiaryResponseDto.fundingListResponse getFundingList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
@@ -51,6 +53,8 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
                 .build();
     }
 
+    @Override
+    @Transactional
     public BeneficiaryResponseDto.volunteerListResponse getVolunteerList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
@@ -75,6 +79,8 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
                 .build();
     }
 
+    @Override
+    @Transactional
     public BeneficiaryResponseDto.postListResponse getPostList(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
@@ -97,6 +103,47 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
                 .postListCount(postListCount)
                 .postList(postResponses)
                 .build();
+    }
+
+    @Override
+    @Transactional
+    public BeneficiaryResponseDto.profileResponse getProfile(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Beneficiary beneficiary=beneficiaryRepository.findById(user.getId())
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        return BeneficiaryConverter.toBeneficiaryResponse(beneficiary);
+    }
+
+    @Override
+    @Transactional
+    public BeneficiaryResponseDto.profileResponse updateProfile(BeneficiaryRequestDto.profileRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
+            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
+        }
+
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Beneficiary beneficiary=beneficiaryRepository.findById(user.getId())
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        beneficiary.setInfo(request.getInfo());
+        beneficiary.setToddler(request.getToddler());
+        beneficiary.setChild(request.getChild());
+        beneficiary.setAdolescent(request.getAdolescent());
+        beneficiary.setYouth(request.getYouth());
+
+        return BeneficiaryConverter.toBeneficiaryResponse(beneficiaryRepository.save(beneficiary));
+
     }
 }
 
