@@ -19,7 +19,7 @@ public class BeneficiaryResponseDto {
 
         private String dDay;
 
-        private Long attainmentPercent;
+        private double attainmentPercent;
 
         private Long beneficiaryId;
 
@@ -34,7 +34,7 @@ public class BeneficiaryResponseDto {
 
         private int listCount;
 
-        private List<SponsorResponseDto.fundingResponse> fundingList;
+        private List<BeneficiaryResponseDto.fundingResponse> fundingList;
     }
     @Getter
     @Builder
@@ -60,7 +60,7 @@ public class BeneficiaryResponseDto {
 
         private int volunteerListCount;
 
-        private List<SponsorResponseDto.volunteerResponse> volunteerList;
+        private List<BeneficiaryResponseDto.volunteerResponse> volunteerList;
 
     }
 
@@ -76,6 +76,16 @@ public class BeneficiaryResponseDto {
         private String beneficiaryName;
 
         private boolean isVerified;
+    }
+
+    @Getter
+    @Builder
+    public static class postListResponse {
+
+        private int postListCount;
+
+        private List<BeneficiaryResponseDto.postResponse> postList;
+
     }
 
 }
