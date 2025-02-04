@@ -46,12 +46,8 @@ public class AmazonConfig {
 
     @Bean
     public AmazonS3 amazonS3() {
-        String accessKey = System.getenv("AWS_ACCESS_KEY_ID");
-        String secretKey = System.getenv("AWS_SECRET_ACCESS_KEY");
+        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
 
-        if (accessKey == null || secretKey == null) {
-            throw new IllegalArgumentException("AWS Access Key 또는 Secret Key가 설정되지 않았습니다!");
-        }
         return AmazonS3ClientBuilder.standard()
                 .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
