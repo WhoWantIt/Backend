@@ -36,12 +36,11 @@ public class AmazonConfig {
 
     @PostConstruct
     public void init() {
+        //AWS 자격 증명 생성
+        this.awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         if (accessKey == null || secretKey == null || accessKey.isEmpty() || secretKey.isEmpty()) {
             throw new IllegalArgumentException(" AWS Access Key 또는 Secret Key가 설정되지 않았습니다!");
         }
-
-        //AWS 자격 증명 생성
-        this.awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
     }
 
     @Bean
