@@ -28,7 +28,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
 
     @Override
     @Transactional
-    public BeneficiaryResponseDto.fundingListResponse getFundingList(){
+    public BeneficiaryResponseDto.fundingListResponse getFundingList(Long beneficiaryId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
@@ -38,7 +38,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundings=fundingRepository.findByBeneficiary_beneficiaryId(user.getId());
+        List<Funding> fundings=fundingRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
 
         int listCount= fundings.size();
 
@@ -55,17 +55,13 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
 
     @Override
     @Transactional
-    public BeneficiaryResponseDto.volunteerListResponse getVolunteerList(){
+    public BeneficiaryResponseDto.volunteerListResponse getVolunteerList(Long beneficiaryId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
         }
 
-        String email = authentication.getName(); // 현재 로그인된 사용자의 이메일
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-
-        List<Volunteer> volunteers=volunteerRepository.findByBeneficiary_beneficiaryId(user.getId());
+        List<Volunteer> volunteers=volunteerRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
 
         int volunteerListCount =volunteers.size();
 
@@ -81,17 +77,13 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
 
     @Override
     @Transactional
-    public BeneficiaryResponseDto.postListResponse getPostList(){
+    public BeneficiaryResponseDto.postListResponse getPostList(Long beneficiaryId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
         }
 
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-
-        List<Post> posts=postRepository.findByBeneficiary_beneficiaryId(user.getId());
+        List<Post> posts=postRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
 
         int postListCount = posts.size();
 
@@ -107,17 +99,13 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
 
     @Override
     @Transactional
-    public BeneficiaryResponseDto.profileResponse getProfile(){
+    public BeneficiaryResponseDto.profileResponse getProfile(Long beneficiaryId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
             throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
         }
 
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-
-        Beneficiary beneficiary=beneficiaryRepository.findById(user.getId())
+        Beneficiary beneficiary=beneficiaryRepository.findById(beneficiaryId)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
         return BeneficiaryConverter.toBeneficiaryResponse(beneficiary);
     }
@@ -133,8 +121,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-        Beneficiary beneficiary=beneficiaryRepository.findById(user.getId())
-                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Beneficiary beneficiary=beneficiaryRepository.findByBeneficiaryId(user.getId());
 
         beneficiary.setInfo(request.getInfo());
         beneficiary.setToddler(request.getToddler());

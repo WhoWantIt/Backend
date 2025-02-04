@@ -4,9 +4,9 @@ import gdg.whowantit.dto.beneficiaryDto.BeneficiaryRequestDto;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 
 public interface BeneficiaryService {
-    BeneficiaryResponseDto.fundingListResponse getFundingList();
-    BeneficiaryResponseDto.volunteerListResponse getVolunteerList();
-    BeneficiaryResponseDto.postListResponse getPostList();
-    BeneficiaryResponseDto.profileResponse getProfile();
+    BeneficiaryResponseDto.fundingListResponse getFundingList(Long beneficiaryId);
+    BeneficiaryResponseDto.volunteerListResponse getVolunteerList(Long beneficiaryId);
+    BeneficiaryResponseDto.postListResponse getPostList(Long beneficiaryId);
+    BeneficiaryResponseDto.profileResponse getProfile(Long beneficiaryId);
     BeneficiaryResponseDto.profileResponse updateProfile(BeneficiaryRequestDto.profileRequest request);
 }

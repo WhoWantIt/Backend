@@ -26,6 +26,7 @@ public class Funding extends BaseEntity {
 
     private String attachedImage;
 
+    @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus;
 
     private LocalDateTime deadline;
