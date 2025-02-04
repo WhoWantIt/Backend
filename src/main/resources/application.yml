@@ -19,6 +19,10 @@ spring:
           auto: update
         default_batch_fetch_size: 1000
 
+server:
+  port: 8080
+  address: 0.0.0.0
+
 spring-doc:
   swagger-ui:
     tags-sorter: alpha
