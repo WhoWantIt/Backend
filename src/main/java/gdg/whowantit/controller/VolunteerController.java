@@ -3,6 +3,7 @@ package gdg.whowantit.controller;
 import gdg.whowantit.apiPayload.ApiResponse;
 import gdg.whowantit.converter.VolunteerConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
+import gdg.whowantit.dto.ScrapDto.ScrapResponseDto;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
 import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
@@ -105,7 +106,7 @@ public class VolunteerController {
     }
 
     @Operation(summary = "봉사 신청한 후원자 리스트 조회", description = "해당 복지시설의 자원봉사 공고글에 신청한 후원자 리스트 조회 기능입니다.")
-    @GetMapping("/{volunteerId}/sponsors")
+    @GetMapping("/sponsors/{volunteerId}")
     public ResponseEntity<ApiResponse<Page<VolunteerAppliedSponsorsDto>>> getSponsorsByVolunteerId
             (@PathVariable Long volunteerId,
              @RequestParam(defaultValue = "0") int page,
@@ -118,4 +119,14 @@ public class VolunteerController {
 
         return ResponseEntity.ok(ApiResponse.onSuccess(sponsorsDtos));
     }
+
+    @Operation(summary = "자원봉사 스크랩하기", description = "해당 자원봉사 공고를 스크랩합니다.")
+    @PostMapping("/scraps/{volunteerId}")
+    public ResponseEntity<ApiResponse<ScrapResponseDto>> scrapVolunteer
+            (@PathVariable Long volunteerId) {
+
+        ScrapResponseDto scrapResponseDto = volunteerService.scrapVolunteer(volunteerId);
+        return ResponseEntity.ok(ApiResponse.onSuccess(scrapResponseDto));
+    }
+
 }
