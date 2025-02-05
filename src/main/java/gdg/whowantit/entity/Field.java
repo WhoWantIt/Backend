@@ -1,5 +1,5 @@
 package gdg.whowantit.entity;
 
 public enum Field {
-    EDUCATION, HEALTH, ENVIRONMENT
+    EDUCATION, HEALTH, ENVIRONMENT, LIVING_SUPPORT
 }
