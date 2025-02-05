@@ -2,16 +2,15 @@ package gdg.whowantit.service;
 
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
+import gdg.whowantit.converter.SponsorConverter;
 import gdg.whowantit.converter.VolunteerConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
+import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
 import gdg.whowantit.entity.*;
-import gdg.whowantit.repository.BeneficiaryRepository;
-import gdg.whowantit.repository.UserRepository;
-import gdg.whowantit.repository.VolunteerRelationRepository;
-import gdg.whowantit.repository.VolunteerRepository;
+import gdg.whowantit.repository.*;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +31,8 @@ public class VolunteerService {
     private final UserRepository userRepository;
     private final BeneficiaryRepository beneficiaryRepository;
     private final VolunteerRelationRepository volunteerRelationRepository;
+    private final SponsorRepository sponsorRepository;
+
     public VolunteerResponseDto postVolunteer(VolunteerRequestDto volunteerRequestDto) {
 
         String email = SecurityUtil.getCurrentUserEmail(); // 현재 로그인된 사용자의 이메일
@@ -134,5 +135,10 @@ public class VolunteerService {
         Page<Volunteer> volunteerPage = volunteerRepository.findVolunteerByField(field, pageable);
 
         return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
+    }
+
+    public Page<VolunteerAppliedSponsorsDto> getSponsorsByVolunteerId(Long volunteerId, Pageable pageable) {
+        Page<Sponsor> sponsors = sponsorRepository.findByVolunteerId(volunteerId, pageable);
+        return SponsorConverter.convertToSponsorResponseDtoPage(sponsors);
     }
 }
