@@ -167,4 +167,21 @@ public class VolunteerService {
 
     }
 
+    public void cancelScrapVolunteer(Long volunteerId) {
+        String email = SecurityUtil.getCurrentUserEmail();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
+
+        if (scrapRepository.existsBySponsor_SponsorIdAndVolunteer_VolunteerId(user.getId(), volunteerId)) {
+            scrapRepository.deleteBySponsor_SponsorIdAndVolunteer_VolunteerId(user.getId(), volunteerId);
+        } else {
+            throw new TempHandler(ErrorStatus.VOLUNTEER_APPLICATION_NOT_FOUND);
+        }
+
+    }
+
 }
