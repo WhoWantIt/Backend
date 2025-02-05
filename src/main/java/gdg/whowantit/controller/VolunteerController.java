@@ -6,6 +6,7 @@ import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
+import gdg.whowantit.entity.Field;
 import gdg.whowantit.entity.Volunteer;
 import gdg.whowantit.entity.VolunteerRelation;
 import gdg.whowantit.service.VolunteerService;
@@ -77,7 +78,7 @@ public class VolunteerController {
                     "ex) 서울시 전체인 경우 city에만 서울시 넣고 district는 첨부 X" +
                     "서울시 도봉산구의 경우 city에 서울시 넣고 district에 도봉산구")
     @GetMapping("/regions")
-    public ResponseEntity<ApiResponse<Page<VolunteerResponseDto>>> getVolunteersByCategory
+    public ResponseEntity<ApiResponse<Page<VolunteerResponseDto>>> getAddressFilteredVolunteers
             (@RequestParam @Nullable String city,
              @RequestParam @Nullable String district,
              @RequestParam(defaultValue = "0") int page,
@@ -85,10 +86,21 @@ public class VolunteerController {
 
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<VolunteerResponseDto> volunteers = volunteerService.getAdressFilteredVolunteers(city, district, pageable);
+        Page<VolunteerResponseDto> volunteers = volunteerService.getAddressFilteredVolunteers(city, district, pageable);
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteers));
     }
 
+    @Operation(summary = "분야별 봉사 리스트 조회", description = "후원자가 분야별로 봉사 리스트를 조회하는 기능입니다.")
+    @GetMapping("/fields")
+    public ResponseEntity<ApiResponse<Page<VolunteerResponseDto>>> getVolunteersByField
+            (@RequestParam Field field,
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size){
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VolunteerResponseDto> volunteers = volunteerService.getVolunteerByField(field, pageable);
+        return ResponseEntity.ok(ApiResponse.onSuccess(volunteers));
 
 
+    }
 }
