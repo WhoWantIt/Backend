@@ -10,6 +10,8 @@ import gdg.whowantit.entity.Volunteer;
 import gdg.whowantit.entity.VolunteerRelation;
 import gdg.whowantit.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
@@ -23,6 +25,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/volunteers")
 @RequiredArgsConstructor
+@Tag(name = "${swagger.tag.volunteer-sponsor}")
+
+
 public class VolunteerController {
     private final VolunteerService volunteerService;
 
@@ -67,6 +72,23 @@ public class VolunteerController {
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteerResponseDto));
     }
 
-    @Operation(summary = "봉사 신청한 후원자 리스트 조회", description = "복지시설에서 게시한 봉사에 신청한 후원자 리스트들을 조회하는 기능입니다.")
+    @Operation(summary = "지역별 봉사 리스트 조회",
+            description = "후원자가 지역별로 봉사 리스트를 조회하는 기능입니다." +
+                    "ex) 서울시 전체인 경우 city에만 서울시 넣고 district는 첨부 X" +
+                    "서울시 도봉산구의 경우 city에 서울시 넣고 district에 도봉산구")
+    @GetMapping("/regions")
+    public ResponseEntity<ApiResponse<Page<VolunteerResponseDto>>> getVolunteersByCategory
+            (@RequestParam @Nullable String city,
+             @RequestParam @Nullable String district,
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size) {
+
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VolunteerResponseDto> volunteers = volunteerService.getAdressFilteredVolunteers(city, district, pageable);
+        return ResponseEntity.ok(ApiResponse.onSuccess(volunteers));
+    }
+
+
 
 }
