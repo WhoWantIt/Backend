@@ -25,4 +25,6 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
             (@Param("keyword1") String keyword1, @Param("keyword2") String keyword2, Pageable pageable);
 
     Page<Volunteer> findVolunteerByField(Field field, Pageable pageable);
+    List<Volunteer> findByBeneficiary_beneficiaryId(Long beneficiaryId);
+
 }

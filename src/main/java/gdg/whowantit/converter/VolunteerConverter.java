@@ -1,15 +1,22 @@
 package gdg.whowantit.converter;
 
+import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.request.SignUpRequestDto;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
 import gdg.whowantit.dto.response.UserResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
 import gdg.whowantit.entity.User;
+import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
+import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.Volunteer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 public class VolunteerConverter {
     public static VolunteerResponseDto convertToVolunteerResponseDto(Volunteer volunteer) {
@@ -40,4 +47,23 @@ public class VolunteerConverter {
             return dto;
         }));
     }
+
+    public static BeneficiaryResponseDto.volunteerResponse toVolunteerResponse (Volunteer volunteer) {
+
+        LocalDate deadline = volunteer.getDeadline().toLocalDate();
+        LocalDate today = LocalDate.now();
+
+        long dDay = ChronoUnit.DAYS.between(today, deadline);
+        String dDayString = (dDay < 0) ? "마감" : String.valueOf(dDay);
+
+        return BeneficiaryResponseDto.volunteerResponse.builder()
+                .volunteerId(volunteer.getVolunteerId())
+                .title(volunteer.getTitle())
+                .address(volunteer.getBeneficiary().getUser().getAddress())
+                .dDay(dDayString)
+                .beneficiaryId(volunteer.getBeneficiary().getBeneficiaryId())
+                .beneficiaryName(volunteer.getBeneficiary().getUser().getNickname())
+                .build();
+    }
+
 }

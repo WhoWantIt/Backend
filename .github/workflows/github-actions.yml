@@ -23,7 +23,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # gradle caching - 빌드 시간 향상
+      # gradle caching - 빌드 시간 향상#
       - name: Gradle Caching
         uses: actions/cache@v3
         with:
@@ -42,27 +42,10 @@ jobs:
           #          spring.datasource.url: ${{ secrets.MYSQL_URL }}
           spring.datasource.username: ${{ secrets.MYSQL_USER }}
           spring.datasource.password: ${{ secrets.MYSQL_PW }}
-          #cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          #cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
 
 
-
-          # 환경별 yml 파일 생성(2) - dev
-          #- name: make application-dev.yml
-          # if: contains(github.ref, 'develop')
-          # run: |
-          # cd ./src/main/resources
-          # touch ./application-dev.yml
-          # echo "${{ secrets.YML_DEV }}" > ./application-dev.yml
-          #shell: bash
-
-          # 환경별 yml 파일 생성(3) - prod
-          #- name: make application-prod.yml
-          # if: contains(github.ref, 'main')
-          #run: |
-          #   cd ./src/main/resources
-          # touch ./application-prod.yml
-          # echo "${{ secrets.YML_PROD }}" > ./application-prod.yml
       # shell: bash
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x ./gradlew
@@ -70,14 +53,6 @@ jobs:
       # gradle build
       - name: Build with Gradle
         run: ./gradlew build -x test
-
-        # docker build & push to production
-        #- name: Docker build & push to prod
-        # if: contains(github.ref, 'main')
-        #run: |
-        #  docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        #  docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_USERNAME }}/docker-test-prod .
-        #  docker push ${{ secrets.DOCKER_USERNAME }}/docker-test-prod
 
       # docker build & push to develop
       - name: Docker build & push to dev
@@ -88,7 +63,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/whowantit:latest
       
 
-      ## deploy to develop#
+      ## deploy to develop##
       - name: Deploy to dev
         uses: appleboy/ssh-action@master
         id: deploy-dev
@@ -108,12 +83,12 @@ jobs:
                     sudo docker pull ${{ secrets.DOCKER_USERNAME }}/whowantit || exit 1
             # Run the new container
                     sudo docker run -d --name whowantit \
-                    -p 8081:8081 \
+                    -p 8080:8080 \
                     -e DB_URL=database-1.clqwo2gs83ac.ap-northeast-2.rds.amazonaws.com \
                     -e DB_USERNAME=${{ secrets.MYSQL_USER }} \
                     -e DB_PASSWORD=${{ secrets.MYSQL_PW }} \
-                    -e cloud.aws.credentials.accessKey="${{ secrets.AWS_ACCESS_KEY_ID }}" \
-                    -e cloud.aws.credentials.secretKey="${{ secrets.AWS_SECRET_ACCESS_KEY}}" \
+                    -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+                    -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
                     -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
                     ${{ secrets.DOCKER_USERNAME }}/whowantit
             # Clean up unused images
