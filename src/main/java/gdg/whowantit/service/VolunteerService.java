@@ -2,9 +2,11 @@ package gdg.whowantit.service;
 
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
+import gdg.whowantit.converter.ScrapConverter;
 import gdg.whowantit.converter.SponsorConverter;
 import gdg.whowantit.converter.VolunteerConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
+import gdg.whowantit.dto.ScrapDto.ScrapResponseDto;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
 import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
@@ -32,6 +34,7 @@ public class VolunteerService {
     private final BeneficiaryRepository beneficiaryRepository;
     private final VolunteerRelationRepository volunteerRelationRepository;
     private final SponsorRepository sponsorRepository;
+    private final ScrapRepository scrapRepository;
 
     public VolunteerResponseDto postVolunteer(VolunteerRequestDto volunteerRequestDto) {
 
@@ -141,4 +144,27 @@ public class VolunteerService {
         Page<Sponsor> sponsors = sponsorRepository.findByVolunteerId(volunteerId, pageable);
         return SponsorConverter.convertToSponsorResponseDtoPage(sponsors);
     }
+
+    public ScrapResponseDto scrapVolunteer(Long volunteerId) {
+        String email = SecurityUtil.getCurrentUserEmail();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
+
+        if (scrapRepository.existsBySponsor_SponsorIdAndVolunteer_VolunteerId(user.getId(), volunteerId)) {
+            throw new TempHandler(ErrorStatus.VOLUNTEER_ALREADY_SCRAPPED);
+        }
+
+        Scrap scrap = new Scrap();
+        scrap.setSponsor(user.getSponsor());
+        scrap.setVolunteer(volunteer);
+        scrapRepository.save(scrap);
+
+        return ScrapConverter.toScrapResponseDto(scrap);
+
+    }
+
 }
