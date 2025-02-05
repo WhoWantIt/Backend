@@ -129,4 +129,12 @@ public class VolunteerController {
         return ResponseEntity.ok(ApiResponse.onSuccess(scrapResponseDto));
     }
 
+    @Operation(summary = "자원봉사 스크랩 취소", description = "해당 자원봉사 공고 스크랩을 취소 합니다.")
+    @DeleteMapping("/scraps/{volunteerId}")
+    public ResponseEntity<ApiResponse<ScrapResponseDto>> cancelScrapVolunteer
+            (@PathVariable Long volunteerId) {
+        volunteerService.cancelScrapVolunteer(volunteerId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
