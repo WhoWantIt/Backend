@@ -121,13 +121,17 @@ public class VolunteerService {
         return volunteerResponseDto;
     }
 
-    public Page<VolunteerResponseDto> getAdressFilteredVolunteers
+    public Page<VolunteerResponseDto> getAddressFilteredVolunteers
             (String keyword1, String keyword2, Pageable pageable) {
 
         Page<Volunteer> volunteerPage = volunteerRepository.
                 findByAddressContainingBoth(keyword1, keyword2, pageable);
 
-        System.out.println(keyword1 + keyword2);
+        return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
+    }
+
+    public Page<VolunteerResponseDto> getVolunteerByField(Field field, Pageable pageable) {
+        Page<Volunteer> volunteerPage = volunteerRepository.findVolunteerByField(field, pageable);
 
         return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
     }
