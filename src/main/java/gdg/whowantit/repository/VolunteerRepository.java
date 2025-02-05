@@ -1,6 +1,7 @@
 package gdg.whowantit.repository;
 
 import gdg.whowantit.entity.ApprovalStatus;
+import gdg.whowantit.entity.Field;
 import gdg.whowantit.entity.Volunteer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,5 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
     Page<Volunteer> findByAddressContainingBoth
             (@Param("keyword1") String keyword1, @Param("keyword2") String keyword2, Pageable pageable);
 
+    Page<Volunteer> findVolunteerByField(Field field, Pageable pageable);
 }
