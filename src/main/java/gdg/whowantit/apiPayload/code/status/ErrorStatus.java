@@ -41,6 +41,8 @@ public enum ErrorStatus implements BaseErrorCode {
     VOLUNTEER_ALREADY_APPLIED(HttpStatus.BAD_REQUEST, "VOLUNTEER4003", "이미 신청한 자원봉사입니다."),
     VOLUNTEER_CAPACITY_FULL(HttpStatus.BAD_REQUEST, "VOLUNTEER4004", "해당 자원봉사는 정원이 초과되었습니다."),
     VOLUNTEER_APPLICATION_NOT_FOUND(HttpStatus.BAD_REQUEST, "VOLUNTEER4005", "해당 자원봉사 신청 내역이 존재하지 않습니다."),
+    VOLUNTEER_ALREADY_SCRAPPED(HttpStatus.BAD_REQUEST, "VOLUNTEER4006", "이미 스크랩한 자원봉사입니다."),
+    VOLUNTEER_SCRAP_NOT_FOUND(HttpStatus.BAD_REQUEST, "VOLUNTEER4007", "스크랩하지 않은 자원봉사는 스크랩 취소할 수 없습니다."),
 
     // 관리자 관련 에러
     VOLUNTEER_APPROVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5001", "자원봉사 승인 처리 중 오류가 발생했습니다."),
