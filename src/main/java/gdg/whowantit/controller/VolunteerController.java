@@ -4,8 +4,10 @@ import gdg.whowantit.apiPayload.ApiResponse;
 import gdg.whowantit.converter.VolunteerConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
+import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
+import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.Field;
 import gdg.whowantit.entity.Volunteer;
 import gdg.whowantit.entity.VolunteerRelation;
@@ -100,7 +102,20 @@ public class VolunteerController {
         Pageable pageable = PageRequest.of(page, size);
         Page<VolunteerResponseDto> volunteers = volunteerService.getVolunteerByField(field, pageable);
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteers));
+    }
+
+    @Operation(summary = "봉사 신청한 후원자 리스트 조회", description = "해당 복지시설의 자원봉사 공고글에 신청한 후원자 리스트 조회 기능입니다.")
+    @GetMapping("/{volunteerId}/sponsors")
+    public ResponseEntity<ApiResponse<Page<VolunteerAppliedSponsorsDto>>> getSponsorsByVolunteerId
+            (@PathVariable Long volunteerId,
+             @RequestParam(defaultValue = "0") int page,
+             @RequestParam(defaultValue = "10") int size){
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VolunteerAppliedSponsorsDto> sponsorsDtos =
+                volunteerService.getSponsorsByVolunteerId(volunteerId, pageable);
 
 
+        return ResponseEntity.ok(ApiResponse.onSuccess(sponsorsDtos));
     }
 }
