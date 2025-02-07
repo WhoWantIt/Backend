@@ -1,8 +1,10 @@
 package gdg.whowantit.converter;
 
+import gdg.whowantit.dto.ScrapDto.ScrapResponseDto;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.FundingScrap;
 import gdg.whowantit.entity.Scrap;
+import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,5 +51,13 @@ public class ScrapConverter {
                 .beneficiaryId(fundingScrap.getFunding().getBeneficiary().getBeneficiaryId())
                 .beneficiaryName(fundingScrap.getFunding().getBeneficiary().getUser().getName())
                 .build();
+    }
+
+    public static ScrapResponseDto toScrapResponseDto (Scrap scrap) {
+        ScrapResponseDto scrapResponseDto = new ScrapResponseDto();
+        scrapResponseDto.setScrapId(scrap.getScrapId());
+        scrapResponseDto.setSponsorId(scrap.getSponsor().getSponsorId());
+        scrapResponseDto.setVolunteerId(scrap.getVolunteer().getVolunteerId());
+        return scrapResponseDto;
     }
 }

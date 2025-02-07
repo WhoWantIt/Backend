@@ -50,7 +50,7 @@ cloud:
     s3:
       bucket: whowantitbucket
       path:
-        picture: picture
+        picture : picture
     region:
       static: ap-northeast-2
     stack:

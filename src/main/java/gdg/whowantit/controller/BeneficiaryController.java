@@ -55,7 +55,7 @@ public class BeneficiaryController {
     @PutMapping("/profiles/details")
     @Operation(summary="수혜자 - 프로필 상세 정보 추가 API",
             description="수혜자 - 프로필 상세 정보 추가 API")
-    public ApiResponse<BeneficiaryResponseDto.profileResponse> updateProfile(BeneficiaryRequestDto.profileRequest request){
+    public ApiResponse<BeneficiaryResponseDto.profileResponse> updateProfile(@RequestBody BeneficiaryRequestDto.profileRequest request){
         BeneficiaryResponseDto.profileResponse profileResponse = beneficiaryService.updateProfile(request);
 
         return ApiResponse.onSuccess(profileResponse);

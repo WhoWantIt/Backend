@@ -9,6 +9,7 @@ import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -121,13 +122,16 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-        Beneficiary beneficiary=beneficiaryRepository.findByBeneficiaryId(user.getId());
+
+        Beneficiary beneficiary=beneficiaryRepository.findByBeneficiaryId(user.getId()).
+                orElseThrow(() -> new TempHandler(ErrorStatus.BENEFICIARY_NOT_FOUND));
 
         beneficiary.setInfo(request.getInfo());
         beneficiary.setToddler(request.getToddler());
         beneficiary.setChild(request.getChild());
         beneficiary.setAdolescent(request.getAdolescent());
         beneficiary.setYouth(request.getYouth());
+        BeanUtils.copyProperties(request, beneficiary);
 
         return BeneficiaryConverter.toBeneficiaryResponse(beneficiaryRepository.save(beneficiary));
 

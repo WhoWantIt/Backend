@@ -1,9 +1,12 @@
 package gdg.whowantit.repository;
 
 import gdg.whowantit.entity.Beneficiary;
+import gdg.whowantit.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface BeneficiaryRepository extends JpaRepository<Beneficiary, Long>{
-    Beneficiary findByBeneficiaryId(Long beneficiaryId);
+    Optional<Beneficiary> findByBeneficiaryId(Long beneficiaryId);
 
 }
