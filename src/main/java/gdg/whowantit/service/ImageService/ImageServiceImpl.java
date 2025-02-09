@@ -31,4 +31,8 @@ public class ImageServiceImpl implements ImageService{
     public String uploadImageForSignUp (String directory, MultipartFile image){
         return s3Manager.uploadFile(directory, image);
     }
+
+    public void deleteImage(String directory, String imageName){
+        s3Manager.deleteFile(directory, imageName);
+    }
 }
