@@ -21,8 +21,6 @@ public class Beneficiary {
 
     private String info;
 
-    private String image;
-
     private Long toddler;
 
     private Long child;

@@ -30,6 +30,4 @@ public class Sponsor {
 
     @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL)
     private List<FundingScrap> fundingScraps;
-
-    private String image;
 }
