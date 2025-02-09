@@ -92,7 +92,10 @@ public class UserService {
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email).
                 orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-
+        if (user.getImage() != null) {
+            String image = user.getImage();
+            imageService.deleteImage("user", image);
+        }
         userRepository.delete(user);
         refreshTokenRepository.deleteByEmail(email);
     }
