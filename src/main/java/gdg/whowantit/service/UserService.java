@@ -14,11 +14,14 @@ import gdg.whowantit.repository.BeneficiaryRepository;
 import gdg.whowantit.repository.RefreshTokenRepository;
 import gdg.whowantit.repository.SponsorRepository;
 import gdg.whowantit.repository.UserRepository;
+import gdg.whowantit.service.ImageService.ImageService;
+import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -29,27 +32,37 @@ public class UserService {
     private final BeneficiaryRepository beneficiaryRepository;
     private final TokenService tokenService;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    public UserResponseDto signUp(SignUpRequestDto signUpRequestDto){
+    private final ImageService imageService;
+    public UserResponseDto signUp(SignUpRequestDto signUpRequestDto, MultipartFile image) {
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
             throw new TempHandler(ErrorStatus.EMAIL_ALREADY_EXIST);
         }
 
-        User savedUser = userRepository.save(UserConverter.toUser(signUpRequestDto));
+        User user = UserConverter.toUser(signUpRequestDto);
+        if (image != null && !image.isEmpty()) { // 유저 이미지 값도 체크해서 넣어줌
+            String fileUrl = imageService.uploadImageForSignUp("users", image);
+            user.setImage(fileUrl);
+        }
 
-        if (savedUser.getRole() == Role.SPONSOR){
+        userRepository.save(user);
+
+
+        if (user.getRole() == Role.SPONSOR){
             Sponsor sponsor = new Sponsor();
-            sponsor.setUser(savedUser);
+            sponsor.setUser(user);
             sponsorRepository.save(sponsor);
 
-        } else if (savedUser.getRole() == Role.BENEFICIARY){
+        } else if (user.getRole() == Role.BENEFICIARY){
             Beneficiary beneficiary = new Beneficiary();
-            beneficiary.setUser(savedUser);
+            beneficiary.setUser(user);
+            beneficiary.setInfo(signUpRequestDto.getInfo());
+
+
             beneficiaryRepository.save(beneficiary);
         }
 
 
-        return UserConverter.toResponseDto(savedUser);
+        return UserConverter.toResponseDto(user);
     }
 
     public TokenResponse signIn(SignInRequestDto signInRequestDto){
@@ -67,13 +80,8 @@ public class UserService {
     }
 
     public UserResponseDto getMyInfo(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
-
         // Refresh Token 삭제
-        String email = authentication.getName(); // 현재 로그인된 사용자의 이메일
+        String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
@@ -81,11 +89,7 @@ public class UserService {
     }
 
     public void deleteUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
-        String email = authentication.getName();
+        String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email).
                 orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
