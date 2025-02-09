@@ -4,4 +4,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
     String uploadImage (String directory, MultipartFile image);
+    String uploadImageForSignUp (String directory, MultipartFile image);
 }

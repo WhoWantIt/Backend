@@ -27,4 +27,8 @@ public class ImageServiceImpl implements ImageService{
         return s3Manager.uploadFile(directory, image);
 
     }
+
+    public String uploadImageForSignUp (String directory, MultipartFile image){
+        return s3Manager.uploadFile(directory, image);
+    }
 }
