@@ -20,4 +20,6 @@ public interface PostService {
     PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId);
     void deletePost(Long postId);
     Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable);
+    void acceptPost(Long postId);
+    void rejectPost(Long postId);
 }
