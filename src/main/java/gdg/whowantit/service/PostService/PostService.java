@@ -3,6 +3,8 @@ package gdg.whowantit.service.PostService;
 
 import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,4 +19,5 @@ public interface PostService {
 
     PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId);
     void deletePost(Long postId);
+    Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable);
 }

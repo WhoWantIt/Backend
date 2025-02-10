@@ -17,6 +17,8 @@ import gdg.whowantit.util.SecurityUtil;
 import gdg.whowantit.util.StringListUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -132,5 +134,10 @@ public class PostServiceImpl implements PostService {
         postRepository.delete(post);
     }
 
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable){
+        Page<Post> posts = postRepository.findAll(pageable);
+        return PostConverter.convertToPostResponseDtoPage(posts);
+
+    }
 
 }
