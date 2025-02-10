@@ -10,7 +10,8 @@ public class PostConverter {
                 .postId(post.getPostId())
                 .title(post.getTitle())
                 .beneficiaryId(post.getBeneficiary().getBeneficiaryId())
-                .beneficiaryName(post.getBeneficiary().getUser().getNickname())
+                .beneficiaryName(post.getBeneficiary().getUser().getName())
+                .beneficiaryNickname(post.getBeneficiary().getUser().getNickname())
                 .isVerified(post.isVerified())
                 .build();
     }

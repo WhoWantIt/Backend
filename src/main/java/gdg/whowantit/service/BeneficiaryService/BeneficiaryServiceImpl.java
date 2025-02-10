@@ -49,6 +49,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
 
         return BeneficiaryResponseDto.fundingListResponse.builder()
                 .beneficiaryName(user.getName())
+                .beneficiaryNickname(user.getNickname())
                 .listCount(listCount)
                 .fundingList(fundingResponses)
                 .build();

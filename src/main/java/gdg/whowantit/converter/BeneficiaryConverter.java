@@ -8,6 +8,7 @@ public class BeneficiaryConverter {
         return BeneficiaryResponseDto.profileResponse.builder()
                 .beneficiaryId(beneficiary.getUser().getId())
                 .beneficiaryName(beneficiary.getUser().getName())
+                .beneficiaryNickname(beneficiary.getUser().getNickname())
                 .image(beneficiary.getUser().getImage())
                 .email(beneficiary.getUser().getEmail())
                 .phoneNumber(beneficiary.getUser().getPhoneNumber())

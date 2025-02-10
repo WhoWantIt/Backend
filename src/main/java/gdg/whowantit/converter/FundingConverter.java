@@ -27,7 +27,8 @@ public class FundingConverter {
                 .dDay(dDayString)
                 .attainmentPercent(attainmentPercent)
                 .beneficiaryId(funding.getBeneficiary().getBeneficiaryId())
-                .beneficiaryName(funding.getBeneficiary().getUser().getNickname())
+                .beneficiaryName(funding.getBeneficiary().getUser().getName())
+                .beneficiaryNickname(funding.getBeneficiary().getUser().getNickname())
                 .build();
     }
 }

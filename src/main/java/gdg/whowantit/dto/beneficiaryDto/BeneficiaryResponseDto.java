@@ -25,12 +25,16 @@ public class BeneficiaryResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
     }
 
     @Getter
     @Builder
     public static class fundingListResponse {
         private String beneficiaryName;
+
+        private String beneficiaryNickname;
 
         private int listCount;
 
@@ -51,6 +55,8 @@ public class BeneficiaryResponseDto {
         private Long beneficiaryId;
 
         private String beneficiaryName;
+
+        private String beneficiaryNickname;
 
     }
 
@@ -75,6 +81,8 @@ public class BeneficiaryResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
         private boolean isVerified;
     }
 
@@ -95,6 +103,8 @@ public class BeneficiaryResponseDto {
         private Long beneficiaryId;
 
         private String beneficiaryName;
+
+        private String beneficiaryNickname;
 
         private String image;
 

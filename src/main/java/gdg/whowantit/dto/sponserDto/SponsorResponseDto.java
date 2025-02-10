@@ -26,12 +26,16 @@ public class SponsorResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
     }
 
     @Getter
     @Builder
     public static class fundingListResponse {
         private String sponsorName;
+
+        private String sponsorNickname;
 
         private Long totalAmount;
 
@@ -60,6 +64,8 @@ public class SponsorResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
     }
 
     @Getter
@@ -78,12 +84,16 @@ public class SponsorResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
     }
 
     @Getter
     @Builder
     public static class volunteerListResponse {
         private String sponsorName;
+
+        private String sponsorNickname;
 
         private int volunteerListCount;
 
@@ -111,6 +121,8 @@ public class SponsorResponseDto {
         private Long beneficiaryId;
 
         private String beneficiaryName;
+
+        private String beneficiaryNickname;
     }
 
 }

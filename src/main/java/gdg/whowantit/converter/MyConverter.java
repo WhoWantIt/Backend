@@ -8,6 +8,7 @@ public class MyConverter {
     public static MyResponseDto.MyResponse toMyResponse (User user){
         return MyResponseDto.MyResponse.builder()
                 .id(user.getId())
+                .name(user.getName())
                 .nickname(user.getNickname())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
