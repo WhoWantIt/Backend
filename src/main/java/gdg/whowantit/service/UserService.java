@@ -3,9 +3,9 @@ import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.UserConverter;
 import gdg.whowantit.dto.TokenResponse;
-import gdg.whowantit.dto.request.SignInRequestDto;
-import gdg.whowantit.dto.request.SignUpRequestDto;
-import gdg.whowantit.dto.response.UserResponseDto;
+import gdg.whowantit.dto.UserDto.SignInRequestDto;
+import gdg.whowantit.dto.UserDto.SignUpRequestDto;
+import gdg.whowantit.dto.UserDto.UserResponseDto;
 import gdg.whowantit.entity.Beneficiary;
 import gdg.whowantit.entity.Role;
 import gdg.whowantit.entity.Sponsor;
@@ -17,11 +17,8 @@ import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.service.ImageService.ImageService;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -33,16 +30,13 @@ public class UserService {
     private final TokenService tokenService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ImageService imageService;
-    public UserResponseDto signUp(SignUpRequestDto signUpRequestDto, MultipartFile image) {
+    public UserResponseDto signUp(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
             throw new TempHandler(ErrorStatus.EMAIL_ALREADY_EXIST);
         }
 
         User user = UserConverter.toUser(signUpRequestDto);
-        if (image != null && !image.isEmpty()) { // 유저 이미지 값도 체크해서 넣어줌
-            String fileUrl = imageService.uploadImageForSignUp("users", image);
-            user.setImage(fileUrl);
-        }
+
 
         userRepository.save(user);
 
@@ -55,12 +49,8 @@ public class UserService {
         } else if (user.getRole() == Role.BENEFICIARY){
             Beneficiary beneficiary = new Beneficiary();
             beneficiary.setUser(user);
-            beneficiary.setInfo(signUpRequestDto.getInfo());
-
-
             beneficiaryRepository.save(beneficiary);
         }
-
 
         return UserConverter.toResponseDto(user);
     }

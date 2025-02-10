@@ -1,11 +1,5 @@
-package gdg.whowantit.dto.response;
+package gdg.whowantit.dto.volunteerDto;
 
-import gdg.whowantit.entity.Beneficiary;
-import gdg.whowantit.entity.Sponsor;
-import gdg.whowantit.entity.Volunteer;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

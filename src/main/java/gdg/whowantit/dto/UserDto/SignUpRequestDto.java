@@ -1,18 +1,9 @@
-package gdg.whowantit.dto.response;
-
+package gdg.whowantit.dto.UserDto;
 import gdg.whowantit.entity.Role;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-
-public class UserResponseDto {
-    private Long id;
+public class SignUpRequestDto {
     private String name;
     private Role role;
     private String nickname;
@@ -20,5 +11,4 @@ public class UserResponseDto {
     private String email;
     private String phoneNumber;
     private String address;
-    private String image;
 }

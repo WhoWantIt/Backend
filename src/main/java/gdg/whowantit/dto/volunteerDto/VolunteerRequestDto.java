@@ -1,4 +1,4 @@
-package gdg.whowantit.dto.request;
+package gdg.whowantit.dto.volunteerDto;
 
 import gdg.whowantit.entity.Field;
 import lombok.AllArgsConstructor;

@@ -1,10 +1,18 @@
-package gdg.whowantit.dto.request;
+package gdg.whowantit.dto.UserDto;
+
 import gdg.whowantit.entity.Role;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.web.multipart.MultipartFile;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-public class SignUpRequestDto {
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+
+public class UserResponseDto {
+    private Long id;
     private String name;
     private Role role;
     private String nickname;
@@ -12,5 +20,5 @@ public class SignUpRequestDto {
     private String email;
     private String phoneNumber;
     private String address;
-    private String info; // 후원자의 경우 null
+    private String image;
 }

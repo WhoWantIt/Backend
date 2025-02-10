@@ -1,26 +1,17 @@
 package gdg.whowantit.controller;
 
 import gdg.whowantit.apiPayload.ApiResponse;
-import gdg.whowantit.converter.VolunteerConverter;
-import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.ScrapDto.ScrapResponseDto;
-import gdg.whowantit.dto.request.SignUpRequestDto;
-import gdg.whowantit.dto.request.VolunteerRequestDto;
-import gdg.whowantit.dto.response.UserResponseDto;
-import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
-import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
-import gdg.whowantit.dto.response.VolunteerResponseDto;
-import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerRequestDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerAppliedSponsorsDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerRelationResponseDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerResponseDto;
 import gdg.whowantit.entity.Field;
-import gdg.whowantit.entity.Volunteer;
-import gdg.whowantit.entity.VolunteerRelation;
 import gdg.whowantit.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -43,9 +34,9 @@ public class VolunteerController {
     @PostMapping("")
     public ResponseEntity<ApiResponse<VolunteerResponseDto>> postVolunteer(
             @RequestPart("volunteerRequestDto") VolunteerRequestDto volunteerRequestDto,
-            @RequestPart(value = "images", required = false) MultipartFile image) {
+            @RequestPart(value = "images", required = false) List<MultipartFile> images) {
         VolunteerResponseDto volunteerResponseDto =
-                volunteerService.postVolunteer(volunteerRequestDto, image);
+                volunteerService.postVolunteer(volunteerRequestDto, images);
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteerResponseDto));
     }
 

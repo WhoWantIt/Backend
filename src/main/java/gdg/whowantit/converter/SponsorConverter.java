@@ -1,9 +1,7 @@
 package gdg.whowantit.converter;
 
-import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
-import gdg.whowantit.dto.response.VolunteerResponseDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.entity.Sponsor;
-import gdg.whowantit.entity.Volunteer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
