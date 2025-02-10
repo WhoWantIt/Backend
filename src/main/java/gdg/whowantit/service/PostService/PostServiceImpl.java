@@ -137,4 +137,28 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Transactional
+    @Override
+    public void acceptPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+        if (post.getApprovalStatus() == ApprovalStatus.APPROVED){
+            throw new TempHandler(ErrorStatus.POST_ALREADY_APPROVED);
+        }
+
+        post.setApprovalStatus(ApprovalStatus.APPROVED);
+    }
+
+    @Transactional
+    @Override
+    public void rejectPost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+        if (post.getApprovalStatus() == ApprovalStatus.DISAPPROVED){
+            throw new TempHandler(ErrorStatus.POST_ALREADY_DISAPPROVED);
+        }
+        post.setApprovalStatus(ApprovalStatus.DISAPPROVED);
+    }
 }
