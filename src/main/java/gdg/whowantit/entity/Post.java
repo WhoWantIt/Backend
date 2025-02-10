@@ -17,6 +17,7 @@ public class Post extends BaseEntity {
 
     private String content;
 
+    @Lob
     private String attachedImages;
 
     private String attachedExcelFile;
