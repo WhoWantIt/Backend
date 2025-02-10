@@ -22,6 +22,7 @@ public class Post extends BaseEntity {
 
     private String attachedExcelFile;
 
+    @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
