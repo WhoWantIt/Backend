@@ -89,4 +89,18 @@ public class PostBeneficiaryController {
         return ResponseEntity.ok(ApiResponse.onSuccess(posts));
     }
 
+    @PutMapping("/{postId}/accept")
+    @Operation(summary = "관리자 게시글 승인", description = "관리자 게시글 승인 기능입니다.")
+    public ResponseEntity<ApiResponse<Void>> acceptPost(@PathVariable Long postId) {
+        postService.acceptPost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{postId}/reject")
+    @Operation(summary = "관리자 게시글 거부", description = "관리자 게시글 승인 거부 기능입니다.")
+    public ResponseEntity<ApiResponse<Void>> rejectPost(@PathVariable Long postId) {
+        postService.rejectPost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
 }
