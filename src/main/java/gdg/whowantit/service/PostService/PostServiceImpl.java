@@ -30,7 +30,6 @@ public class PostServiceImpl implements PostService {
     private final ImageService imageService;
     private final PostRepository postRepository;
 
-    @Transactional
     @Override
     public PostResponseDto.BeneficiaryPostResponseDto createPost
             (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile){
@@ -60,5 +59,31 @@ public class PostServiceImpl implements PostService {
 
         return PostConverter.toBeneficiaryPostResponseDto(savedPost);
     }
+
+    @Override
+    @Transactional
+    public PostResponseDto.BeneficiaryPostResponseDto updatePost
+            (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile, Long postId){
+
+        String email = SecurityUtil.getCurrentUserEmail();
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+
+        post.setTitle(postRequestDto.getTitle());
+        post.setContent(postRequestDto.getContent());
+        if (!images.isEmpty()){
+            List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
+            post.setAttachedImages(StringListUtil.listToString(attachedImages));
+        }
+
+        if (!excelFile.isEmpty()){
+            String attachedExcelFile = imageService.uploadImage("posts", excelFile);
+            post.setAttachedExcelFile(attachedExcelFile);
+        }
+
+        return PostConverter.toBeneficiaryPostResponseDto(post);
+    }
+
 
 }

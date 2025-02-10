@@ -12,4 +12,7 @@ public interface PostService {
     PostResponseDto.BeneficiaryPostResponseDto createPost
             (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile);
 
+    PostResponseDto.BeneficiaryPostResponseDto updatePost
+            (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile, Long postId);
+
 }
