@@ -17,7 +17,9 @@ public class Post extends BaseEntity {
 
     private String content;
 
-    private String attachedImage;
+    private String attachedImages;
+
+    private String attachedExcelFile;
 
     private boolean isVerified;
 
