@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService{
@@ -26,5 +29,19 @@ public class ImageServiceImpl implements ImageService{
 
         return s3Manager.uploadFile(directory, image);
 
+    }
+
+    // ✅ 여러 개의 이미지 업로드 기능 추가
+    public List<String> uploadMultipleImages(String directory, List<MultipartFile> images) {
+        return s3Manager.uploadMultipleFiles(directory, images);
+    }
+
+
+    public String uploadImageForSignUp (String directory, MultipartFile image){
+        return s3Manager.uploadFile(directory, image);
+    }
+
+    public void deleteImage(String directory, String imageName){
+        s3Manager.deleteFile(directory, imageName);
     }
 }

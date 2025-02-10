@@ -15,8 +15,8 @@ public class SponsorConverter {
             BeanUtils.copyProperties(sponsor.getUser(), dto);  // 엔티티 필드 자동 복사
 
             // 추가 정보 입력
-            if (sponsor.getImage() != null) {
-                dto.setImage(sponsor.getImage());
+            if (sponsor.getUser().getImage() != null) {
+                dto.setImage(sponsor.getUser().getImage());
             }
             dto.setId(sponsor.getUser().getId());
 

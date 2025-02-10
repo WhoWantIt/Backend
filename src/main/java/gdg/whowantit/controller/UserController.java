@@ -11,9 +11,11 @@ import gdg.whowantit.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/users")
@@ -26,8 +28,11 @@ public class UserController {
 
     @Operation(summary = "회원가입", description = "유저 회원가입 입니다.")
     @PostMapping("/sign-up")
-    public ResponseEntity<ApiResponse<UserResponseDto>> signUp(@RequestBody SignUpRequestDto signUpRequestDto) {
-        UserResponseDto userResponseDto = userService.signUp(signUpRequestDto);
+
+    public ResponseEntity<ApiResponse<UserResponseDto>> signUp(
+            @RequestPart("signUpRequestDto") @Valid SignUpRequestDto signUpRequestDto,
+            @RequestPart(value = "image", required = false) MultipartFile image) {
+        UserResponseDto userResponseDto = userService.signUp(signUpRequestDto, image);
         return ResponseEntity.ok(ApiResponse.onSuccess(userResponseDto));
     }
 

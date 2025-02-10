@@ -4,7 +4,9 @@ import gdg.whowantit.apiPayload.ApiResponse;
 import gdg.whowantit.converter.VolunteerConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.ScrapDto.ScrapResponseDto;
+import gdg.whowantit.dto.request.SignUpRequestDto;
 import gdg.whowantit.dto.request.VolunteerRequestDto;
+import gdg.whowantit.dto.response.UserResponseDto;
 import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
@@ -16,6 +18,7 @@ import gdg.whowantit.service.VolunteerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
@@ -23,6 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -37,11 +41,14 @@ public class VolunteerController {
 
     @Operation(summary = "자원봉사 공고글 게시", description = "복지시설에서 자원봉사 공고글 게시 요청 기능입니다.")
     @PostMapping("")
-    public ResponseEntity<ApiResponse<VolunteerResponseDto>> postVolunteer(@RequestBody VolunteerRequestDto volunteerRequestDto) {
+    public ResponseEntity<ApiResponse<VolunteerResponseDto>> postVolunteer(
+            @RequestPart("volunteerRequestDto") VolunteerRequestDto volunteerRequestDto,
+            @RequestPart(value = "images", required = false) MultipartFile image) {
         VolunteerResponseDto volunteerResponseDto =
-                volunteerService.postVolunteer(volunteerRequestDto);
+                volunteerService.postVolunteer(volunteerRequestDto, image);
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteerResponseDto));
     }
+
 
     @Operation(summary = "자원봉사 지원", description = "후원자가 자원봉사 공고글에 신청하는 기능입니다.")
     @PostMapping("/{volunteerId}")

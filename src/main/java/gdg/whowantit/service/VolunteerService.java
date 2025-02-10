@@ -13,6 +13,7 @@ import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.response.VolunteerResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
+import gdg.whowantit.service.ImageService.ImageService;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -35,8 +37,9 @@ public class VolunteerService {
     private final VolunteerRelationRepository volunteerRelationRepository;
     private final SponsorRepository sponsorRepository;
     private final ScrapRepository scrapRepository;
+    private final ImageService imageService;
 
-    public VolunteerResponseDto postVolunteer(VolunteerRequestDto volunteerRequestDto) {
+    public VolunteerResponseDto postVolunteer(VolunteerRequestDto volunteerRequestDto, MultipartFile image) {
 
         String email = SecurityUtil.getCurrentUserEmail(); // 현재 로그인된 사용자의 이메일
         User user = userRepository.findByEmail(email).
@@ -48,6 +51,11 @@ public class VolunteerService {
         volunteer.setApprovalStatus(ApprovalStatus.UNDETERMINED);
         volunteer.setStatus(Status.BEFORE_PROGRESS);
         volunteer.setCurrentCapacity(0L);
+
+        if (!image.isEmpty()) {
+            String imageUrl = imageService.uploadImage("volunteers", image);
+            volunteer.setAttachedImage(imageUrl);
+        }
 
 
         volunteerRepository.save(volunteer);

@@ -28,6 +28,8 @@ public class User extends BaseEntity {
 
     private String address;
 
+    private String image;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Sponsor sponsor;
 
