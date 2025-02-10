@@ -18,7 +18,7 @@ public class PostConverter {
                 .title(post.getTitle())
                 .beneficiaryId(post.getBeneficiary().getBeneficiaryId())
                 .beneficiaryName(post.getBeneficiary().getUser().getNickname())
-                .isVerified(post.isVerified())
+                .approvalStatus(post.getApprovalStatus())
                 .build();
     }
 

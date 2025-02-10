@@ -1,6 +1,7 @@
 package gdg.whowantit.dto.beneficiaryDto;
 
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
+import gdg.whowantit.entity.ApprovalStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -75,7 +76,7 @@ public class BeneficiaryResponseDto {
 
         private String beneficiaryName;
 
-        private boolean isVerified;
+        private ApprovalStatus approvalStatus;
     }
 
     @Getter
