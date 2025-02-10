@@ -3,6 +3,7 @@ package gdg.whowantit.service.PostService;
 
 import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
+import gdg.whowantit.entity.ApprovalStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,9 @@ public interface PostService {
 
     PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId);
     void deletePost(Long postId);
-    Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable);
     void acceptPost(Long postId);
     void rejectPost(Long postId);
+    Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable);
+    Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByApprovalStatus(ApprovalStatus approvalStatus, Pageable pageable);
+
 }
