@@ -19,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.List;
 
 @Service
@@ -31,13 +33,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostResponseDto.BeneficiaryPostResponseDto createPost
-            (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile){
+            (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile) {
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()-> new TempHandler(ErrorStatus.USER_NOT_FOUND)
+                () -> new TempHandler(ErrorStatus.USER_NOT_FOUND)
         );
 
-        if (user.getRole() != Role.BENEFICIARY){
+        if (user.getRole() != Role.BENEFICIARY) {
             throw new TempHandler(ErrorStatus.FORBIDDEN_POST_ACCESS);
         }
 
@@ -45,12 +47,12 @@ public class PostServiceImpl implements PostService {
         post.setBeneficiary(user.getBeneficiary());
         post.setApprovalStatus(ApprovalStatus.UNDETERMINED);
 
-        if (!images.isEmpty()){
+        if (!images.isEmpty()) {
             List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
             post.setAttachedImages(StringListUtil.listToString(attachedImages));
         }
 
-        if (!excelFile.isEmpty()){
+        if (!excelFile.isEmpty()) {
             String attachedExcelFile = imageService.uploadImage("posts", excelFile);
             post.setAttachedExcelFile(attachedExcelFile);
         }
@@ -62,7 +64,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostResponseDto.BeneficiaryPostResponseDto updatePost
-            (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile, Long postId){
+            (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile, Long postId) {
 
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
@@ -75,23 +77,23 @@ public class PostServiceImpl implements PostService {
         String attachedImages = post.getAttachedImages();
         String attachedExcelFile = post.getAttachedExcelFile();
 
-        if (!attachedImages.isEmpty()){
+        if (!attachedImages.isEmpty()) {
             List<String> attachImagesUrls = StringListUtil.stringToList(attachedImages);
             for (String attachImagesUrl : attachImagesUrls) {
-                imageService.deleteImage("posts",attachImagesUrl);
+                imageService.deleteImage("posts", attachImagesUrl);
             }
         }
-        if (!attachedExcelFile.isEmpty()){
-            imageService.deleteImage("posts",attachedExcelFile);
+        if (!attachedExcelFile.isEmpty()) {
+            imageService.deleteImage("posts", attachedExcelFile);
         }
 
         // 새로운 이미지 업로드
-        if (!images.isEmpty()){
+        if (!images.isEmpty()) {
             List<String> newlyAttachedImages = imageService.uploadMultipleImages("posts", images);
             post.setAttachedImages(StringListUtil.listToString(newlyAttachedImages));
         }
 
-        if (!excelFile.isEmpty()){
+        if (!excelFile.isEmpty()) {
             String newlyAttachedExcelFile = imageService.uploadImage("posts", excelFile);
             post.setAttachedExcelFile(newlyAttachedExcelFile);
         }
@@ -100,7 +102,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId){
+    public PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
@@ -109,7 +111,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void deletePost(Long postId){
+    public void deletePost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
@@ -117,21 +119,21 @@ public class PostServiceImpl implements PostService {
         String attachedImages = post.getAttachedImages();
         String attachedExcelFile = post.getAttachedExcelFile();
 
-        if (!attachedImages.isEmpty()){
+        if (!attachedImages.isEmpty()) {
             List<String> attachImagesUrls = StringListUtil.stringToList(attachedImages);
             for (String attachImagesUrl : attachImagesUrls) {
-                imageService.deleteImage("posts",attachImagesUrl);
+                imageService.deleteImage("posts", attachImagesUrl);
             }
         }
-        if (!attachedExcelFile.isEmpty()){
-            imageService.deleteImage("posts",attachedExcelFile);
+        if (!attachedExcelFile.isEmpty()) {
+            imageService.deleteImage("posts", attachedExcelFile);
         }
 
 
         postRepository.delete(post);
     }
 
-    public Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable){
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable) {
         Page<Post> posts = postRepository.findAll(pageable);
         return PostConverter.convertToPostResponseDtoPage(posts);
 
@@ -143,7 +145,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
-        if (post.getApprovalStatus() == ApprovalStatus.APPROVED){
+        if (post.getApprovalStatus() == ApprovalStatus.APPROVED) {
             throw new TempHandler(ErrorStatus.POST_ALREADY_APPROVED);
         }
 
@@ -156,7 +158,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
-        if (post.getApprovalStatus() == ApprovalStatus.DISAPPROVED){
+        if (post.getApprovalStatus() == ApprovalStatus.DISAPPROVED) {
             throw new TempHandler(ErrorStatus.POST_ALREADY_DISAPPROVED);
         }
         post.setApprovalStatus(ApprovalStatus.DISAPPROVED);
@@ -164,24 +166,36 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByApprovalStatus
-            (ApprovalStatus approvalStatus, Pageable pageable){
+            (ApprovalStatus approvalStatus, Pageable pageable) {
         Page<Post> posts = postRepository.findByApprovalStatus(approvalStatus, pageable);
         return PostConverter.convertToPostResponseDtoPage(posts);
 
     }
 
     @Override
-    public Page<PostResponseDto.BeneficiaryPostResponseDto> getMyPosts(Pageable pageable){
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getMyPosts(Pageable pageable) {
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email).orElseThrow(
-                ()-> new TempHandler(ErrorStatus.USER_NOT_FOUND)
+                () -> new TempHandler(ErrorStatus.USER_NOT_FOUND)
         );
-        if (user.getRole() != Role.BENEFICIARY){
+        if (user.getRole() != Role.BENEFICIARY) {
             throw new TempHandler(ErrorStatus.FORBIDDEN_POST_ACCESS);
         }
         Page<Post> posts = postRepository.findByBeneficiary(user.getBeneficiary(), pageable);
         return PostConverter.convertToPostResponseDtoPage(posts);
     }
 
+    @Override
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByYearAndMonth(Long year, Long month, Pageable pageable)
+    {
+        YearMonth yearMonth = YearMonth.of(year.intValue(), month.intValue());
+        LocalDateTime start = yearMonth.atDay(1).atStartOfDay(); // 해당 월의 1일 00:00:00
+        LocalDateTime end = yearMonth.atEndOfMonth().atTime(23, 59, 59); // 해당 월의 마지막 날 23:59:59
+
+
+        Page<Post> posts = postRepository.findByCreatedAtBetween(start, end, pageable);
+
+        return PostConverter.convertToPostResponseDtoPage(posts);
+    }
 
 }
