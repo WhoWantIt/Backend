@@ -3,6 +3,7 @@ package gdg.whowantit.config;
 import gdg.whowantit.security.JwtAuthenticationFilter;
 import gdg.whowantit.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 
 @EnableWebSecurity
@@ -39,5 +44,19 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of("http://localhost:3000", "https://example.com")); // ✅ 허용할 프론트엔드 도메인
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // ✅ 허용할 HTTP 메서드
+        config.setAllowedHeaders(List.of("*")); // ✅ 모든 요청 헤더 허용
+        config.setAllowCredentials(true); // ✅ 쿠키 인증 허용
+
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter();
     }
 }
