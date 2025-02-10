@@ -5,10 +5,12 @@ import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
 import gdg.whowantit.dto.volunteerDto.VolunteerRequestDto;
 import gdg.whowantit.dto.volunteerDto.VolunteerResponseDto;
+import gdg.whowantit.entity.ApprovalStatus;
 import gdg.whowantit.entity.Post;
 import gdg.whowantit.service.PostService.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Page;
@@ -101,6 +103,18 @@ public class PostBeneficiaryController {
     public ResponseEntity<ApiResponse<Void>> rejectPost(@PathVariable Long postId) {
         postService.rejectPost(postId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/approvalStatus")
+    @Operation(summary = "승인 상태에 따른 게시글 조회", description = "승인 상태에 따른 게시글 조회입니다.")
+    public ResponseEntity<ApiResponse<Page<PostResponseDto.BeneficiaryPostResponseDto>>> getPostsByApprovalStatus (
+            @RequestParam ApprovalStatus approvalStatus,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostResponseDto.BeneficiaryPostResponseDto> posts = postService.getPostsByApprovalStatus(approvalStatus, pageable);
+        return ResponseEntity.ok(ApiResponse.onSuccess(posts));
     }
 
 }
