@@ -32,6 +32,8 @@ public class PostConverter {
                 .content(post.getContent())
                 .attachedExcelFile(post.getAttachedExcelFile())
                 .attachedImages(StringListUtil.stringToList(post.getAttachedImages()))
+                .nickname(post.getBeneficiary().getUser().getNickname())
+                .createdAt(post.getCreatedAt().toString())
                 .build();
     }
 
