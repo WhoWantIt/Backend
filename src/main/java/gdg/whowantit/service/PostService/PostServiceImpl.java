@@ -49,7 +49,7 @@ public class PostServiceImpl implements PostService {
 
         if (!images.isEmpty()){
             List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
-            post.setAttachedImage(StringListUtil.listToString(attachedImages));
+            post.setAttachedImages(StringListUtil.listToString(attachedImages));
         }
 
         if (!excelFile.isEmpty()){

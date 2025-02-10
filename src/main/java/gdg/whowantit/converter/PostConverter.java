@@ -28,7 +28,7 @@ public class PostConverter {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .attachedExcelFile(post.getAttachedExcelFile())
-                .attachedImage(StringListUtil.stringToList(post.getAttachedImage()))
+                .attachedImages(StringListUtil.stringToList(post.getAttachedImages()))
                 .build();
     }
 
