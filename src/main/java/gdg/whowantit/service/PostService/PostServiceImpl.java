@@ -161,4 +161,13 @@ public class PostServiceImpl implements PostService {
         }
         post.setApprovalStatus(ApprovalStatus.DISAPPROVED);
     }
+
+    @Override
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByApprovalStatus
+            (ApprovalStatus approvalStatus, Pageable pageable){
+        Page<Post> posts = postRepository.findByApprovalStatus(approvalStatus, pageable);
+        return PostConverter.convertToPostResponseDtoPage(posts);
+
+    }
+
 }
