@@ -198,4 +198,12 @@ public class PostServiceImpl implements PostService {
         return PostConverter.convertToPostResponseDtoPage(posts);
     }
 
+    @Override
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByNickname(String nickname, Pageable pageable){
+
+        Page<Post> posts = postRepository.findByBeneficiaryNickname(nickname, pageable);
+        return PostConverter.convertToPostResponseDtoPage(posts);
+
+    }
+
 }
