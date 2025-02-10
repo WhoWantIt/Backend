@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
                 imageService.deleteImage("posts",attachImagesUrl);
             }
         }
-        if (!excelFile.isEmpty()){
+        if (!attachedExcelFile.isEmpty()){
             imageService.deleteImage("posts",attachedExcelFile);
         }
 
@@ -106,6 +106,30 @@ public class PostServiceImpl implements PostService {
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
         return PostConverter.toBeneficiaryPostResponseDto(post);
+    }
+
+    @Transactional
+    @Override
+    public void deletePost(Long postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+        // 기존에 올라온 이미지 삭제
+        String attachedImages = post.getAttachedImages();
+        String attachedExcelFile = post.getAttachedExcelFile();
+
+        if (!attachedImages.isEmpty()){
+            List<String> attachImagesUrls = StringListUtil.stringToList(attachedImages);
+            for (String attachImagesUrl : attachImagesUrls) {
+                imageService.deleteImage("posts",attachImagesUrl);
+            }
+        }
+        if (!attachedExcelFile.isEmpty()){
+            imageService.deleteImage("posts",attachedExcelFile);
+        }
+
+
+        postRepository.delete(post);
     }
 
 
