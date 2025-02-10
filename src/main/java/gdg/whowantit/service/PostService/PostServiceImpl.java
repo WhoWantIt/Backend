@@ -170,4 +170,18 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
+    public Page<PostResponseDto.BeneficiaryPostResponseDto> getMyPosts(Pageable pageable){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email).orElseThrow(
+                ()-> new TempHandler(ErrorStatus.USER_NOT_FOUND)
+        );
+        if (user.getRole() != Role.BENEFICIARY){
+            throw new TempHandler(ErrorStatus.FORBIDDEN_POST_ACCESS);
+        }
+        Page<Post> posts = postRepository.findByBeneficiary(user.getBeneficiary(), pageable);
+        return PostConverter.convertToPostResponseDtoPage(posts);
+    }
+
+
 }
