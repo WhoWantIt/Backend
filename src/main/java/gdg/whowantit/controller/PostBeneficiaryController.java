@@ -36,4 +36,19 @@ public class PostBeneficiaryController {
     }
 
 
+    @PutMapping("/{postId}")
+    @Operation(summary = "복지시설 게시글 수정", description = "복지시설에서 게시글 수정입니다.")
+    public ResponseEntity<ApiResponse<PostResponseDto.BeneficiaryPostResponseDto>> updatePost(
+            @RequestPart("volunteerRequestDto") PostRequestDto.BeneficiaryPostRequestDto postRequestDto,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images,
+            @RequestPart MultipartFile excelFile,
+            @PathVariable Long postId)
+    {
+
+        PostResponseDto.BeneficiaryPostResponseDto postResponseDto =
+                postService.updatePost(postRequestDto, images, excelFile, postId);
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(postResponseDto));
+    }
+
 }
