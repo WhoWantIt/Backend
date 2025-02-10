@@ -7,20 +7,18 @@ import gdg.whowantit.converter.SponsorConverter;
 import gdg.whowantit.converter.VolunteerConverter;
 import gdg.whowantit.converter.VolunteerRelationConverter;
 import gdg.whowantit.dto.ScrapDto.ScrapResponseDto;
-import gdg.whowantit.dto.request.VolunteerRequestDto;
-import gdg.whowantit.dto.response.VolunteerAppliedSponsorsDto;
-import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
-import gdg.whowantit.dto.response.VolunteerResponseDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerRequestDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerAppliedSponsorsDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerRelationResponseDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
 import gdg.whowantit.service.ImageService.ImageService;
 import gdg.whowantit.util.SecurityUtil;
+import gdg.whowantit.util.StringListUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,7 +37,7 @@ public class VolunteerService {
     private final ScrapRepository scrapRepository;
     private final ImageService imageService;
 
-    public VolunteerResponseDto postVolunteer(VolunteerRequestDto volunteerRequestDto, MultipartFile image) {
+    public VolunteerResponseDto postVolunteer(VolunteerRequestDto volunteerRequestDto, List<MultipartFile> images) {
 
         String email = SecurityUtil.getCurrentUserEmail(); // 현재 로그인된 사용자의 이메일
         User user = userRepository.findByEmail(email).
@@ -52,11 +50,10 @@ public class VolunteerService {
         volunteer.setStatus(Status.BEFORE_PROGRESS);
         volunteer.setCurrentCapacity(0L);
 
-        if (!image.isEmpty()) {
-            String imageUrl = imageService.uploadImage("volunteers", image);
-            volunteer.setAttachedImage(imageUrl);
+        if (!images.isEmpty()) {
+            List<String> imageUrls = imageService.uploadMultipleImages("volunteers", images);
+            volunteer.setAttachedImage(StringListUtil.listToString(imageUrls));
         }
-
 
         volunteerRepository.save(volunteer);
 
