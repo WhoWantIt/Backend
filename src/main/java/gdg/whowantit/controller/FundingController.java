@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/fundings")
 @RequiredArgsConstructor
-@Tag(name = "${swagger.tag.cloudfunding-sponsor}")
-@Tag(name = "${swagger.tag.cloudfunding-author}")
+//@Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+//@Tag(name = "${swagger.tag.cloudfunding-author}")
 public class FundingController {
     private final FundingService fundingService;
     @PostMapping("/")

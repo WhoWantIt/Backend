@@ -1,5 +1,6 @@
 package gdg.whowantit.dto.fundingDto;
 
+import gdg.whowantit.entity.Beneficiary;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -15,8 +16,7 @@ public class FundingRequestDto {
 
         private String text;
 
-        private String attached_image;
-
         private LocalDateTime deadline;
+
     }
 }

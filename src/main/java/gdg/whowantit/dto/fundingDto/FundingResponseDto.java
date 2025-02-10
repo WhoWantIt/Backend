@@ -1,5 +1,6 @@
 package gdg.whowantit.dto.fundingDto;
 
+import gdg.whowantit.entity.Beneficiary;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,12 +20,12 @@ public class FundingResponseDto {
 
         private String text;
 
-        private String attached_image;
-
         private String status;
 
         private String approval_status;
 
         private LocalDateTime deadline;
+
+        private long beneficiaryId;
     }
 }
