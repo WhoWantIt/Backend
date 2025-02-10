@@ -65,23 +65,46 @@ public class PostServiceImpl implements PostService {
     public PostResponseDto.BeneficiaryPostResponseDto updatePost
             (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile, Long postId){
 
-        String email = SecurityUtil.getCurrentUserEmail();
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
 
         post.setTitle(postRequestDto.getTitle());
         post.setContent(postRequestDto.getContent());
+
+        // 기존에 올라온 이미지 삭제
+        String attachedImages = post.getAttachedImages();
+        String attachedExcelFile = post.getAttachedExcelFile();
+
+        if (!attachedImages.isEmpty()){
+            List<String> attachImagesUrls = StringListUtil.stringToList(attachedImages);
+            for (String attachImagesUrl : attachImagesUrls) {
+                imageService.deleteImage("posts",attachImagesUrl);
+            }
+        }
+        if (!excelFile.isEmpty()){
+            imageService.deleteImage("posts",attachedExcelFile);
+        }
+
+        // 새로운 이미지 업로드
         if (!images.isEmpty()){
-            List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
-            post.setAttachedImages(StringListUtil.listToString(attachedImages));
+            List<String> newlyAttachedImages = imageService.uploadMultipleImages("posts", images);
+            post.setAttachedImages(StringListUtil.listToString(newlyAttachedImages));
         }
 
         if (!excelFile.isEmpty()){
-            String attachedExcelFile = imageService.uploadImage("posts", excelFile);
-            post.setAttachedExcelFile(attachedExcelFile);
+            String newlyAttachedExcelFile = imageService.uploadImage("posts", excelFile);
+            post.setAttachedExcelFile(newlyAttachedExcelFile);
         }
 
+        return PostConverter.toBeneficiaryPostResponseDto(post);
+    }
+
+    @Override
+    public PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
         return PostConverter.toBeneficiaryPostResponseDto(post);
     }
 

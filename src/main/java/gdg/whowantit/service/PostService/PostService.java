@@ -15,4 +15,5 @@ public interface PostService {
     PostResponseDto.BeneficiaryPostResponseDto updatePost
             (PostRequestDto.BeneficiaryPostRequestDto postRequestDto, List<MultipartFile> images, MultipartFile excelFile, Long postId);
 
+    PostResponseDto.BeneficiaryPostResponseDto getPostDetail(Long postId);
 }
