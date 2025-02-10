@@ -10,10 +10,63 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.MySQLDialect
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 카멜 -> 스네이크 표기법 변환
         show_sql: true
         format_sql: true
         use_sql_comments: true
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 500MB
+server:
+  port: 8080
+  address: 0.0.0.0
+
+spring-doc:
+  swagger-ui:
+    tags-sorter: alpha
+    operations-sorter: method
+
+swagger:
+  tag:
+    auth: '01. 로그인/회원가입'
+    my-sponsor: '02. [후원자] 마이페이지'
+    my-beneficiary: '03. [수혜자] 마이페이지'
+    my-author: '04. [관리자] 마이페이지 - 기본'
+    cloudfunding-sponsor: '05. [후원자] 클라우드 펀딩'
+    cloudfunding-beneficiary: '06. [수혜자] 클라우드 펀딩'
+    cloudfunding-author: '07. [관리자] 클라우드 펀딩'
+    pay: '08. 카카오페이 결제'
+    volunteer-sponsor: '09. [후원자] 자원봉사'
+    volunteer-beneficiary: '10. [수혜자] 자원봉사'
+    post-sponsor: '11. [후원자] 게시글'
+    post-beneficiary: '12. [수혜자] 게시글'
+    post-author: '13. [관리자] 게시글'
+    test: 'A. Test API'
+
+cloud:
+  aws:
+    s3:
+      bucket: whowantitbucket
+      path:
+        picture : picture
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+
+jwt:
+  header: Authorization
+  #secret : 별도 문자열을 base64로 암호화한값
+  secret:
+    key: ${JWT_SECRET_KEY}
+  #토큰만료시간(ms)
+  token-validity-in-seconds: 3600
