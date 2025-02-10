@@ -44,6 +44,9 @@ public enum ErrorStatus implements BaseErrorCode {
     VOLUNTEER_ALREADY_SCRAPPED(HttpStatus.BAD_REQUEST, "VOLUNTEER4006", "이미 스크랩한 자원봉사입니다."),
     VOLUNTEER_SCRAP_NOT_FOUND(HttpStatus.BAD_REQUEST, "VOLUNTEER4007", "스크랩하지 않은 자원봉사는 스크랩 취소할 수 없습니다."),
 
+    // 게시물 관련 에러
+    FORBIDDEN_POST_ACCESS(HttpStatus.BAD_REQUEST, "POST4001", "복지시설만 게시물을 작성할 수 있습니다."),
+
     // 관리자 관련 에러
     VOLUNTEER_APPROVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5001", "자원봉사 승인 처리 중 오류가 발생했습니다."),
     VOLUNTEER_REJECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5002", "자원봉사 거절 처리 중 오류가 발생했습니다."),
@@ -54,6 +57,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //펀딩 관련 에러
     FUNDING_NOT_FOUND(HttpStatus.BAD_REQUEST,"FUNDING4002","해당 펀딩을 찾을 수 없습니다."),
+
 
     ;
 
