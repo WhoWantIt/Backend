@@ -63,5 +63,15 @@ public class PostBeneficiaryController {
         return ResponseEntity.ok(ApiResponse.onSuccess(postResponseDto));
     }
 
+    @DeleteMapping("/{postId}")
+    @Operation(summary = "복지시설 게시글 삭제", description = "복지시설에서 해당 게시글 삭제 기능입니다.")
+    public ResponseEntity<ApiResponse<Void>> deletePost(
+            @PathVariable Long postId
+    )
+    {
+        postService.deletePost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
