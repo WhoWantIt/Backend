@@ -1,12 +1,8 @@
 package gdg.whowantit.converter;
 
-import gdg.whowantit.dto.response.VolunteerRelationResponseDto;
-import gdg.whowantit.dto.response.VolunteerResponseDto;
-import gdg.whowantit.apiPayload.code.status.ErrorStatus;
-import gdg.whowantit.apiPayload.exception.handler.TempHandler;
+import gdg.whowantit.dto.volunteerDto.VolunteerRelationResponseDto;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.VolunteerRelation;
-import org.springframework.beans.BeanUtils;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

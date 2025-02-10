@@ -1,21 +1,14 @@
 package gdg.whowantit.converter;
 
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
-import gdg.whowantit.dto.request.SignUpRequestDto;
-import gdg.whowantit.dto.request.VolunteerRequestDto;
-import gdg.whowantit.dto.response.UserResponseDto;
-import gdg.whowantit.dto.response.VolunteerResponseDto;
-import gdg.whowantit.entity.User;
-import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
-import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerRequestDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerResponseDto;
 import gdg.whowantit.entity.Volunteer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class VolunteerConverter {

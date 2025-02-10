@@ -1,4 +1,4 @@
-package gdg.whowantit.dto.response;
+package gdg.whowantit.dto.volunteerDto;
 
 import gdg.whowantit.entity.ApprovalStatus;
 import gdg.whowantit.entity.Field;

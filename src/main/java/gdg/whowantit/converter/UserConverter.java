@@ -1,6 +1,6 @@
 package gdg.whowantit.converter;
-import gdg.whowantit.dto.request.SignUpRequestDto;
-import gdg.whowantit.dto.response.UserResponseDto;
+import gdg.whowantit.dto.UserDto.SignUpRequestDto;
+import gdg.whowantit.dto.UserDto.UserResponseDto;
 import gdg.whowantit.entity.User;
 import org.springframework.beans.BeanUtils;
 

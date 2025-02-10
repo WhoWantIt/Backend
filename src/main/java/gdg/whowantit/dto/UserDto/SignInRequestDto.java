@@ -1,4 +1,4 @@
-package gdg.whowantit.dto.request;
+package gdg.whowantit.dto.UserDto;
 
 import lombok.Getter;
 
