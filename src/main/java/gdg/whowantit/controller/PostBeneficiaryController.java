@@ -4,11 +4,16 @@ import gdg.whowantit.apiPayload.ApiResponse;
 import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
 import gdg.whowantit.dto.volunteerDto.VolunteerRequestDto;
+import gdg.whowantit.dto.volunteerDto.VolunteerResponseDto;
 import gdg.whowantit.entity.Post;
 import gdg.whowantit.service.PostService.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,5 +78,15 @@ public class PostBeneficiaryController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("")
+    @Operation(summary = "게시글 전체 조회", description = "게시글 전체 조회 기능입니다.")
+    public ResponseEntity<ApiResponse<Page<PostResponseDto.BeneficiaryPostResponseDto>>> getAllPosts (
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostResponseDto.BeneficiaryPostResponseDto> posts = postService.getAllPosts(pageable);
+        return ResponseEntity.ok(ApiResponse.onSuccess(posts));
+    }
 
 }
