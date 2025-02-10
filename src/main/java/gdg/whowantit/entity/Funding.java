@@ -1,12 +1,15 @@
 package gdg.whowantit.entity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class Funding extends BaseEntity {
     @Id
     private Long fundingId;
