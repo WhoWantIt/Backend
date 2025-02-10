@@ -22,7 +22,7 @@ public class Post extends BaseEntity {
 
     private String attachedExcelFile;
 
-    private boolean isVerified;
+    private ApprovalStatus approvalStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiary_id")

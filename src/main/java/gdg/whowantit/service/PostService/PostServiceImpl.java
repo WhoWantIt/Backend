@@ -5,10 +5,7 @@ import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.PostConverter;
 import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
-import gdg.whowantit.entity.Beneficiary;
-import gdg.whowantit.entity.Post;
-import gdg.whowantit.entity.Role;
-import gdg.whowantit.entity.User;
+import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.BeneficiaryRepository;
 import gdg.whowantit.repository.PostRepository;
 import gdg.whowantit.repository.UserRepository;
@@ -46,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
         Post post = PostConverter.toPost(postRequestDto);
         post.setBeneficiary(user.getBeneficiary());
-        post.setVerified(false);
+        post.setApprovalStatus(ApprovalStatus.UNDETERMINED);
 
         if (!images.isEmpty()){
             List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
