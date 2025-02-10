@@ -141,4 +141,16 @@ public class PostBeneficiaryController {
         Page<PostResponseDto.BeneficiaryPostResponseDto> posts = postService.getPostsByYearAndMonth(year, month, pageable);
         return ResponseEntity.ok(ApiResponse.onSuccess(posts));
     }
+
+    @GetMapping("/beneficiaries")
+    @Operation(summary = "기관별 게시글 조회", description = "기관 닉네임을 통해 기관이 작성한 게시글 조회 가능한 기능입니다.")
+    public ResponseEntity<ApiResponse<Page<PostResponseDto.BeneficiaryPostResponseDto>>> getMyPosts (
+            @RequestParam String nickname,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<PostResponseDto.BeneficiaryPostResponseDto> posts = postService.getPostsByNickname(nickname, pageable);
+        return ResponseEntity.ok(ApiResponse.onSuccess(posts));
+    }
 }
