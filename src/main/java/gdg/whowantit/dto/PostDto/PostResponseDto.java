@@ -14,6 +14,8 @@ public class PostResponseDto {
 
         private Long beneficiaryId;
 
+        private String nickname;
+
         private String title;
 
         private String content;
@@ -21,6 +23,8 @@ public class PostResponseDto {
         private List<String> attachedImages;
 
         private String attachedExcelFile;
+
+        private String createdAt;
 
     }
 
