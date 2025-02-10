@@ -24,5 +24,6 @@ public interface PostService {
     void rejectPost(Long postId);
     Page<PostResponseDto.BeneficiaryPostResponseDto> getAllPosts(Pageable pageable);
     Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByApprovalStatus(ApprovalStatus approvalStatus, Pageable pageable);
+    Page<PostResponseDto.BeneficiaryPostResponseDto> getMyPosts(Pageable pageable);
 
 }
