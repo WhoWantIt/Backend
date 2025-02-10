@@ -51,4 +51,17 @@ public class PostBeneficiaryController {
         return ResponseEntity.ok(ApiResponse.onSuccess(postResponseDto));
     }
 
+    @GetMapping("/{postId}")
+    @Operation(summary = "복지시설 게시글 상세 조회", description = "복지시설에서 게시글 상세 조회입니다.")
+    public ResponseEntity<ApiResponse<PostResponseDto.BeneficiaryPostResponseDto>> getPostDetail(
+            @PathVariable Long postId)
+    {
+
+        PostResponseDto.BeneficiaryPostResponseDto postResponseDto =
+                postService.getPostDetail(postId);
+
+        return ResponseEntity.ok(ApiResponse.onSuccess(postResponseDto));
+    }
+
+
 }
