@@ -17,9 +17,13 @@ public class Post extends BaseEntity {
 
     private String content;
 
-    private String attachedImage;
+    @Lob
+    private String attachedImages;
 
-    private boolean isVerified;
+    private String attachedExcelFile;
+
+    @Enumerated(EnumType.STRING)
+    private ApprovalStatus approvalStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "beneficiary_id")
