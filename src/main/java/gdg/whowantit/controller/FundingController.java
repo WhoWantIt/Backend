@@ -1,6 +1,7 @@
 package gdg.whowantit.controller;
 
 import gdg.whowantit.apiPayload.ApiResponse;
+import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.Status;
@@ -10,6 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/fundings")
@@ -38,4 +41,25 @@ public class FundingController {
         return ApiResponse.onSuccess(response);
     }
 
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
+    @GetMapping("/lists")
+    @Operation(summary="전체 - 클라우드 펀딩 조회  ( ALL )",
+            description="전체 - 클라우드 펀딩 조회  ( ALL )")
+    public ApiResponse<List<BeneficiaryResponseDto.fundingResponse>> getFundingList(){
+        List<BeneficiaryResponseDto.fundingResponse> response = fundingService.getFundingList();
+
+        return ApiResponse.onSuccess(response);
+    }
+
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
+    @GetMapping("/filters")
+    @Operation(summary="전체 - 클라우드 펀딩 조회 ( 진행중, 진행완료 )",
+            description="전체 - 클라우드 펀딩 조회 ( 진행중, 진행완료 )")
+    public ApiResponse<List<BeneficiaryResponseDto.fundingResponse>> getFundingList(@RequestParam Status status){
+        List<BeneficiaryResponseDto.fundingResponse> response = fundingService.getFundingList(status);
+
+        return ApiResponse.onSuccess(response);
+    }
 }

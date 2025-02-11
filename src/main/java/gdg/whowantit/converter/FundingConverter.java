@@ -15,10 +15,12 @@ public class FundingConverter {
         long dDay = ChronoUnit.DAYS.between(today, deadline);
         String dDayString = (dDay < 0) ? "마감" : String.valueOf(dDay);
 
-        float targetAmount=funding.getTargetAmount();
+        // null 체크 후 기본값 설정
+        float targetAmount = (funding.getTargetAmount() != null) ? funding.getTargetAmount() : 1.0f; // 0으로 설정하면 나누기 에러 발생 가능
+        float currentAmount = (funding.getCurrentAmount() != null) ? funding.getCurrentAmount() : 0.0f;
 
-        float currentAmount=funding.getCurrentAmount();
-        double attainmentPercent=currentAmount/targetAmount*100.0;
+        // 목표 금액이 0이면 퍼센트 계산을 방지 (기본값 0%)
+        double attainmentPercent = (targetAmount > 0) ? (currentAmount / targetAmount * 100.0) : 0.0;
 
         return BeneficiaryResponseDto.fundingResponse.builder()
                 .fundingId(funding.getFundingId())

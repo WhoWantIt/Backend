@@ -2,6 +2,8 @@ package gdg.whowantit.service.FundingService;
 
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
+import gdg.whowantit.converter.FundingConverter;
+import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.*;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +91,29 @@ public class FundingServiceImpl implements FundingService{
                 .build();
 
 
+    }
+
+    public List<BeneficiaryResponseDto.fundingResponse> getFundingList(){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        List<Funding> fundingList = fundingRepository.findAll();
+        return fundingList.stream()
+                .map(FundingConverter::toFundingResponse)
+                .collect(Collectors.toList());
+
+    }
+
+    public List<BeneficiaryResponseDto.fundingResponse> getFundingList(Status status){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        List<Funding> fundingList = fundingRepository.findAllByStatus(status);
+        return fundingList.stream()
+                .map(FundingConverter::toFundingResponse)
+                .collect(Collectors.toList());
     }
 
 }
