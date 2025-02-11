@@ -28,4 +28,5 @@ public class FundingResponseDto {
 
         private long beneficiaryId;
     }
+
 }

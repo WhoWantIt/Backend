@@ -21,7 +21,8 @@ public class Funding extends BaseEntity {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    @Column(nullable = false)
+    private Status status= Status.BEFORE_PROGRESS;
 
     private String productName;
 
@@ -32,7 +33,8 @@ public class Funding extends BaseEntity {
     private String attachedImage;
 
     @Enumerated(EnumType.STRING)
-    private ApprovalStatus approvalStatus;
+    @Column(nullable = false)
+    private ApprovalStatus approvalStatus= ApprovalStatus.UNDETERMINED;
 
     private LocalDateTime deadline;
 

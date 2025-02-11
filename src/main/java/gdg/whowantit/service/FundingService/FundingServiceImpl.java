@@ -4,9 +4,7 @@ import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
-import gdg.whowantit.entity.Beneficiary;
-import gdg.whowantit.entity.Funding;
-import gdg.whowantit.entity.User;
+import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.BeneficiaryRepository;
 import gdg.whowantit.repository.FundingRepository;
 import gdg.whowantit.repository.UserRepository;
@@ -56,6 +54,39 @@ public class FundingServiceImpl implements FundingService{
                 .deadline(funding.getDeadline())
                 .beneficiaryId(funding.getBeneficiary().getBeneficiaryId())
                 .build();
+    }
+
+    public FundingResponseDto.createResponse updateFunding(Long fundingId, boolean permission){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        if(user.getRole() != Role.ADMIN){
+            throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
+        }
+        Funding funding=fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+
+        if(permission){
+            funding.setApprovalStatus(ApprovalStatus.APPROVED);
+        }
+        else{
+            funding.setApprovalStatus(ApprovalStatus.DISAPPROVED);
+        }
+        fundingRepository.save(funding);
+
+        return FundingResponseDto.createResponse.builder()
+                .fundingId(funding.getFundingId())
+                .title(funding.getTitle())
+                .product_name(funding.getProductName())
+                .target_amount(funding.getTargetAmount())
+                .text(funding.getContent())
+                .status(String.valueOf(funding.getStatus()))
+                .approval_status(String.valueOf(funding.getApprovalStatus()))
+                .deadline(funding.getDeadline())
+                .beneficiaryId(funding.getBeneficiary().getBeneficiaryId())
+                .build();
+
+
     }
 
 }
