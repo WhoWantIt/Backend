@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/fundings")
 @RequiredArgsConstructor
@@ -41,6 +42,7 @@ public class FundingController {
         return ApiResponse.onSuccess(response);
     }
 
+
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
     @GetMapping("/lists")
@@ -62,4 +64,5 @@ public class FundingController {
 
         return ApiResponse.onSuccess(response);
     }
+
 }
