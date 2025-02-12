@@ -8,6 +8,7 @@ import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.BeneficiaryRepository;
+import gdg.whowantit.repository.FundingRelationRepository;
 import gdg.whowantit.repository.FundingRepository;
 import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.util.SecurityUtil;
@@ -25,6 +26,8 @@ public class FundingServiceImpl implements FundingService{
     private final UserRepository userRepository;
     private final FundingRepository fundingRepository;
     private final BeneficiaryRepository beneficiaryRepository;
+    private final FundingRelationRepository fundingRelationRepository;
+
     @Override
     @Transactional
     public FundingResponseDto.createResponse createFunding(FundingRequestDto.createRequest request){
@@ -126,6 +129,19 @@ public class FundingServiceImpl implements FundingService{
         return FundingConverter.toInfoResponse(funding);
 
 
+    }
+
+    public List<FundingResponseDto.sponsorResponse> getSponsorList(Long fundingId){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findAllByFunding_FundingId(funding.getFundingId());
+        return fundingRelations.stream()
+                .map(FundingConverter::toSponsorResponse)
+                .collect(Collectors.toList());
     }
 
 }

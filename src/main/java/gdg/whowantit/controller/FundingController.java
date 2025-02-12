@@ -75,6 +75,16 @@ public class FundingController {
 
         return ApiResponse.onSuccess(response);
     }
+    @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
+    @GetMapping("/sponsors/{fundingId}")
+    @Operation(summary="펀딩 신청한 후원자 리스트 조회",
+            description="펀딩 신청한 후원자 리스트 조회")
+    public ApiResponse<List<FundingResponseDto.sponsorResponse>>getSponsorList(@PathVariable @Valid Long fundingId){
+        List<FundingResponseDto.sponsorResponse> response = fundingService.getSponsorList(fundingId);
+
+        return ApiResponse.onSuccess(response);
+    }
+
 
 
 }

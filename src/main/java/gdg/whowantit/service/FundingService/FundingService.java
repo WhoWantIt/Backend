@@ -14,5 +14,6 @@ public interface FundingService {
     List<BeneficiaryResponseDto.fundingResponse> getFundingList();
     List<BeneficiaryResponseDto.fundingResponse> getFundingList(Status status);
     FundingResponseDto.infoResponse getFundingInfo(Long fundingId);
+    List<FundingResponseDto.sponsorResponse> getSponsorList(Long fundingId);
 
 }

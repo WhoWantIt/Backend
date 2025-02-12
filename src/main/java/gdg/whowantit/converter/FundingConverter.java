@@ -5,6 +5,7 @@ import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.ApprovalStatus;
 import gdg.whowantit.entity.Funding;
+import gdg.whowantit.entity.FundingRelation;
 import gdg.whowantit.entity.Status;
 
 import java.time.LocalDate;
@@ -58,6 +59,16 @@ public class FundingConverter {
                 .beneficiaryId(funding.getBeneficiary().getBeneficiaryId())
                 .beneficiaryName(funding.getBeneficiary().getUser().getName())
                 .beneficiaryNickname(funding.getBeneficiary().getUser().getNickname())
+                .build();
+    }
+
+    public static FundingResponseDto.sponsorResponse toSponsorResponse(FundingRelation fundingRelation){
+
+        return FundingResponseDto.sponsorResponse.builder()
+                .sponsorId(fundingRelation.getSponsor().getSponsorId())
+                .sponsorNickname(fundingRelation.getSponsor().getUser().getNickname())
+                .fundingRelationId(fundingRelation.getFundingRelationId())
+                .paymentAmount(fundingRelation.getPaymentAmount())
                 .build();
     }
 }

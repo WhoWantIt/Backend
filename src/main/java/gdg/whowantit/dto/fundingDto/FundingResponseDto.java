@@ -61,4 +61,17 @@ public class FundingResponseDto {
         private String beneficiaryNickname;
     }
 
+    @Getter
+    @Builder
+    public static class sponsorResponse {
+        private Long sponsorId;
+
+        private String sponsorNickname;
+
+        private Long fundingRelationId;
+
+        private Long paymentAmount;
+
+    }
+
 }
