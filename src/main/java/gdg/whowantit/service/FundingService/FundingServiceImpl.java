@@ -116,4 +116,16 @@ public class FundingServiceImpl implements FundingService{
                 .collect(Collectors.toList());
     }
 
+    public FundingResponseDto.infoResponse getFundingInfo(Long fundingId){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+        return FundingConverter.toInfoResponse(funding);
+
+
+    }
+
 }

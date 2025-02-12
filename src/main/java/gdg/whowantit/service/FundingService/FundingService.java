@@ -13,5 +13,6 @@ public interface FundingService {
     FundingResponseDto.createResponse updateFunding(Long fundingId, boolean permission);
     List<BeneficiaryResponseDto.fundingResponse> getFundingList();
     List<BeneficiaryResponseDto.fundingResponse> getFundingList(Status status);
+    FundingResponseDto.infoResponse getFundingInfo(Long fundingId);
 
 }

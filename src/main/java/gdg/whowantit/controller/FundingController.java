@@ -46,8 +46,8 @@ public class FundingController {
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
     @GetMapping("/lists")
-    @Operation(summary="전체 - 클라우드 펀딩 조회  ( ALL )",
-            description="전체 - 클라우드 펀딩 조회  ( ALL )")
+    @Operation(summary="클라우드 펀딩 조회  ( ALL )",
+            description="클라우드 펀딩 조회  ( ALL )")
     public ApiResponse<List<BeneficiaryResponseDto.fundingResponse>> getFundingList(){
         List<BeneficiaryResponseDto.fundingResponse> response = fundingService.getFundingList();
 
@@ -57,12 +57,24 @@ public class FundingController {
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
     @GetMapping("/filters")
-    @Operation(summary="전체 - 클라우드 펀딩 조회 ( 진행중, 진행완료 )",
-            description="전체 - 클라우드 펀딩 조회 ( 진행중, 진행완료 )")
+    @Operation(summary="클라우드 펀딩 조회 ( 진행중, 진행완료 )",
+            description="클라우드 펀딩 조회 ( 진행중, 진행완료 )")
     public ApiResponse<List<BeneficiaryResponseDto.fundingResponse>> getFundingList(@RequestParam Status status){
         List<BeneficiaryResponseDto.fundingResponse> response = fundingService.getFundingList(status);
 
         return ApiResponse.onSuccess(response);
     }
+
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
+    @GetMapping("/{fundingId}")
+    @Operation(summary="클라우드 펀딩 상세 조회",
+            description="클라우드 펀딩 상세 조회")
+    public ApiResponse<FundingResponseDto.infoResponse> getFundingInfo(@PathVariable @Valid Long fundingId){
+        FundingResponseDto.infoResponse response = fundingService.getFundingInfo(fundingId);
+
+        return ApiResponse.onSuccess(response);
+    }
+
 
 }

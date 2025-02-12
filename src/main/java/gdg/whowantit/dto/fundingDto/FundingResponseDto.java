@@ -1,6 +1,11 @@
 package gdg.whowantit.dto.fundingDto;
 
+import gdg.whowantit.entity.ApprovalStatus;
 import gdg.whowantit.entity.Beneficiary;
+import gdg.whowantit.entity.Status;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,6 +33,32 @@ public class FundingResponseDto {
 
         private long beneficiaryId;
     }
+    @Getter
+    @Builder
+    public static class infoResponse {
+        private Long fundingId;
 
+        private String title;
+
+        private String content;
+
+        private Status status;
+
+        private String productName;
+
+        private Float currentAmount;
+
+        private String attachedImage;
+
+        private ApprovalStatus approvalStatus;
+
+        private double attainmentPercent;
+
+        private Long beneficiaryId;
+
+        private String beneficiaryName;
+
+        private String beneficiaryNickname;
+    }
 
 }
