@@ -7,10 +7,7 @@ import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.*;
-import gdg.whowantit.repository.BeneficiaryRepository;
-import gdg.whowantit.repository.FundingRelationRepository;
-import gdg.whowantit.repository.FundingRepository;
-import gdg.whowantit.repository.UserRepository;
+import gdg.whowantit.repository.*;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,6 +24,8 @@ public class FundingServiceImpl implements FundingService{
     private final FundingRepository fundingRepository;
     private final BeneficiaryRepository beneficiaryRepository;
     private final FundingRelationRepository fundingRelationRepository;
+    private final SponsorRepository sponsorRepository;
+    private final FundingScrapRepository fundingScrapRepository;
 
     @Override
     @Transactional
@@ -142,6 +141,57 @@ public class FundingServiceImpl implements FundingService{
         return fundingRelations.stream()
                 .map(FundingConverter::toSponsorResponse)
                 .collect(Collectors.toList());
+    }
+
+    public FundingResponseDto.scrapResponse scrapFunding(Long fundingId){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Sponsor sponsor=sponsorRepository.findById(user.getId())
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        if(user.getRole() != Role.SPONSOR){
+            throw new TempHandler(ErrorStatus.FUNDING_PERMISSION_DENIED);
+        }
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+
+        if(fundingScrapRepository.findBySponsor_SponsorIdAndFunding_FundingId(user.getId(),fundingId)!=null)
+        {
+            throw new TempHandler(ErrorStatus.FUNDING_ALREADY_SCRAPPED);
+        }
+
+        FundingScrap fundingScrap=FundingScrap.builder()
+                .sponsor(sponsor)
+                .funding(funding)
+                .build();
+
+        fundingScrapRepository.save(fundingScrap);
+
+        return FundingResponseDto.scrapResponse.builder()
+                .fundingId(fundingScrap.getFunding().getFundingId())
+                .sponsorId(fundingScrap.getSponsor().getUser().getId())
+                .scrapId(fundingScrap.getFundingScrapId())
+                .build();
+    }
+
+    public void deleteScrapFunding(Long fundingId){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        if(user.getRole() != Role.SPONSOR){
+            throw new TempHandler(ErrorStatus.FUNDING_PERMISSION_DENIED);
+        }
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+
+        if(fundingScrapRepository.findBySponsor_SponsorIdAndFunding_FundingId(user.getId(),fundingId)==null)
+        {
+            throw new TempHandler(ErrorStatus.FUNDING_SCRAP_NOT_FOUND);
+        }
+
+        FundingScrap fundingScrap=fundingScrapRepository.findBySponsor_SponsorIdAndFunding_FundingId(user.getId(),fundingId);
+        fundingScrapRepository.delete(fundingScrap);
+
     }
 
 }

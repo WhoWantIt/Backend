@@ -60,6 +60,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     //펀딩 관련 에러
     FUNDING_NOT_FOUND(HttpStatus.BAD_REQUEST,"FUNDING4002","해당 펀딩을 찾을 수 없습니다."),
+    FUNDING_PERMISSION_DENIED(HttpStatus.BAD_REQUEST,"FUNDING4003","스폰서만 스크랩할 수 있습니다."),
+    FUNDING_ALREADY_SCRAPPED(HttpStatus.BAD_REQUEST,"FUNDING4004","이미 해당 펀딩을 스크랩했습니다."),
+    FUNDING_SCRAP_NOT_FOUND(HttpStatus.BAD_REQUEST,"FUNDING4005","스크랩하지 않은 펀딩은 스크랩 취소할 수 없습니다."),
+
 
 
     ;

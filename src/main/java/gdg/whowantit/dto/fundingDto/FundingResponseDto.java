@@ -74,4 +74,14 @@ public class FundingResponseDto {
 
     }
 
+    @Getter
+    @Builder
+    public static class scrapResponse{
+        private Long scrapId;
+
+        private Long sponsorId;
+
+        private Long fundingId;
+    }
+
 }

@@ -85,6 +85,26 @@ public class FundingController {
         return ApiResponse.onSuccess(response);
     }
 
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @PostMapping("/scraps/{fundingId}")
+    @Operation(summary="클라우드 펀딩 스크랩 등록",
+            description="클라우드 펀딩 스크랩 등록")
+    public ApiResponse<FundingResponseDto.scrapResponse>scrapFunding(@PathVariable @Valid Long fundingId){
+        FundingResponseDto.scrapResponse response = fundingService.scrapFunding(fundingId);
+
+        return ApiResponse.onSuccess(response);
+    }
+
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @DeleteMapping("/scraps/{fundingId}")
+    @Operation(summary="클라우드 펀딩 스크랩 취소",
+            description="클라우드 펀딩 스크랩 취소")
+    public ApiResponse<String>deleteScrapFunding(@PathVariable @Valid Long fundingId){
+        fundingService.deleteScrapFunding(fundingId);
+
+        return ApiResponse.onSuccess("스크랩 취소 성공");
+    }
+
 
 
 }
