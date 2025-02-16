@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,8 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/fundings")
 @RequiredArgsConstructor
-//@Tag(name = "${swagger.tag.cloudfunding-sponsor}")
-//@Tag(name = "${swagger.tag.cloudfunding-author}")
 public class FundingController {
     private final FundingService fundingService;
     @PostMapping("/")
@@ -29,6 +28,15 @@ public class FundingController {
     @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
     public ApiResponse<FundingResponseDto.createResponse> createFunding(@RequestBody FundingRequestDto.createRequest request) {
         FundingResponseDto.createResponse response = fundingService.createFunding(request);
+
+        return ApiResponse.onSuccess(response);
+    }
+    @PutMapping(value ="/{fundingId}", consumes = "multipart/form-data")
+    @Operation(summary="수혜자 - 펀딩 이미지 생성 API",
+            description="수혜자 - 펀딩 생성할 때, 이미지 추가하는 API 입니다.")
+    @Tag(name = "${swagger.tag.cloudfunding-beneficiary}")
+    public ApiResponse<FundingResponseDto.createResponse> createFundingImage(@PathVariable @Valid Long fundingId, @RequestParam(value = "images", required = false) List<MultipartFile> images) {
+        FundingResponseDto.createResponse response = fundingService.createFundingImage(fundingId, images);
 
         return ApiResponse.onSuccess(response);
     }

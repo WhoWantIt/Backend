@@ -9,10 +9,13 @@ import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
+import gdg.whowantit.service.ImageService.ImageService;
 import gdg.whowantit.util.SecurityUtil;
+import gdg.whowantit.util.StringListUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +30,7 @@ public class FundingServiceImpl implements FundingService{
     private final FundingRelationRepository fundingRelationRepository;
     private final SponsorRepository sponsorRepository;
     private final FundingScrapRepository fundingScrapRepository;
+    private final ImageService imageService;
 
     @Override
     @Transactional
@@ -56,6 +60,39 @@ public class FundingServiceImpl implements FundingService{
                 .product_name(funding.getProductName())
                 .target_amount(funding.getTargetAmount())
                 .text(funding.getContent())
+                .attachedImage(funding.getAttachedImage())
+                .status(String.valueOf(funding.getStatus()))
+                .approval_status(String.valueOf(funding.getApprovalStatus()))
+                .deadline(funding.getDeadline())
+                .beneficiaryId(funding.getBeneficiary().getBeneficiaryId())
+                .build();
+    }
+
+    public FundingResponseDto.createResponse createFundingImage(Long fundingId, List<MultipartFile> images){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Beneficiary beneficiary=beneficiaryRepository.findByBeneficiaryId(user.getId())
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+
+        Funding funding=fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+
+        if (!images.isEmpty()) {
+            List<String> imageUrls = imageService.uploadMultipleImages("fundings", images);
+            funding.setAttachedImage(StringListUtil.listToString(imageUrls));
+        }
+
+        fundingRepository.save(funding);
+
+        return FundingResponseDto.createResponse.builder()
+                .fundingId(funding.getFundingId())
+                .title(funding.getTitle())
+                .product_name(funding.getProductName())
+                .target_amount(funding.getTargetAmount())
+                .text(funding.getContent())
+                .attachedImage(funding.getAttachedImage())
                 .status(String.valueOf(funding.getStatus()))
                 .approval_status(String.valueOf(funding.getApprovalStatus()))
                 .deadline(funding.getDeadline())

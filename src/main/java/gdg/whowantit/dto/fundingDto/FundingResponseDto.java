@@ -23,6 +23,8 @@ public class FundingResponseDto {
 
         private String status;
 
+        private String attachedImage;
+
         private String approval_status;
 
         private LocalDateTime deadline;
