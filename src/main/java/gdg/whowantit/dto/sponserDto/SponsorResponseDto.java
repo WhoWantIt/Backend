@@ -20,7 +20,7 @@ public class SponsorResponseDto {
 
         private String dDay;
 
-        private Long fundingAmount;
+        private float fundingAmount;
 
         private Long beneficiaryId;
 
@@ -37,7 +37,7 @@ public class SponsorResponseDto {
 
         private String sponsorNickname;
 
-        private Long totalAmount;
+        private double totalAmount;
 
         private List<fundingResponse> fundingList;
     }

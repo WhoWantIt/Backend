@@ -2,6 +2,7 @@ package gdg.whowantit.controller;
 
 import gdg.whowantit.apiPayload.ApiResponse;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
+import gdg.whowantit.dto.fundingDto.FundingRelationResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.Status;
@@ -103,6 +104,16 @@ public class FundingController {
         fundingService.deleteScrapFunding(fundingId);
 
         return ApiResponse.onSuccess("스크랩 취소 성공");
+    }
+
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @PostMapping("/pays/{fundingId}")
+    @Operation(summary="클라우드 펀딩 모금하기",
+            description="클라우드 펀딩 모금하기")
+    public ApiResponse<FundingRelationResponseDto.createResponse> createSpon(@PathVariable @Valid Long fundingId, @RequestParam float paymentAmount){
+        FundingRelationResponseDto.createResponse response=fundingService.createSpon(fundingId,paymentAmount);
+
+        return ApiResponse.onSuccess(response);
     }
 
 

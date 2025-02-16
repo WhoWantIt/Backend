@@ -4,6 +4,7 @@ import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.FundingConverter;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
+import gdg.whowantit.dto.fundingDto.FundingRelationResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.entity.*;
@@ -192,6 +193,33 @@ public class FundingServiceImpl implements FundingService{
         FundingScrap fundingScrap=fundingScrapRepository.findBySponsor_SponsorIdAndFunding_FundingId(user.getId(),fundingId);
         fundingScrapRepository.delete(fundingScrap);
 
+    }
+
+    public FundingRelationResponseDto.createResponse createSpon(Long fundingId, float paymentAmount){
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Sponsor sponsor=sponsorRepository.findById(user.getId())
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Funding funding = fundingRepository.findById(fundingId)
+                .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+
+        FundingRelation fundingRelation=FundingRelation.builder()
+                .sponsor(sponsor)
+                .funding(funding)
+                .paymentAmount(paymentAmount)
+                .beneficiary(funding.getBeneficiary())
+                .build();
+        fundingRelationRepository.save(fundingRelation);
+
+        funding.setCurrentAmount(funding.getCurrentAmount() + paymentAmount);
+        fundingRepository.save(funding);
+
+        return FundingRelationResponseDto.createResponse.builder()
+                .sponsorId(sponsor.getUser().getId())
+                .fundingId(fundingId)
+                .paymentAmount(paymentAmount)
+                .build();
     }
 
 }
