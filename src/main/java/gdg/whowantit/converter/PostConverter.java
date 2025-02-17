@@ -20,7 +20,6 @@ public class PostConverter {
                 .beneficiaryName(post.getBeneficiary().getUser().getName())
                 .beneficiaryNickname(post.getBeneficiary().getUser().getNickname())
                 .approvalStatus(post.getApprovalStatus())
-                .beneficiaryNickname(post.getBeneficiary().getUser().getNickname())
                 .build();
     }
 

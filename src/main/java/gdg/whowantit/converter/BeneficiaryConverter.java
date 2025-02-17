@@ -1,5 +1,6 @@
 package gdg.whowantit.converter;
 
+import gdg.whowantit.dto.adminDto.AdminResponseDto;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.entity.Beneficiary;
 
@@ -18,6 +19,13 @@ public class BeneficiaryConverter {
                 .child(beneficiary.getChild())
                 .adolescent(beneficiary.getAdolescent())
                 .youth(beneficiary.getYouth())
+                .build();
+    }
+    public static AdminResponseDto.beneficiaryResponse toBeneficiaryListResponse (Beneficiary beneficiary){
+        return AdminResponseDto.beneficiaryResponse.builder()
+                .attachedImage(beneficiary.getUser().getImage())
+                .name(beneficiary.getUser().getName())
+                .nickname(beneficiary.getUser().getNickname())
                 .build();
     }
 }

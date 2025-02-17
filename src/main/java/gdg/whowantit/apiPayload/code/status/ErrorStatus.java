@@ -53,7 +53,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 관리자 관련 에러
     VOLUNTEER_APPROVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5001", "자원봉사 승인 처리 중 오류가 발생했습니다."),
     VOLUNTEER_REJECTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5002", "자원봉사 거절 처리 중 오류가 발생했습니다."),
-    PERMISSION_DENIED(HttpStatus.BAD_REQUEST,"FUNDING4001","관리자만 승인/거절 관리할 수 있습니다."),
+    PERMISSION_DENIED(HttpStatus.BAD_REQUEST,"ADMIN4001","관리자만 관리할 수 있습니다."),
 
     // 기타 에러
     JSON_PARSING_ERROR(HttpStatus.BAD_REQUEST, "JSON4001", "JSON 파싱이 잘못되었습니다."),
