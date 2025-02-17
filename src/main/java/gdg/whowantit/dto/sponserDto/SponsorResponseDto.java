@@ -20,11 +20,13 @@ public class SponsorResponseDto {
 
         private String dDay;
 
-        private Long fundingAmount;
+        private float fundingAmount;
 
         private Long beneficiaryId;
 
         private String beneficiaryName;
+
+        private String beneficiaryNickname;
 
     }
 
@@ -33,7 +35,9 @@ public class SponsorResponseDto {
     public static class fundingListResponse {
         private String sponsorName;
 
-        private Long totalAmount;
+        private String sponsorNickname;
+
+        private double totalAmount;
 
         private List<fundingResponse> fundingList;
     }
@@ -60,6 +64,8 @@ public class SponsorResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
     }
 
     @Getter
@@ -78,12 +84,16 @@ public class SponsorResponseDto {
 
         private String beneficiaryName;
 
+        private String beneficiaryNickname;
+
     }
 
     @Getter
     @Builder
     public static class volunteerListResponse {
         private String sponsorName;
+
+        private String sponsorNickname;
 
         private int volunteerListCount;
 
@@ -111,6 +121,8 @@ public class SponsorResponseDto {
         private Long beneficiaryId;
 
         private String beneficiaryName;
+
+        private String beneficiaryNickname;
     }
 
 }

@@ -8,6 +8,7 @@ import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
+import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
@@ -30,12 +31,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
     @Override
     @Transactional
     public BeneficiaryResponseDto.fundingListResponse getFundingList(Long beneficiaryId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
-
-        String email = authentication.getName(); // 현재 로그인된 사용자의 이메일
+        String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
@@ -49,6 +45,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
 
         return BeneficiaryResponseDto.fundingListResponse.builder()
                 .beneficiaryName(user.getName())
+                .beneficiaryNickname(user.getNickname())
                 .listCount(listCount)
                 .fundingList(fundingResponses)
                 .build();
@@ -57,10 +54,9 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
     @Override
     @Transactional
     public BeneficiaryResponseDto.volunteerListResponse getVolunteerList(Long beneficiaryId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
         List<Volunteer> volunteers=volunteerRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
 
@@ -79,10 +75,9 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
     @Override
     @Transactional
     public BeneficiaryResponseDto.postListResponse getPostList(Long beneficiaryId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
         List<Post> posts=postRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
 
@@ -101,10 +96,9 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
     @Override
     @Transactional
     public BeneficiaryResponseDto.profileResponse getProfile(Long beneficiaryId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
+        String email = SecurityUtil.getCurrentUserEmail();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
         Beneficiary beneficiary=beneficiaryRepository.findById(beneficiaryId)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
@@ -114,12 +108,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
     @Override
     @Transactional
     public BeneficiaryResponseDto.profileResponse updateProfile(BeneficiaryRequestDto.profileRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal().equals("anonymousUser")) {
-            throw new TempHandler(ErrorStatus.TOKEN_EXPIRED);
-        }
-
-        String email = authentication.getName();
+        String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 

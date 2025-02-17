@@ -69,8 +69,8 @@ public class SponsorServiceImpl implements SponsorService{
 
         List<FundingRelation> fundingRelations=fundingRelationRepository.findBySponsor_SponsorId(user.getId());
 
-        long totalAmount= fundingRelations.stream()
-                .mapToLong(FundingRelation::getPaymentAmount)
+        double totalAmount = fundingRelations.stream()
+                .mapToDouble(FundingRelation::getPaymentAmount)
                 .sum();
 
         List<SponsorResponseDto.fundingResponse> fundingResponses= fundingRelations.stream()

@@ -23,6 +23,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             )
     Page<Post> findByBeneficiaryNickname
             (@Param("keyword1") String keyword1, Pageable pageable);
+  
+    List<Post> findAllByApprovalStatus(ApprovalStatus approvalStatus);
+
 
 }
 

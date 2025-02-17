@@ -22,7 +22,8 @@ public class FundingRelationConverter {
                 .dDay(dDayString)
                 .fundingAmount(fundingRelation.getPaymentAmount())
                 .beneficiaryId(fundingRelation.getFunding().getBeneficiary().getBeneficiaryId())
-                .beneficiaryName(fundingRelation.getFunding().getBeneficiary().getUser().getNickname())
+                .beneficiaryName(fundingRelation.getFunding().getBeneficiary().getUser().getName())
+                .beneficiaryNickname(fundingRelation.getFunding().getBeneficiary().getUser().getNickname())
                 .build();
     }
 }

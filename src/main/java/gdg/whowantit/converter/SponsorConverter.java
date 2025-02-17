@@ -1,9 +1,12 @@
 package gdg.whowantit.converter;
 
+import gdg.whowantit.dto.adminDto.AdminResponseDto;
 import gdg.whowantit.dto.volunteerDto.VolunteerAppliedSponsorsDto;
 import gdg.whowantit.entity.Sponsor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public class SponsorConverter {
 
@@ -20,5 +23,13 @@ public class SponsorConverter {
 
             return dto;
         }));
+    }
+
+    public static AdminResponseDto.sponsorResponse toSponsorResponse (Sponsor sponsor){
+        return AdminResponseDto.sponsorResponse.builder()
+                .attachedImage(sponsor.getUser().getImage())
+                .name(sponsor.getUser().getName())
+                .nickname(sponsor.getUser().getNickname())
+                .build();
     }
 }

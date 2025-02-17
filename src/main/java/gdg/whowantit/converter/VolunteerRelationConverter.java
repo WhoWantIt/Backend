@@ -40,7 +40,8 @@ public class VolunteerRelationConverter {
                 .address(volunteerRelation.getVolunteer().getBeneficiary().getUser().getAddress())
                 .dDay(dDayString)
                 .beneficiaryId(volunteerRelation.getVolunteer().getBeneficiary().getBeneficiaryId())
-                .beneficiaryName(volunteerRelation.getVolunteer().getBeneficiary().getUser().getNickname())
+                .beneficiaryName(volunteerRelation.getVolunteer().getBeneficiary().getUser().getName())
+                .beneficiaryNickname(volunteerRelation.getVolunteer().getBeneficiary().getUser().getNickname())
                 .build();
     }
 

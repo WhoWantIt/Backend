@@ -9,6 +9,8 @@ public class MyRequestDto {
     public static class MyRequest {
         private String nickname;
 
+        private String name;
+
         private String email;
 
         private String password;
