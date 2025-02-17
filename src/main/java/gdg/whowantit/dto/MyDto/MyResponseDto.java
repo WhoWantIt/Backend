@@ -19,5 +19,7 @@ public class MyResponseDto {
         private String phoneNumber;
 
         private String address;
+
+        private String image;
     }
 }

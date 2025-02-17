@@ -13,6 +13,9 @@ public class MyConverter {
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .address(user.getAddress())
+                .image(user.getImage())
                 .build();
     }
+
+
 }
