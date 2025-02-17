@@ -88,7 +88,6 @@ public class BeneficiaryResponseDto {
 
         private ApprovalStatus approvalStatus;
 
-
     }
 
     @Getter

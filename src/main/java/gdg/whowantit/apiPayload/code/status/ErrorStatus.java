@@ -58,6 +58,7 @@ public enum ErrorStatus implements BaseErrorCode {
     // 기타 에러
     JSON_PARSING_ERROR(HttpStatus.BAD_REQUEST, "JSON4001", "JSON 파싱이 잘못되었습니다."),
 
+
     //펀딩 관련 에러
     FUNDING_NOT_FOUND(HttpStatus.BAD_REQUEST,"FUNDING4002","해당 펀딩을 찾을 수 없습니다."),
     FUNDING_PERMISSION_DENIED(HttpStatus.BAD_REQUEST,"FUNDING4003","스폰서만 스크랩할 수 있습니다."),
