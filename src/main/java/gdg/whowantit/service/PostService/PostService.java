@@ -27,5 +27,6 @@ public interface PostService {
     Page<PostResponseDto.BeneficiaryPostResponseDto> getMyPosts(Pageable pageable);
     Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByYearAndMonth(Long year, Long month, Pageable pageable);
     Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByNickname(String nickname, Pageable pageable);
-
+    void verifyApprovePost(Long postId);
+    void verifyRejectPost(Long postId);
 }
