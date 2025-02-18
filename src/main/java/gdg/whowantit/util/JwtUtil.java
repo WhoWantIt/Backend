@@ -19,7 +19,7 @@ import java.util.*;
 public class JwtUtil {
     private static Key key;
     private final RefreshTokenRepository refreshTokenRepository; // ✅ Repository 주입
-    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15; // 15분
+    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60; // 1 시간
     private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7일
 
     // 🔥 SECRET_KEY를 환경 변수에서 불러오기
