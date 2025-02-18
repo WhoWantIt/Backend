@@ -15,7 +15,6 @@ public class VolunteerRequestDto {
     private String title;
     private Field field;
     private String content;
-    private String attachedImage;
     private String startTime;
     private String deadline;
     private Long maxCapacity;
