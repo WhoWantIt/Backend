@@ -34,6 +34,8 @@ public class PostConverter {
                 .attachedImages(StringListUtil.stringToList(post.getAttachedImages()))
                 .nickname(post.getBeneficiary().getUser().getNickname())
                 .createdAt(post.getCreatedAt().toString())
+                .approvalStatus(post.getApprovalStatus())
+                .isVerified(post.getIsVerified())
                 .build();
     }
 

@@ -46,6 +46,7 @@ public class PostServiceImpl implements PostService {
         Post post = PostConverter.toPost(postRequestDto);
         post.setBeneficiary(user.getBeneficiary());
         post.setApprovalStatus(ApprovalStatus.UNDETERMINED);
+        post.setIsVerified(Boolean.FALSE);
 
         if (!images.isEmpty()) {
             List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
@@ -163,6 +164,33 @@ public class PostServiceImpl implements PostService {
         }
         post.setApprovalStatus(ApprovalStatus.DISAPPROVED);
     }
+
+    @Transactional
+    @Override
+    public void verifyApprovePost(Long postId)
+    {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+        if (post.getIsVerified() == Boolean.TRUE) {
+            throw new TempHandler(ErrorStatus.POST_ALREADY_VERIFIED);
+        }
+        post.setIsVerified(Boolean.TRUE);
+    };
+
+    @Transactional
+    @Override
+    public void verifyRejectPost(Long postId)
+    {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+        if (post.getIsVerified() == Boolean.FALSE) {
+            throw new TempHandler(ErrorStatus.POST_ALREADY_VERIFY_REJECTED);
+        }
+        post.setIsVerified(Boolean.FALSE);
+    };
+
 
     @Override
     public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByApprovalStatus
