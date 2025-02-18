@@ -49,6 +49,8 @@ public enum ErrorStatus implements BaseErrorCode {
     POST_NOT_FOUND(HttpStatus.BAD_REQUEST, "POST4002", "존재하지 않는 게시물입니다."),
     POST_ALREADY_APPROVED(HttpStatus.BAD_REQUEST, "POST4003", "이미 승인된 게시물입니다."),
     POST_ALREADY_DISAPPROVED(HttpStatus.BAD_REQUEST, "POST4004", "이미 승인 거절된 게시물입니다."),
+    POST_ALREADY_VERIFIED(HttpStatus.BAD_REQUEST, "POST4005", "이미 검증된 게시물입니다."),
+    POST_ALREADY_VERIFY_REJECTED(HttpStatus.BAD_REQUEST, "POST4006", "이미 검증 거절된 게시물입니다."),
 
     // 관리자 관련 에러
     VOLUNTEER_APPROVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "VOLUNTEER5001", "자원봉사 승인 처리 중 오류가 발생했습니다."),
