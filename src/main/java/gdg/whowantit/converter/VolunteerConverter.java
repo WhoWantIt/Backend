@@ -55,7 +55,8 @@ public class VolunteerConverter {
                 .address(volunteer.getBeneficiary().getUser().getAddress())
                 .dDay(dDayString)
                 .beneficiaryId(volunteer.getBeneficiary().getBeneficiaryId())
-                .beneficiaryName(volunteer.getBeneficiary().getUser().getNickname())
+                .beneficiaryName(volunteer.getBeneficiary().getUser().getName())
+                .beneficiaryNickname(volunteer.getBeneficiary().getUser().getNickname())
                 .build();
     }
 

@@ -1,20 +1,22 @@
 package gdg.whowantit.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class FundingRelation extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fundingRelationId;
 
-    private Long paymentAmount;
+    private float paymentAmount;
 
     @ManyToOne
     @JoinColumn(name = "funding_id")

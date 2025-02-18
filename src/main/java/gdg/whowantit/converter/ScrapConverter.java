@@ -29,6 +29,7 @@ public class ScrapConverter {
                 .currentCapacity(scrap.getVolunteer().getCurrentCapacity())
                 .beneficiaryId(scrap.getVolunteer().getBeneficiary().getBeneficiaryId())
                 .beneficiaryName(scrap.getVolunteer().getBeneficiary().getUser().getName())
+                .beneficiaryNickname(scrap.getVolunteer().getBeneficiary().getUser().getNickname())
                 .build();
     }
 
@@ -50,6 +51,7 @@ public class ScrapConverter {
                 .dDay(dDayString)
                 .beneficiaryId(fundingScrap.getFunding().getBeneficiary().getBeneficiaryId())
                 .beneficiaryName(fundingScrap.getFunding().getBeneficiary().getUser().getName())
+                .beneficiaryNickname(fundingScrap.getFunding().getBeneficiary().getUser().getNickname())
                 .build();
     }
 

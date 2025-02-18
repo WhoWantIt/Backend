@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface FundingRelationRepository extends JpaRepository<FundingRelation, Long> {
     List<FundingRelation> findBySponsor_SponsorId(Long SponsorId);
+    List<FundingRelation> findAllByFunding_FundingId(Long fundingId);
 }

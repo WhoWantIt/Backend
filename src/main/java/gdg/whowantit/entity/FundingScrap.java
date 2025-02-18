@@ -1,12 +1,14 @@
 package gdg.whowantit.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class FundingScrap extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

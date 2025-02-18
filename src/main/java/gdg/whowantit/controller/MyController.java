@@ -10,6 +10,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/my")
@@ -35,6 +38,15 @@ public class MyController {
             description="후원자, 수혜자 - 사용자 개인정보 수정 API")
     public ApiResponse<MyResponseDto.MyResponse> updateProfile(MyRequestDto.MyRequest request){
         MyResponseDto.MyResponse response=myService.updateProfile(request);
+
+        return ApiResponse.onSuccess(response);
+    }
+
+    @PutMapping(value= "/info/images", consumes = "multipart/form-data")
+    @Operation(summary="후원자, 수혜자 - 사용자 프로필 이미지 수정 API",
+            description="후원자, 수혜자 - 사용자 프로필 이미지 수정 API")
+    public ApiResponse<MyResponseDto.MyResponse> updateProfileImage(@RequestParam(value = "images") MultipartFile image){
+        MyResponseDto.MyResponse response=myService.updateProfileImage(image);
 
         return ApiResponse.onSuccess(response);
     }
