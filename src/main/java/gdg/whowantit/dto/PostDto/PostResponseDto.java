@@ -1,5 +1,6 @@
 package gdg.whowantit.dto.PostDto;
 
+import gdg.whowantit.entity.ApprovalStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,8 +25,11 @@ public class PostResponseDto {
 
         private String attachedExcelFile;
 
-        private String createdAt;
+        private ApprovalStatus approvalStatus;
 
+        private Boolean isVerified;
+
+        private String createdAt;
     }
 
 }
