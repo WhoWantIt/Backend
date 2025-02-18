@@ -22,6 +22,8 @@ public class Post extends BaseEntity {
 
     private String attachedExcelFile;
 
+    private Boolean isVerified;
+
     @Enumerated(EnumType.STRING)
     private ApprovalStatus approvalStatus;
 
