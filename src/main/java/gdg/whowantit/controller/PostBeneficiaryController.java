@@ -32,7 +32,7 @@ public class PostBeneficiaryController {
     @PostMapping("")
     @Operation(summary = "복지시설 게시글 생성", description = "복지시설에서 게시글 생성입니다.")
     public ResponseEntity<ApiResponse<PostResponseDto.BeneficiaryPostResponseDto>> createPost(
-            @RequestPart("volunteerRequestDto") PostRequestDto.BeneficiaryPostRequestDto postRequestDto,
+            @RequestPart("postRequestDto") PostRequestDto.BeneficiaryPostRequestDto postRequestDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images,
             @RequestPart MultipartFile excelFile)
     {
