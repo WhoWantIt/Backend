@@ -105,6 +105,22 @@ public class PostBeneficiaryController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{postId}/verify-approve")
+    @Operation(summary = "관리자 게시글 검증 승인", description = "관리자 게시글 검증 승인입니다.")
+    public ResponseEntity<ApiResponse<Void>> verifyApprovePost(@PathVariable Long postId) {
+        postService.verifyApprovePost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{postId}/verify-reject")
+    @Operation(summary = "관리자 게시글 검증 거절", description = "관리자 게시글 검증 거절입니다.")
+    public ResponseEntity<ApiResponse<Void>> verifyRejectPost(@PathVariable Long postId) {
+        postService.verifyRejectPost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+
+
     @GetMapping("/approvalStatus")
     @Operation(summary = "승인 상태에 따른 게시글 조회", description = "승인 상태에 따른 게시글 조회입니다.")
     public ResponseEntity<ApiResponse<Page<PostResponseDto.BeneficiaryPostResponseDto>>> getPostsByApprovalStatus (
