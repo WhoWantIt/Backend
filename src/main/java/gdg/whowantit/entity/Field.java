@@ -13,7 +13,8 @@ public enum Field {
     ENVIRONMENTAL_PROTECTION("환경보호"),
     DISASTER_RELIEF("재해 재난"),
     PUBLIC_INTEREST_RIGHTS("공익 인권"),
-    MENTORING("멘토링");
+    MENTORING("멘토링"),
+    OTHERS("기타 항목");
 
     private final String description; // 한글 설명
 
