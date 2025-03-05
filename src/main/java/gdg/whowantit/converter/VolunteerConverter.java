@@ -15,6 +15,9 @@ public class VolunteerConverter {
     public static VolunteerResponseDto convertToVolunteerResponseDto(Volunteer volunteer) {
         VolunteerResponseDto volunteerResponseDto = new VolunteerResponseDto();
         BeanUtils.copyProperties(volunteer, volunteerResponseDto);
+        if (volunteer.getBeneficiary() != null) {
+            volunteerResponseDto.setAddress((volunteer.getBeneficiary().getUser().getAddress()));
+        }
         return volunteerResponseDto;
     }
 
@@ -35,6 +38,7 @@ public class VolunteerConverter {
             if (volunteer.getBeneficiary() != null) {
                 dto.setBeneficiaryId(volunteer.getBeneficiary().getBeneficiaryId());
                 dto.setNickname(volunteer.getBeneficiary().getUser().getNickname());
+                dto.setAddress((volunteer.getBeneficiary().getUser().getAddress()));
             }
 
             return dto;
