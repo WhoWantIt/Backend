@@ -30,6 +30,12 @@ spring:
       allowed-methods: "GET,POST,PUT,DELETE,OPTIONS"
       allowed-headers: "*"
       allow-credentials: true
+
+  kakao:
+    pay:
+      secret-key: ${KAKAO_PAY_SECRET_KEY}
+      cid: TC0ONETIME
+
 server:
   port: 8080
   address: 0.0.0.0
