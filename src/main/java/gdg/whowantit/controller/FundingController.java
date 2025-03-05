@@ -1,16 +1,21 @@
 package gdg.whowantit.controller;
 
 import gdg.whowantit.apiPayload.ApiResponse;
+import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRelationResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
+import gdg.whowantit.dto.kakaoPayDto.KakaoPayResponseDto;
 import gdg.whowantit.entity.Status;
 import gdg.whowantit.service.FundingService.FundingService;
+import gdg.whowantit.service.FundingService.KakaopayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FundingController {
     private final FundingService fundingService;
+    private final KakaopayService kakaopayService;
     @PostMapping("/")
     @Operation(summary="수혜자 - 펀딩 생성 API",
             description="수혜자 - 펀딩 생성 API")
@@ -124,6 +130,34 @@ public class FundingController {
         return ApiResponse.onSuccess(response);
     }
 
+    //결제 요청
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @PostMapping("/ready")
+    @Operation(summary="카카오페이 결제 요청 API",
+            description="카카오페이 결제 요청 페이지의 url을 responsebody에 담았습니다. \n" +
+                    "response body 중, next_redirect_pc_url을 사용하면 됩니다." )
+    public ApiResponse<KakaoPayResponseDto.KakaoReadyResponse> readyToKakaoPay(){
+        return ApiResponse.onSuccess(kakaopayService.kakaoPayReady());
+    }
+    //결제 성공
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @PostMapping("/success")
+    public ResponseEntity<KakaoPayResponseDto.KakaoApproveResponse> afterPayRequest(@RequestParam("pg_token") String pgToken){
+        KakaoPayResponseDto.KakaoApproveResponse kakaoApprove=kakaopayService.approveResponse(pgToken);
+
+        return new ResponseEntity<>(kakaoApprove, HttpStatus.OK);
+    }
+    //결제 진행 중 취소
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @GetMapping("/cancel")
+    public ApiResponse<String> cancel(){
+        return ApiResponse.onSuccess("결제 진행 중 취소하셨습니다.");
+    }
+    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
+    @GetMapping("/fail")
+    public ApiResponse<String> fail(){
+        return ApiResponse.onSuccess("결제 실패하였습니다.");
+    }
 
 
 }
