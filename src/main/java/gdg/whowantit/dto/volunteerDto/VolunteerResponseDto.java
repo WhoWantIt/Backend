@@ -28,4 +28,5 @@ public class VolunteerResponseDto {
     private ApprovalStatus approvalStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private String address;
 }
