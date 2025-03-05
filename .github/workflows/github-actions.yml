@@ -39,11 +39,11 @@ jobs:
         with:
           files: 'src/main/resources/application.yml'
         env:
-          #          spring.datasource.url: ${{ secrets.MYSQL_URL }}
           spring.datasource.username: ${{ secrets.MYSQL_USER }}
           spring.datasource.password: ${{ secrets.MYSQL_PW }}
           cloud.aws.credentials.access-key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           cloud.aws.credentials.secret-key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          spring.kakao.pay.secret-key: ${{ secrets.KAKAO_PAY_SECRET_KEY}}
 
 
       # shell: bash
@@ -90,6 +90,7 @@ jobs:
                     -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
                     -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
                     -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+                    -e AWS_SECRET_ACCESS_KEY=${{secrets.KAKAO_PAY_SECRET_KEY}} \
                     ${{ secrets.DOCKER_USERNAME }}/whowantit
             # Clean up unused images
                     sudo docker image prune -f
