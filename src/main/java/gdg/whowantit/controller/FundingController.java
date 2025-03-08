@@ -120,25 +120,20 @@ public class FundingController {
         return ApiResponse.onSuccess("스크랩 취소 성공");
     }
 
+    //결제 요청
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @PostMapping("/pays/{fundingId}")
     @Operation(summary="클라우드 펀딩 모금하기",
-            description="클라우드 펀딩 모금하기")
-    public ApiResponse<FundingRelationResponseDto.createResponse> createSpon(@PathVariable @Valid Long fundingId, @RequestParam float paymentAmount){
-        FundingRelationResponseDto.createResponse response=fundingService.createSpon(fundingId,paymentAmount);
+            description="""
+                    카카오페이 결제 요청 페이지의 url을 responsebody에 담았습니다. \n
+                    response body 중, next_redirect_pc_url을 사용하면 됩니다.
+                    """)
+    public ApiResponse<KakaoPayResponseDto.KakaoReadyResponse> createSpon(@PathVariable @Valid Long fundingId, @RequestParam float paymentAmount){
+        KakaoPayResponseDto.KakaoReadyResponse response=fundingService.createSpon(fundingId,paymentAmount);
 
         return ApiResponse.onSuccess(response);
     }
 
-    //결제 요청
-    @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
-    @PostMapping("/ready")
-    @Operation(summary="카카오페이 결제 요청 API",
-            description="카카오페이 결제 요청 페이지의 url을 responsebody에 담았습니다. \n" +
-                    "response body 중, next_redirect_pc_url을 사용하면 됩니다." )
-    public ApiResponse<KakaoPayResponseDto.KakaoReadyResponse> readyToKakaoPay(){
-        return ApiResponse.onSuccess(kakaopayService.kakaoPayReady());
-    }
     //결제 성공
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @PostMapping("/success")

@@ -35,7 +35,7 @@ public class KakaopayServiceImpl implements KakaopayService{
         return headers;
 
     }
-    public KakaoPayResponseDto.KakaoReadyResponse kakaoPayReady() {
+    public KakaoPayResponseDto.KakaoReadyResponse kakaoPayReady(float paymentAmount) {
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
@@ -45,7 +45,7 @@ public class KakaopayServiceImpl implements KakaopayService{
         parameters.put("partner_user_id","USER_ID");
         parameters.put("item_name", "ITEM_NAME");
         parameters.put("quantity", "1");
-        parameters.put("total_amount", "1000");
+        parameters.put("total_amount", paymentAmount);
         parameters.put("vat_amount", "100");
         parameters.put("tax_free_amount", "0");
         parameters.put("approval_url", "http://13.209.33.88:8080/success"); //url 주소 수정 필요
