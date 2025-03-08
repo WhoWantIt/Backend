@@ -249,18 +249,6 @@ public class FundingServiceImpl implements FundingService{
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
 
-        FundingRelation fundingRelation=FundingRelation.builder()
-                .sponsor(sponsor)
-                .funding(funding)
-                .paymentAmount(paymentAmount)
-                .beneficiary(funding.getBeneficiary())
-                .build();
-        fundingRelationRepository.save(fundingRelation);
-
-
-        funding.setCurrentAmount(funding.getCurrentAmount() + paymentAmount);
-        fundingRepository.save(funding);
-
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("cid", payProperties.getCid());
         parameters.put("partner_order_id", "ORDER_ID");
@@ -281,6 +269,19 @@ public class FundingServiceImpl implements FundingService{
                 "https://open-api.kakaopay.com/online/v1/payment/ready",
                 requestEntity,
                 KakaoPayResponseDto.KakaoReadyResponse.class);
+
+        FundingRelation fundingRelation=FundingRelation.builder()
+                .sponsor(sponsor)
+                .funding(funding)
+                .paymentAmount(paymentAmount)
+                .beneficiary(funding.getBeneficiary())
+                .tid(kakaoReady.getTid())
+                .build();
+        fundingRelationRepository.save(fundingRelation);
+
+
+        funding.setCurrentAmount(funding.getCurrentAmount() + paymentAmount);
+        fundingRepository.save(funding);
         return kakaoReady;
 
     }

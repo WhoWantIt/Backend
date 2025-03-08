@@ -18,6 +18,8 @@ public class FundingRelation extends BaseEntity{
 
     private float paymentAmount;
 
+    private String tid;
+
     @ManyToOne
     @JoinColumn(name = "funding_id")
     private Funding funding;
