@@ -35,32 +35,7 @@ public class KakaopayServiceImpl implements KakaopayService{
         return headers;
 
     }
-    public KakaoPayResponseDto.KakaoReadyResponse kakaoPayReady(float paymentAmount) {
-        String email = SecurityUtil.getCurrentUserEmail();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("cid", payProperties.getCid());
-        parameters.put("partner_order_id", "ORDER_ID");
-        parameters.put("partner_user_id","USER_ID");
-        parameters.put("item_name", "ITEM_NAME");
-        parameters.put("quantity", "1");
-        parameters.put("total_amount", paymentAmount);
-        parameters.put("vat_amount", "100");
-        parameters.put("tax_free_amount", "0");
-        parameters.put("approval_url", "http://13.209.33.88:8080/success"); //url 주소 수정 필요
-        parameters.put("cancel_url", "http://13.209.33.88:8080/cancel"); //url 주소 수정 필요
-        parameters.put("fail_url", "http://13.209.33.88:8080/fail");
 
-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
-
-        RestTemplate restTemplate = new RestTemplate();
-        kakaoReady = restTemplate.postForObject(
-                "https://open-api.kakaopay.com/online/v1/payment/ready",
-                requestEntity,
-                KakaoPayResponseDto.KakaoReadyResponse.class);
-        return kakaoReady;
-    }
     public KakaoPayResponseDto.KakaoApproveResponse approveResponse (String pgToken) {
 
         String email = SecurityUtil.getCurrentUserEmail();

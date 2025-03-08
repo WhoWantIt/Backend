@@ -5,6 +5,5 @@ import org.springframework.http.HttpHeaders;
 
 public interface KakaopayService {
     HttpHeaders getHeaders();
-    KakaoPayResponseDto.KakaoReadyResponse kakaoPayReady(float paymentAmount);
     KakaoPayResponseDto.KakaoApproveResponse approveResponse (String pgToken);
 }
