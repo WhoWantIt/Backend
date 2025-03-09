@@ -4,6 +4,7 @@ import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRelationResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
+import gdg.whowantit.dto.kakaoPayDto.KakaoPayResponseDto;
 import gdg.whowantit.entity.Status;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,6 @@ public interface FundingService {
     List<FundingResponseDto.sponsorResponse> getSponsorList(Long fundingId);
     FundingResponseDto.scrapResponse scrapFunding(Long fundingId);
     void deleteScrapFunding(Long fundingId);
-    FundingRelationResponseDto.createResponse createSpon(Long fundingId, float paymentAmount);
+    KakaoPayResponseDto.KakaoReadyResponse createSpon(Long fundingId, float paymentAmount);
 
 }

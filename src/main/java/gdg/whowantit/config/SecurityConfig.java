@@ -39,7 +39,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                         .requestMatchers("/public/**").permitAll() // ✅ 공개 API 허용
-                        .requestMatchers("/users/sign-in", "/users/sign-up", "/users/tokens/update", "/swagger-ui/**", "/v3/api-docs/**","/success/**","/cancle/**","/fail/**").permitAll()
+                        .requestMatchers("/users/sign-in", "/users/sign-up", "/users/tokens/update", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/success/**", "/cancel/**", "/fail/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);  // ✅ 필터 등록

@@ -7,18 +7,23 @@ import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRelationResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
+import gdg.whowantit.dto.kakaoPayDto.KakaoPayResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
 import gdg.whowantit.service.ImageService.ImageService;
 import gdg.whowantit.util.SecurityUtil;
 import gdg.whowantit.util.StringListUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +36,10 @@ public class FundingServiceImpl implements FundingService{
     private final SponsorRepository sponsorRepository;
     private final FundingScrapRepository fundingScrapRepository;
     private final ImageService imageService;
-
+    private final KakaoPayProperties payProperties;
+    private final RestTemplate restTemplate =new RestTemplate();
+    private KakaoPayResponseDto.KakaoReadyResponse kakaoReady;
+    private final KakaopayService kakaopayService;
     @Override
     @Transactional
     public FundingResponseDto.createResponse createFunding(FundingRequestDto.createRequest request){
@@ -232,7 +240,7 @@ public class FundingServiceImpl implements FundingService{
 
     }
 
-    public FundingRelationResponseDto.createResponse createSpon(Long fundingId, float paymentAmount){
+    public KakaoPayResponseDto.KakaoReadyResponse createSpon(Long fundingId, float paymentAmount){
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
@@ -241,22 +249,42 @@ public class FundingServiceImpl implements FundingService{
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
 
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("cid", payProperties.getCid());
+        parameters.put("partner_order_id", "ORDER_ID");
+        parameters.put("partner_user_id","USER_ID");
+        parameters.put("item_name", "ITEM_NAME");
+        parameters.put("quantity", "1");
+        parameters.put("total_amount", paymentAmount);
+        parameters.put("vat_amount", "100");
+        parameters.put("tax_free_amount", "0");
+        parameters.put("approval_url", "http://13.209.33.88:8080/success"); //url 주소 수정 필요
+        parameters.put("cancel_url", "http://13.209.33.88:8080/cancel"); //url 주소 수정 필요
+        parameters.put("fail_url", "http://13.209.33.88:8080/fail");
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(parameters, kakaopayService.getHeaders());
+
+        RestTemplate restTemplate = new RestTemplate();
+        kakaoReady = restTemplate.postForObject(
+                "https://open-api.kakaopay.com/online/v1/payment/ready",
+                requestEntity,
+                KakaoPayResponseDto.KakaoReadyResponse.class);
+
         FundingRelation fundingRelation=FundingRelation.builder()
                 .sponsor(sponsor)
                 .funding(funding)
                 .paymentAmount(paymentAmount)
                 .beneficiary(funding.getBeneficiary())
+                .tid(kakaoReady.getTid())
+                .paymentStatus(PaymentStatus.READY)
                 .build();
         fundingRelationRepository.save(fundingRelation);
 
+
         funding.setCurrentAmount(funding.getCurrentAmount() + paymentAmount);
         fundingRepository.save(funding);
+        return kakaoReady;
 
-        return FundingRelationResponseDto.createResponse.builder()
-                .sponsorId(sponsor.getUser().getId())
-                .fundingId(fundingId)
-                .paymentAmount(paymentAmount)
-                .build();
     }
 
 }
