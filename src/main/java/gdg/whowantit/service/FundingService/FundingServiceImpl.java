@@ -276,6 +276,7 @@ public class FundingServiceImpl implements FundingService{
                 .paymentAmount(paymentAmount)
                 .beneficiary(funding.getBeneficiary())
                 .tid(kakaoReady.getTid())
+                .paymentStatus(PaymentStatus.READY)
                 .build();
         fundingRelationRepository.save(fundingRelation);
 

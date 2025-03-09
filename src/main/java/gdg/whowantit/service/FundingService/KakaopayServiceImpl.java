@@ -3,7 +3,12 @@ package gdg.whowantit.service.FundingService;
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.dto.kakaoPayDto.KakaoPayResponseDto;
+import gdg.whowantit.entity.FundingRelation;
+import gdg.whowantit.entity.PaymentStatus;
+import gdg.whowantit.entity.Sponsor;
 import gdg.whowantit.entity.User;
+import gdg.whowantit.repository.FundingRelationRepository;
+import gdg.whowantit.repository.SponsorRepository;
 import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +29,9 @@ import java.util.Map;
 public class KakaopayServiceImpl implements KakaopayService{
     private final KakaoPayProperties payProperties;
     private final RestTemplate restTemplate =new RestTemplate();
-    private KakaoPayResponseDto.KakaoReadyResponse kakaoReady;
     private final UserRepository userRepository;
+    private final FundingRelationRepository fundingRelationRepository;
+    private final SponsorRepository sponsorRepository;
 
     public HttpHeaders getHeaders(){
         HttpHeaders headers=new HttpHeaders();
@@ -41,10 +47,16 @@ public class KakaopayServiceImpl implements KakaopayService{
         String email = SecurityUtil.getCurrentUserEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        Sponsor sponsor = sponsorRepository.findById(user.getId())
+                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
+        FundingRelation fundingRelation = fundingRelationRepository
+                .findTopBySponsorOrderByFundingRelationIdDesc(sponsor)
+                .orElseThrow(() -> new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
+        String tid = fundingRelation.getTid();
         //카카오 요청
         Map<String, String> parameters = new HashMap<>();
         parameters.put("cid", payProperties.getCid());
-        parameters.put("tid", kakaoReady.getTid());
+        parameters.put("tid", tid);
         parameters.put("partner_order_id", "ORDER_ID");
         parameters.put("partner_user_id", "USER_ID");
         parameters.put("pg_token", pgToken);
@@ -64,6 +76,8 @@ public class KakaopayServiceImpl implements KakaopayService{
                 "https://open-api.kakaopay.com/online/v1/payment/approve",
                 requestEntity,
                 KakaoPayResponseDto.KakaoApproveResponse.class);
+        fundingRelation.setPaymentStatus(PaymentStatus.SUCCESS);
+        fundingRelationRepository.save(fundingRelation);
         System.out.println();
         System.out.println();
         System.out.println();

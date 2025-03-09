@@ -125,7 +125,7 @@ public class FundingController {
     @PostMapping("/pays/{fundingId}")
     @Operation(summary="클라우드 펀딩 모금하기",
             description="""
-                    카카오페이 결제 요청 페이지의 url을 responsebody에 담았습니다. \n
+                    responsebody에 카카오페이 결제 요청 페이지의 url을 담았습니다. \n
                     response body 중, next_redirect_pc_url을 사용하면 됩니다.
                     """)
     public ApiResponse<KakaoPayResponseDto.KakaoReadyResponse> createSpon(@PathVariable @Valid Long fundingId, @RequestParam float paymentAmount){
@@ -137,6 +137,12 @@ public class FundingController {
     //결제 성공
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @PostMapping("/success")
+    @Operation(summary="카카오페이 결제 성공 API",
+            description="""
+                    카카오페이 결제 성공 시 사용하는 API입니다. \n
+                    클라우드 펀딩 모금하기에서 response body에 있는 결제 요청 페이지의 url로 접속하여 결제하면 \n
+                    "http://13.209.33.88:8080/success?pg_token=토큰값"처럼 토큰값을 파라미터로 가지며 url을 redirect해줍니다. "
+                    """)
     public ResponseEntity<KakaoPayResponseDto.KakaoApproveResponse> afterPayRequest(@RequestParam("pg_token") String pgToken){
         KakaoPayResponseDto.KakaoApproveResponse kakaoApprove=kakaopayService.approveResponse(pgToken);
 
@@ -145,11 +151,15 @@ public class FundingController {
     //결제 진행 중 취소
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @GetMapping("/cancel")
+    @Operation(summary="카카오페이 결제 진행 중 취소 API",
+            description=" 카카오페이 결제 진행 중 취소 시 사용하는 API입니다.")
     public ApiResponse<String> cancel(){
         return ApiResponse.onSuccess("결제 진행 중 취소하셨습니다.");
     }
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
     @GetMapping("/fail")
+    @Operation(summary="카카오페이 결제 실패 API",
+            description=" 카카오페이 결제 실패 시 사용하는 API입니다.")
     public ApiResponse<String> fail(){
         return ApiResponse.onSuccess("결제 실패하였습니다.");
     }

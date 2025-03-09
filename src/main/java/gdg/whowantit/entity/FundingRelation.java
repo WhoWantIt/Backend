@@ -20,6 +20,9 @@ public class FundingRelation extends BaseEntity{
 
     private String tid;
 
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
     @ManyToOne
     @JoinColumn(name = "funding_id")
     private Funding funding;
