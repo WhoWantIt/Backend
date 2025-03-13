@@ -25,7 +25,7 @@ public class CorsConfig {
         ArrayList<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("http://localhost:5173");
         allowedOriginPatterns.add("http://127.0.0.1:5000");
-        configuration.setAllowedOrigins(allowedOriginPatterns);
+        configuration.setAllowedOriginPatterns(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD 지정
         ArrayList<String> allowedHttpMethods = new ArrayList<>();
