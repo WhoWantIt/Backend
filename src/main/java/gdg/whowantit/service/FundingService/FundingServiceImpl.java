@@ -256,8 +256,8 @@ public class FundingServiceImpl implements FundingService{
         parameters.put("total_amount", paymentAmount);
         parameters.put("vat_amount", "100");
         parameters.put("tax_free_amount", "0");
-        parameters.put("approval_url", "http://13.209.33.88:8080/fundings/success"); //url 주소 수정 필요
-        parameters.put("cancel_url", "http://13.209.33.88:8080/fundings/cancel"); //url 주소 수정 필요
+        parameters.put("approval_url", "http://13.209.33.88:8080/fundings/success");
+        parameters.put("cancel_url", "http://13.209.33.88:8080/fundings/cancel");
         parameters.put("fail_url", "http://13.209.33.88:8080/fundings/fail");
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(parameters, kakaopayService.getHeaders());
