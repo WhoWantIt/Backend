@@ -136,7 +136,7 @@ public class FundingController {
 
     //결제 성공
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
-    @PostMapping("/success")
+    @GetMapping("/success")
     @Operation(summary="카카오페이 결제 성공 API",
             description="""
                     카카오페이 결제 성공 시 사용하는 API입니다. \n
