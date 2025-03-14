@@ -35,6 +35,7 @@ public class VolunteerController {
     public ResponseEntity<ApiResponse<VolunteerResponseDto>> postVolunteer(
             @RequestPart("volunteerRequestDto") VolunteerRequestDto volunteerRequestDto,
             @RequestPart(value = "images", required = false) List<MultipartFile> images) {
+
         VolunteerResponseDto volunteerResponseDto =
                 volunteerService.postVolunteer(volunteerRequestDto, images);
         return ResponseEntity.ok(ApiResponse.onSuccess(volunteerResponseDto));

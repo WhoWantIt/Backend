@@ -45,6 +45,7 @@ public class PostServiceImpl implements PostService {
 
         Post post = PostConverter.toPost(postRequestDto);
         post.setBeneficiary(user.getBeneficiary());
+        System.out.println("PostServiceImpl.createPost");
         post.setApprovalStatus(ApprovalStatus.UNDETERMINED);
         post.setIsVerified(Boolean.FALSE);
 
@@ -195,7 +196,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByApprovalStatus
             (ApprovalStatus approvalStatus, Pageable pageable) {
-        Page<Post> posts = postRepository.findByApprovalStatus(approvalStatus, pageable);
+        Page<Post> posts = postRepository.findByApprovalStatusOrderByCreatedAtDesc(approvalStatus, pageable);
         return PostConverter.convertToPostResponseDtoPage(posts);
 
     }
@@ -209,7 +210,7 @@ public class PostServiceImpl implements PostService {
         if (user.getRole() != Role.BENEFICIARY) {
             throw new TempHandler(ErrorStatus.FORBIDDEN_POST_ACCESS);
         }
-        Page<Post> posts = postRepository.findByBeneficiary(user.getBeneficiary(), pageable);
+        Page<Post> posts = postRepository.findByBeneficiaryOrderByCreatedAtDesc(user.getBeneficiary(), pageable);
         return PostConverter.convertToPostResponseDtoPage(posts);
     }
 
@@ -221,7 +222,7 @@ public class PostServiceImpl implements PostService {
         LocalDateTime end = yearMonth.atEndOfMonth().atTime(23, 59, 59); // 해당 월의 마지막 날 23:59:59
 
 
-        Page<Post> posts = postRepository.findByCreatedAtBetween(start, end, pageable);
+        Page<Post> posts = postRepository.findByCreatedAtBetweenOrderByCreatedAtDesc(start, end, pageable);
 
         return PostConverter.convertToPostResponseDtoPage(posts);
     }
@@ -229,7 +230,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<PostResponseDto.BeneficiaryPostResponseDto> getPostsByNickname(String nickname, Pageable pageable){
 
-        Page<Post> posts = postRepository.findByBeneficiaryNickname(nickname, pageable);
+        Page<Post> posts = postRepository.findByBeneficiaryNicknameOrderByCreatedAtDesc(nickname, pageable);
         return PostConverter.convertToPostResponseDtoPage(posts);
 
     }

@@ -72,7 +72,7 @@ public class VolunteerService {
 
 
         Volunteer volunteer = volunteerRepository.
-                findVolunteerByVolunteerId(volunteerId).
+                findVolunteerByVolunteerIdOrderByCreatedAtDesc(volunteerId).
                 orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
 
         if (volunteerRelationRepository.existsVolunteerRelationBySponsor(user.getSponsor()))
@@ -97,10 +97,10 @@ public class VolunteerService {
         User user = userRepository.findByEmail(email).
                 orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId).
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerIdOrderByCreatedAtDesc(volunteerId).
                 orElseThrow(()->new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
 
-        VolunteerRelation volunteerRelation = volunteerRelationRepository.findByVolunteerAndSponsor(volunteer, user.getSponsor()).
+        VolunteerRelation volunteerRelation = volunteerRelationRepository.findByVolunteerAndSponsorOrderByCreatedAtDesc(volunteer, user.getSponsor()).
                 orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_APPLICATION_NOT_FOUND));
 
 
@@ -111,14 +111,14 @@ public class VolunteerService {
 
     public Page<VolunteerResponseDto> getAllVolunteers(Pageable pageable) {
         Page<Volunteer> volunteerPage = volunteerRepository.
-                findByApprovalStatus(ApprovalStatus.APPROVED, pageable);
+                findByApprovalStatusOrderByCreatedAtDesc(ApprovalStatus.APPROVED, pageable);
 
         return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
 
     }
 
     public VolunteerResponseDto getVolunteerDetail(Long volunteerId) {
-        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId)
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerIdOrderByCreatedAtDesc(volunteerId)
                 .orElseThrow(()->new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
 
         VolunteerResponseDto volunteerResponseDto =
@@ -134,13 +134,13 @@ public class VolunteerService {
             (String keyword1, String keyword2, Pageable pageable) {
 
         Page<Volunteer> volunteerPage = volunteerRepository.
-                findByAddressContainingBoth(keyword1, keyword2, pageable);
+                findByAddressContainingBothOrderByCreatedAtDesc(keyword1, keyword2, pageable);
 
         return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
     }
 
     public Page<VolunteerResponseDto> getVolunteerByField(Field field, Pageable pageable) {
-        Page<Volunteer> volunteerPage = volunteerRepository.findVolunteerByField(field, pageable);
+        Page<Volunteer> volunteerPage = volunteerRepository.findVolunteerByFieldOrderByCreatedAtDesc(field, pageable);
 
         return VolunteerConverter.convertToVolunteerResponseDtoPage(volunteerPage);
     }
@@ -156,7 +156,7 @@ public class VolunteerService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId)
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerIdOrderByCreatedAtDesc(volunteerId)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
 
         if (scrapRepository.existsBySponsor_SponsorIdAndVolunteer_VolunteerId(user.getId(), volunteerId)) {
@@ -178,7 +178,7 @@ public class VolunteerService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerId(volunteerId)
+        Volunteer volunteer = volunteerRepository.findVolunteerByVolunteerIdOrderByCreatedAtDesc(volunteerId)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.VOLUNTEER_NOT_FOUND));
 
         if (scrapRepository.existsBySponsor_SponsorIdAndVolunteer_VolunteerId(user.getId(), volunteerId)) {

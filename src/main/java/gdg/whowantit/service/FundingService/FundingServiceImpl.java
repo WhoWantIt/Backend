@@ -4,7 +4,6 @@ import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.FundingConverter;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
-import gdg.whowantit.dto.fundingDto.FundingRelationResponseDto;
 import gdg.whowantit.dto.fundingDto.FundingRequestDto;
 import gdg.whowantit.dto.fundingDto.FundingResponseDto;
 import gdg.whowantit.dto.kakaoPayDto.KakaoPayResponseDto;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +144,7 @@ public class FundingServiceImpl implements FundingService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundingList = fundingRepository.findAll();
+        List<Funding> fundingList = fundingRepository.findAllByOrderByCreatedAtDesc();
         return fundingList.stream()
                 .map(FundingConverter::toFundingResponse)
                 .collect(Collectors.toList());
@@ -158,7 +156,7 @@ public class FundingServiceImpl implements FundingService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundingList = fundingRepository.findAllByStatus(status);
+        List<Funding> fundingList = fundingRepository.findAllByStatusOrderByCreatedAtDesc(status);
         return fundingList.stream()
                 .map(FundingConverter::toFundingResponse)
                 .collect(Collectors.toList());
@@ -183,7 +181,7 @@ public class FundingServiceImpl implements FundingService{
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
 
-        List<FundingRelation> fundingRelations=fundingRelationRepository.findAllByFunding_FundingId(funding.getFundingId());
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findAllByFunding_FundingIdOrderByFundingRelationIdDesc(funding.getFundingId());
         return fundingRelations.stream()
                 .map(FundingConverter::toSponsorResponse)
                 .collect(Collectors.toList());

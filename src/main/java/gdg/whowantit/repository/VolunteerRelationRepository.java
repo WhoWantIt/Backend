@@ -11,6 +11,6 @@ public interface VolunteerRelationRepository extends JpaRepository<VolunteerRela
     Optional<VolunteerRelation> findVolunteerRelationByVolunteer(Volunteer volunteer);
     boolean existsVolunteerRelationBySponsor(Sponsor sponsor);
     void deleteVolunteerRelationByVolunteerRelationId(Long volunteerRelationId);
-    Optional<VolunteerRelation> findByVolunteerAndSponsor(Volunteer volunteer, Sponsor sponsor);
-    List<VolunteerRelation> findBySponsor_SponsorId(Long SponsorId);
+    Optional<VolunteerRelation> findByVolunteerAndSponsorOrderByCreatedAtDesc(Volunteer volunteer, Sponsor sponsor);
+    List<VolunteerRelation> findBySponsor_SponsorIdOrderByVolunteerRelationIdDesc(Long SponsorId);
 }
