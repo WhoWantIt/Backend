@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
     @Query("SELECT s FROM Sponsor s JOIN VolunteerRelation v ON s.sponsorId = v.sponsor.sponsorId " +
             "WHERE v.volunteer.volunteerId = :volunteerId")
     Page<Sponsor> findByVolunteerId(@Param("volunteerId") Long volunteerId, Pageable pageable);
+    List<Sponsor> findAllByOrderBySponsorIdDesc();
 }

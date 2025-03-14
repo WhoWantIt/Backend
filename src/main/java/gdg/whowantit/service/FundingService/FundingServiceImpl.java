@@ -146,7 +146,7 @@ public class FundingServiceImpl implements FundingService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundingList = fundingRepository.findAll();
+        List<Funding> fundingList = fundingRepository.findAllByOrderByFundingIdDesc();
         return fundingList.stream()
                 .map(FundingConverter::toFundingResponse)
                 .collect(Collectors.toList());
@@ -158,7 +158,7 @@ public class FundingServiceImpl implements FundingService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundingList = fundingRepository.findAllByStatus(status);
+        List<Funding> fundingList = fundingRepository.findAllByStatusOrderByFundingIdDesc(status);
         return fundingList.stream()
                 .map(FundingConverter::toFundingResponse)
                 .collect(Collectors.toList());
@@ -183,7 +183,7 @@ public class FundingServiceImpl implements FundingService{
         Funding funding = fundingRepository.findById(fundingId)
                 .orElseThrow(()->new TempHandler(ErrorStatus.FUNDING_NOT_FOUND));
 
-        List<FundingRelation> fundingRelations=fundingRelationRepository.findAllByFunding_FundingId(funding.getFundingId());
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findAllByFunding_FundingIdOrderByFundingRelationIdDesc(funding.getFundingId());
         return fundingRelations.stream()
                 .map(FundingConverter::toSponsorResponse)
                 .collect(Collectors.toList());

@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FundingScrapRepository extends JpaRepository<FundingScrap, Long> {
-    List<FundingScrap> findBySponsor_SponsorId(Long SponsorId);
+    List<FundingScrap> findBySponsor_SponsorIdOrderByFundingScrapIdDesc(Long SponsorId);
     FundingScrap findBySponsor_SponsorIdAndFunding_FundingId(Long SponsorId, Long FundigId);
 }

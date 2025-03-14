@@ -40,7 +40,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<VolunteerRelation> volunteerRelations=volunteerRelationRepository.findBySponsor_SponsorId(user.getId());
+        List<VolunteerRelation> volunteerRelations=volunteerRelationRepository.findBySponsor_SponsorIdOrderByVolunteerRelationIdDesc(user.getId());
 
         int volunteerListCount =volunteerRelations.size();
 
@@ -67,7 +67,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<FundingRelation> fundingRelations=fundingRelationRepository.findBySponsor_SponsorId(user.getId());
+        List<FundingRelation> fundingRelations=fundingRelationRepository.findBySponsor_SponsorIdOrderByFundingRelationIdDesc(user.getId());
 
         double totalAmount = fundingRelations.stream()
                 .mapToDouble(FundingRelation::getPaymentAmount)
@@ -97,7 +97,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Scrap> scrapList = scrapRepository.findBySponsor_SponsorId(user.getId());
+        List<Scrap> scrapList = scrapRepository.findBySponsor_SponsorIdOrderByScrapIdDesc(user.getId());
 
         return scrapList.stream()
                 .map(ScrapConverter::toScrapedVolunteerResponse)
@@ -116,7 +116,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<FundingScrap> scrapList = fundingScrapRepository.findBySponsor_SponsorId(user.getId());
+        List<FundingScrap> scrapList = fundingScrapRepository.findBySponsor_SponsorIdOrderByFundingScrapIdDesc(user.getId());
 
         return scrapList.stream()
                 .map(ScrapConverter::toScrapFundingResponse)

@@ -37,7 +37,7 @@ public class AdminServiceImpl implements AdminService{
             throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
         }
 
-        List<Beneficiary> beneficiaries=beneficiaryRepository.findAll();
+        List<Beneficiary> beneficiaries=beneficiaryRepository.findAllByOrderByBeneficiaryIdDesc();
         List<AdminResponseDto.beneficiaryResponse> beneficiaryResponses=beneficiaries.stream()
                 .map(BeneficiaryConverter::toBeneficiaryListResponse)
                 .collect(Collectors.toList());
@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService{
             throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
         }
 
-        List<Sponsor> sponsors=sponsorRepository.findAll();
+        List<Sponsor> sponsors=sponsorRepository.findAllByOrderBySponsorIdDesc();
         List<AdminResponseDto.sponsorResponse> sponsorsResponse=sponsors.stream()
                 .map(SponsorConverter::toSponsorResponse)
                 .collect(Collectors.toList());
@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService{
             throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
         }
 
-        List<Post> posts=postRepository.findAllByApprovalStatus(ApprovalStatus.UNDETERMINED);
+        List<Post> posts=postRepository.findAllByApprovalStatusOrderByPostIdDesc(ApprovalStatus.UNDETERMINED);
         int listCount=posts.size();
 
         List<BeneficiaryResponseDto.postResponse> postResponses= posts.stream()
@@ -100,7 +100,7 @@ public class AdminServiceImpl implements AdminService{
             throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
         }
 
-        List<Funding> fundings=fundingRepository.findAllByApprovalStatus(ApprovalStatus.UNDETERMINED);
+        List<Funding> fundings=fundingRepository.findAllByApprovalStatusOrderByFundingIdDesc(ApprovalStatus.UNDETERMINED);
 
         int listCount= fundings.size();
 

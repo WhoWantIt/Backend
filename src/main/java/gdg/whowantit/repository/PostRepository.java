@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findByBeneficiary_beneficiaryId(Long beneficiaryId);
+    List<Post> findByBeneficiary_beneficiaryIdOrderByPostIdDesc(Long beneficiaryId);
     Page<Post> findByApprovalStatus(ApprovalStatus approvalStatus, Pageable pageable);
     Page<Post> findByBeneficiary(Beneficiary beneficiary, Pageable pageable);
     Page<Post> findByCreatedAtBetween(LocalDateTime start, LocalDateTime end, Pageable pageable);
@@ -24,7 +24,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByBeneficiaryNickname
             (@Param("keyword1") String keyword1, Pageable pageable);
   
-    List<Post> findAllByApprovalStatus(ApprovalStatus approvalStatus);
+    List<Post> findAllByApprovalStatusOrderByPostIdDesc(ApprovalStatus approvalStatus);
 
 
 }

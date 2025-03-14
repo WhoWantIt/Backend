@@ -8,7 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface FundingRepository extends JpaRepository<Funding, Long> {
-    List<Funding> findByBeneficiary_beneficiaryId (Long beneficiaryId);
-    List<Funding> findAllByStatus(Status status);
-    List<Funding> findAllByApprovalStatus(ApprovalStatus approvalStatus);
+    List<Funding> findByBeneficiary_beneficiaryIdOrderByFundingIdDesc (Long beneficiaryId);
+    List<Funding> findAllByStatusOrderByFundingIdDesc(Status status);
+    List<Funding> findAllByApprovalStatusOrderByFundingIdDesc(ApprovalStatus approvalStatus);
+    List<Funding> findAllByOrderByFundingIdDesc();
 }

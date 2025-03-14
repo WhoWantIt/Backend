@@ -35,7 +35,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundings=fundingRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
+        List<Funding> fundings=fundingRepository.findByBeneficiary_beneficiaryIdOrderByFundingIdDesc(beneficiaryId);
 
         int listCount= fundings.size();
 
@@ -58,7 +58,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Volunteer> volunteers=volunteerRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
+        List<Volunteer> volunteers=volunteerRepository.findByBeneficiary_beneficiaryIdOrderByVolunteerIdDesc(beneficiaryId);
 
         int volunteerListCount =volunteers.size();
 
@@ -79,7 +79,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Post> posts=postRepository.findByBeneficiary_beneficiaryId(beneficiaryId);
+        List<Post> posts=postRepository.findByBeneficiary_beneficiaryIdOrderByPostIdDesc(beneficiaryId);
 
         int postListCount = posts.size();
 
