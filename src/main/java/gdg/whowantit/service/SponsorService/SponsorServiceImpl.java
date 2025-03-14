@@ -116,7 +116,7 @@ public class SponsorServiceImpl implements SponsorService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<FundingScrap> scrapList = fundingScrapRepository.findBySponsor_SponsorIdOrderByFundingScrapIdDesc(user.getId());
+        List<FundingScrap> scrapList = fundingScrapRepository.findBySponsor_SponsorIdOrderByCreatedAtDesc(user.getId());
 
         return scrapList.stream()
                 .map(ScrapConverter::toScrapFundingResponse)

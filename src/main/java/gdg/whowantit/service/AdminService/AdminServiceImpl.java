@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService{
             throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
         }
 
-        List<Post> posts=postRepository.findAllByApprovalStatusOrderByPostIdDesc(ApprovalStatus.UNDETERMINED);
+        List<Post> posts=postRepository.findAllByApprovalStatusOrderByCreatedAtDesc(ApprovalStatus.UNDETERMINED);
         int listCount=posts.size();
 
         List<BeneficiaryResponseDto.postResponse> postResponses= posts.stream()
@@ -100,7 +100,7 @@ public class AdminServiceImpl implements AdminService{
             throw new TempHandler(ErrorStatus.PERMISSION_DENIED);
         }
 
-        List<Funding> fundings=fundingRepository.findAllByApprovalStatusOrderByFundingIdDesc(ApprovalStatus.UNDETERMINED);
+        List<Funding> fundings=fundingRepository.findAllByApprovalStatusOrderByCreatedAtDesc(ApprovalStatus.UNDETERMINED);
 
         int listCount= fundings.size();
 

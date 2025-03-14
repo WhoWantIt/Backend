@@ -5,14 +5,11 @@ import gdg.whowantit.apiPayload.exception.handler.TempHandler;
 import gdg.whowantit.converter.*;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryRequestDto;
 import gdg.whowantit.dto.beneficiaryDto.BeneficiaryResponseDto;
-import gdg.whowantit.dto.sponserDto.SponsorResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.*;
 import gdg.whowantit.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,7 +32,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Funding> fundings=fundingRepository.findByBeneficiary_beneficiaryIdOrderByFundingIdDesc(beneficiaryId);
+        List<Funding> fundings=fundingRepository.findByBeneficiary_beneficiaryIdOrderByCreatedAtDesc(beneficiaryId);
 
         int listCount= fundings.size();
 
@@ -79,7 +76,7 @@ public class BeneficiaryServiceImpl implements BeneficiaryService{
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new TempHandler(ErrorStatus.USER_NOT_FOUND));
 
-        List<Post> posts=postRepository.findByBeneficiary_beneficiaryIdOrderByPostIdDesc(beneficiaryId);
+        List<Post> posts=postRepository.findByBeneficiary_beneficiaryIdOrderByCreatedAtDesc(beneficiaryId);
 
         int postListCount = posts.size();
 
