@@ -46,7 +46,7 @@ public class SponsorController {
         return ApiResponse.onSuccess(scrapedVolunteerResponses);
     }
 
-    @GetMapping("/scraps/fundings)")
+    @GetMapping("/scraps/fundings")
     @Operation(summary="후원자 - 스크랩한 후원 리스트 조회 API",
             description="후원자 - 스크랩한 후원 리스트 조회 API")
     public ApiResponse<List<SponsorResponseDto.scrapedFundingResponse>> getScrapedFundings(){
