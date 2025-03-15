@@ -54,6 +54,7 @@ public class FundingConverter {
                 .attachedImage(funding.getAttachedImage())
                 .productName(funding.getProductName())
                 .currentAmount(funding.getCurrentAmount())
+                .targetAmount(funding.getTargetAmount())
                 .attainmentPercent(attainmentPercent)
                 .status(funding.getStatus())
                 .approvalStatus(funding.getApprovalStatus())

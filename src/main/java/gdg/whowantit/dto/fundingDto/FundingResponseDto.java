@@ -46,6 +46,8 @@ public class FundingResponseDto {
 
         private Float currentAmount;
 
+        private Float targetAmount;
+
         private String attachedImage;
 
         private ApprovalStatus approvalStatus;
