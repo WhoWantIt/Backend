@@ -21,6 +21,7 @@ public class Volunteer extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String title;
