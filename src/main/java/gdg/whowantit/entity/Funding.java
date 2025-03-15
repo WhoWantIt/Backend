@@ -16,6 +16,7 @@ public class Funding extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fundingId;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private String title;
