@@ -22,6 +22,8 @@ public class BeneficiaryResponseDto {
 
         private double attainmentPercent;
 
+        private Float targetAmount;
+
         private Long beneficiaryId;
 
         private String beneficiaryName;

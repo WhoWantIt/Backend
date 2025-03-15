@@ -31,6 +31,7 @@ public class FundingConverter {
                 .title(funding.getTitle())
                 .attachedImage(funding.getAttachedImage())
                 .dDay(dDayString)
+                .targetAmount(funding.getTargetAmount())
                 .attainmentPercent(attainmentPercent)
                 .beneficiaryId(funding.getBeneficiary().getBeneficiaryId())
                 .beneficiaryName(funding.getBeneficiary().getUser().getName())
