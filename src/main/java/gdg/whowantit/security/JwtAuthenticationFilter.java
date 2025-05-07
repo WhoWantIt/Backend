@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
 
-        if (tokenType.equals("access")){
+        if (token == null || token.isEmpty() || tokenType == null){
             try {
                 if (jwtUtil.validateToken(token, "access")) {  // ✅ 토큰이 유효한 경우 SecurityContext 설정
                     String email = jwtUtil.getEmailFromToken(token);
