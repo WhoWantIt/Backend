@@ -28,6 +28,7 @@ public class CorsConfig {
         allowedOriginPatterns.add("http://localhost:5173");
         allowedOriginPatterns.add("http://127.0.0.1:5000");
         allowedOriginPatterns.add("http://localhost:8080");
+        allowedOriginPatterns.add("http://43.203.2.129:8080");
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD 지정
