@@ -56,6 +56,7 @@ public class FundingServiceImpl implements FundingService{
                 .content(request.getText())
                 .deadline(request.getDeadline())
                 .approvalStatus(ApprovalStatus.UNDETERMINED)
+                .status(Status.BEFORE_PROGRESS)
                 .beneficiary(beneficiary)
                 .build();
 
