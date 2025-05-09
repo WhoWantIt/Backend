@@ -20,7 +20,7 @@ import java.util.List;
 public class CorsConfig {
 
     @Bean
-    public static CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
         //리소스를 허용할 URL 지정
