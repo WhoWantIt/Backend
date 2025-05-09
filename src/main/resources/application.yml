@@ -65,7 +65,7 @@ swagger:
 cloud:
   aws:
     s3:
-      bucket: whowantitbucket
+      bucket: solchalbucket
       path:
         picture : picture
     region:
