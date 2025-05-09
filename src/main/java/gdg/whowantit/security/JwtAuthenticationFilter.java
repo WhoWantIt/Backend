@@ -25,43 +25,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String token = jwtUtil.extractToken(request);  // 요청에서 JWT 추출
+        String token = jwtUtil.extractToken(request);
         String requestURI = request.getRequestURI();
-        String tokenType = jwtUtil.getTokenType(token);
 
-        // ✅ Swagger 관련 요청은 필터를 그냥 통과시키기
-        if (requestURI.startsWith("/users/sign-in") || requestURI.startsWith("/users/sign-up") ||
-                requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs")) {
+        // Swagger & 공개 API 통과
+        if (requestURI.startsWith("/users/sign-in") || requestURI.startsWith("/users/sign-up")
+                || requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs")) {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println(tokenType);
-        if ("refresh".equals(tokenType)) {
-            request.setAttribute("refreshToken", token);
-            filterChain.doFilter(request, response);
-        }
 
+        try {
+            if (token != null && !token.isEmpty()) {
+                String tokenType = jwtUtil.getTokenType(token);
 
-
-        if (token == null || token.isEmpty() || tokenType == null){
-            try {
-                if (jwtUtil.validateToken(token, "access")) {  // ✅ 토큰이 유효한 경우 SecurityContext 설정
-                    String email = jwtUtil.getEmailFromToken(token);
-                    UsernamePasswordAuthenticationToken authentication =
-                            new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                if ("access".equals(tokenType)) {
+                    if (jwtUtil.validateToken(token, "access")) {
+                        String email = jwtUtil.getEmailFromToken(token);
+                        UsernamePasswordAuthenticationToken authentication =
+                                new UsernamePasswordAuthenticationToken(email, null, new ArrayList<>());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                } else if ("refresh".equals(tokenType)) {
+                    request.setAttribute("refreshToken", token);
                 }
-            } catch (ExpiredJwtException e) {
-                // ✅ 만료된 토큰은 예외 발생시키지 않고 계속 진행 → Refresh Token 검증을 위해 요청 유지
-                request.setAttribute("expiredToken", token);  // ✅ 만료된 토큰을 리퀘스트에 저장
-            } catch (JwtException e) {
-                // ✅ 잘못된 토큰은 즉시 차단 (위조된 경우)
-                throw new TempHandler(ErrorStatus.TOKEN_UNVALID);
             }
-
-            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            request.setAttribute("expiredToken", token);
+        } catch (JwtException e) {
+            throw new TempHandler(ErrorStatus.TOKEN_UNVALID);
         }
+
+        filterChain.doFilter(request, response);
     }
+
 
 }
 
