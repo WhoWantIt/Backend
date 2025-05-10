@@ -57,11 +57,14 @@ dependencies {
     // aws 연동 (S3)
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'mysql:mysql-connector-java:8.0.30'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'software.amazon.awssdk:auth:2.20.100'
     implementation 'software.amazon.awssdk:s3:2.20.100'
+
+    implementation 'org.hibernate.common:hibernate-commons-annotations:6.0.6.Final'
+    implementation 'net.bytebuddy:byte-buddy:1.14.0'
+
 
 
 }
