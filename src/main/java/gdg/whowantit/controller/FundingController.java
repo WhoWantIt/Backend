@@ -12,7 +12,6 @@ import gdg.whowantit.service.FundingService.FundingService;
 import gdg.whowantit.service.FundingService.KakaopayService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -145,12 +143,10 @@ public class FundingController {
                     클라우드 펀딩 모금하기에서 response body에 있는 결제 요청 페이지의 url로 접속하여 결제하면 \n
                     "http://13.209.33.88:8080/success?pg_token=토큰값"처럼 토큰값을 파라미터로 가지며 url을 redirect해줍니다. "
                     """)
-    public void afterPayRequest(@RequestParam("pg_token") String pgToken, HttpServletResponse response) throws IOException, IOException {
-        KakaoPayResponseDto.KakaoApproveResponse kakaoApprove = kakaopayService.approveResponse(pgToken);
+    public ResponseEntity<KakaoPayResponseDto.KakaoApproveResponse> afterPayRequest(@RequestParam("pg_token") String pgToken){
+        KakaoPayResponseDto.KakaoApproveResponse kakaoApprove=kakaopayService.approveResponse(pgToken);
 
-        // 승인 처리 끝나고 프론트엔드로 다시 리다이렉트
-        String redirectUrl = "http://localhost:5173/fundings/result?status=success";
-        response.sendRedirect(redirectUrl);
+        return new ResponseEntity<>(kakaoApprove, HttpStatus.OK);
     }
     //결제 진행 중 취소
     @Tag(name = "${swagger.tag.cloudfunding-sponsor}")
