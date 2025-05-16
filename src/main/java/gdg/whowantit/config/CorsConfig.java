@@ -31,6 +31,7 @@ public class CorsConfig {
         allowedOriginPatterns.add("http://43.203.2.129:8080");
         allowedOriginPatterns.add("https://43.203.2.129:8080");
         allowedOriginPatterns.add("https://whowantit.me");
+        allowedOriginPatterns.add("https://www.whowantit.me");
         allowedOriginPatterns.add("https://api.whowantit.me");
         allowedOriginPatterns.add("https://who-want-it.vercel.app");
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
