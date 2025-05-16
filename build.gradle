@@ -69,6 +69,10 @@ dependencies {
 
 // Excel 처리용
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    //implementation platform("org.springframework.ai:spring-ai-bom:0.8.1-SNAPSHOT")
+    //implementation 'org.springframework.ai:spring-ai-vertex-ai-gemini-spring-boot-starter'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
 
 
 

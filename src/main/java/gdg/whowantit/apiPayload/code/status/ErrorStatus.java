@@ -67,7 +67,7 @@ public enum ErrorStatus implements BaseErrorCode {
     FUNDING_ALREADY_SCRAPPED(HttpStatus.BAD_REQUEST,"FUNDING4004","이미 해당 펀딩을 스크랩했습니다."),
     FUNDING_SCRAP_NOT_FOUND(HttpStatus.BAD_REQUEST,"FUNDING4005","스크랩하지 않은 펀딩은 스크랩 취소할 수 없습니다."),
     TID_NOT_FOUND(HttpStatus.BAD_REQUEST,"FUNDING4006","해당 tid가 존재하지 않습니다."),
-
+    POST_ITEM_MISMATCH(HttpStatus.BAD_REQUEST, "POST4008", "다릅니다."),
 
     ;
 

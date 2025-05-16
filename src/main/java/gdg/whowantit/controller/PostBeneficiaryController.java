@@ -42,7 +42,6 @@ public class PostBeneficiaryController {
         return ResponseEntity.ok(ApiResponse.onSuccess(postResponseDto));
     }
 
-
     @PutMapping("/{postId}")
     @Operation(summary = "복지시설 게시글 수정", description = "복지시설에서 게시글 수정입니다.")
     public ResponseEntity<ApiResponse<PostResponseDto.BeneficiaryPostResponseDto>> updatePost(
@@ -92,7 +91,7 @@ public class PostBeneficiaryController {
     }
 
     @PutMapping("/{postId}/accept")
-    @Operation(summary = "관리자 게시글 승인", description = "관리자 게시글 승인 기능입니다.")
+    @Operation(summary = "관리자 게시글 승인 - AI 추가", description = "관리자 게시글 승인 기능입니다.")
     public ResponseEntity<ApiResponse<Void>> acceptPost(@PathVariable Long postId) {
         postService.acceptPost(postId);
         return ResponseEntity.noContent().build();
