@@ -32,6 +32,7 @@ public class CorsConfig {
         allowedOriginPatterns.add("https://43.203.2.129:8080");
         allowedOriginPatterns.add("https://whowantit.me");
         allowedOriginPatterns.add("https://api.whowantit.me");
+        allowedOriginPatterns.add("https://who-want-it.vercel.app");
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD 지정
