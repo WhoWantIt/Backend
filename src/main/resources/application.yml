@@ -83,3 +83,6 @@ jwt:
     key: ${JWT_SECRET_KEY}
   #토큰만료시간(ms)
   token-validity-in-seconds: 3600
+
+gemini:
+  api-key: AIzaSyAgX-XTficiJ3C0Dqj-2l8h8x-HkUAf5Vo

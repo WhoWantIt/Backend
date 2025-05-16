@@ -2,7 +2,9 @@ package gdg.whowantit.service.PostService;
 
 import gdg.whowantit.apiPayload.code.status.ErrorStatus;
 import gdg.whowantit.apiPayload.exception.handler.TempHandler;
+import gdg.whowantit.converter.DonatedItemConverter;
 import gdg.whowantit.converter.PostConverter;
+import gdg.whowantit.dto.PostDto.ItemDTO;
 import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
 import gdg.whowantit.entity.*;
@@ -33,6 +35,8 @@ import java.time.YearMonth;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +46,7 @@ public class PostServiceImpl implements PostService {
     private final ImageService imageService;
     private final PostRepository postRepository;
     private final DonatedItemRepository donatedItemRepository;
+    private final GeminiVisionService geminiVisionService;
 
     @Override
     public PostResponseDto.BeneficiaryPostResponseDto createPost
@@ -192,8 +197,30 @@ public class PostServiceImpl implements PostService {
         if (post.getApprovalStatus() == ApprovalStatus.APPROVED) {
             throw new TempHandler(ErrorStatus.POST_ALREADY_APPROVED);
         }
+        List<DonatedItem> donatedItems=donatedItemRepository.findAllByPost_PostId(post.getPostId());
+        List<ItemDTO> itemDTOs = donatedItems.stream()
+                .map(DonatedItemConverter::toItem)  // 정적 메서드 참조
+                .toList();
+        // 비교 결과만 받아서 처리
+        boolean isMatched = geminiVisionService.verifyItemsWithImage(post.getAttachedImages(), itemDTOs);
 
-        post.setApprovalStatus(ApprovalStatus.APPROVED);
+        if (isMatched) {
+            post.setApprovalStatus(ApprovalStatus.APPROVED);
+        } else {
+            post.setApprovalStatus(ApprovalStatus.DISAPPROVED);
+        }
+    }
+
+    private boolean itemsMatch(List<DonatedItem> dbItems, List<ItemDTO> aiItems) {
+        if (dbItems.size() != aiItems.size()) return false;
+
+        Map<String, Integer> dbMap = dbItems.stream()
+                .collect(Collectors.toMap(DonatedItem::getItemName, DonatedItem::getQuantity));
+
+        Map<String, Integer> aiMap = aiItems.stream()
+                .collect(Collectors.toMap(ItemDTO::getName, ItemDTO::getCount));
+
+        return dbMap.equals(aiMap);
     }
 
     @Transactional
