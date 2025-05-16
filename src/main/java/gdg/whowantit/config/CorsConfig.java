@@ -22,7 +22,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-/*
+
 
 ArrayList<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("http://localhost:5173");
@@ -35,9 +35,7 @@ ArrayList<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("https://api.whowantit.me");
         allowedOriginPatterns.add("https://who-want-it.vercel.app");
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
- */
-        configuration.setAllowedOrigins(List.of("https://www.whowantit.me"));
-        //리소스를 허용할 URL 지정
+
 
 
         //허용하는 HTTP METHOD 지정
