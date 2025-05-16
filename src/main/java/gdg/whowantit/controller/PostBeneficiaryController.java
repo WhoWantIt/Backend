@@ -104,11 +104,19 @@ public class PostBeneficiaryController {
         return ResponseEntity.noContent().build();
     }
 
+
     @PutMapping("/{postId}/verify-approve")
     @Operation(summary = "관리자 게시글 검증 승인", description = "관리자 게시글 검증 승인입니다.")
-    public ResponseEntity<ApiResponse<Void>> verifyApprovePost(@PathVariable Long postId) {
-        postService.verifyApprovePost(postId);
-        return ResponseEntity.noContent().build();
+    public ApiResponse<PostResponseDto.BeneficiaryPostResponseDto> verifyApprovePost(@PathVariable Long postId) {
+        PostResponseDto.BeneficiaryPostResponseDto response=postService.verifyApprovePost(postId);
+        return ApiResponse.onSuccess(response);
+    }
+
+    @PostMapping("/{postId}/ex")
+    @Operation(summary = "엑셀", description = "엑셀")
+    public ApiResponse<PostResponseDto.BeneficiaryPostResponseDto> updatePostExel(@PathVariable Long postId) {
+        PostResponseDto.BeneficiaryPostResponseDto response=postService.updatePostExel(postId);
+        return ApiResponse.onSuccess(response);
     }
 
     @PutMapping("/{postId}/verify-reject")
