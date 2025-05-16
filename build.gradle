@@ -64,6 +64,11 @@ dependencies {
 
     implementation 'org.hibernate.common:hibernate-commons-annotations:6.0.6.Final'
     implementation 'net.bytebuddy:byte-buddy:1.14.0'
+    // S3 SDK
+    implementation 'software.amazon.awssdk:s3:2.20.150'
+
+// Excel 처리용
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
 
 
 
