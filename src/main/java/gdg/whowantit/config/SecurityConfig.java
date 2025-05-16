@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                        .requestMatchers("/", "/index.html").permitAll() // ✅ 루트 경로 허용
                         .requestMatchers("/public/**").permitAll() // ✅ 공개 API 허용
                         .requestMatchers("/users/**","/users/sign-in","/users/login", "/users/sign-up", "/users/tokens/update", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/success/**", "/cancel/**", "/fail/**").permitAll()
