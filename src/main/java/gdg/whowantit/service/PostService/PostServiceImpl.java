@@ -7,6 +7,7 @@ import gdg.whowantit.dto.PostDto.PostRequestDto;
 import gdg.whowantit.dto.PostDto.PostResponseDto;
 import gdg.whowantit.entity.*;
 import gdg.whowantit.repository.BeneficiaryRepository;
+import gdg.whowantit.repository.DonatedItemRepository;
 import gdg.whowantit.repository.PostRepository;
 import gdg.whowantit.repository.UserRepository;
 import gdg.whowantit.service.ImageService.ImageService;
@@ -14,13 +15,23 @@ import gdg.whowantit.util.SecurityUtil;
 import gdg.whowantit.util.StringListUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,6 +41,7 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final ImageService imageService;
     private final PostRepository postRepository;
+    private final DonatedItemRepository donatedItemRepository;
 
     @Override
     public PostResponseDto.BeneficiaryPostResponseDto createPost
@@ -53,12 +65,42 @@ public class PostServiceImpl implements PostService {
             List<String> attachedImages = imageService.uploadMultipleImages("posts", images);
             post.setAttachedImages(StringListUtil.listToString(attachedImages));
         }
-
+        Post savedPost = postRepository.save(post);
         if (!excelFile.isEmpty()) {
             String attachedExcelFile = imageService.uploadImage("posts", excelFile);
             post.setAttachedExcelFile(attachedExcelFile);
+            try (
+                    InputStream is = excelFile.getInputStream();
+                    Workbook workbook = new XSSFWorkbook(is)
+            ) {
+                Sheet sheet = workbook.getSheetAt(0);
+                List<DonatedItem> items = new ArrayList<>();
+
+                for (Row row : sheet) {
+                    if (row.getRowNum() == 0) continue; // 헤더는 건너뜀
+                    if (row.getCell(1) == null || row.getCell(2) == null || row.getCell(3) == null) continue;
+
+                    String itemName = row.getCell(1).getStringCellValue().trim();     // 예: 타올
+                    int quantity = (int) row.getCell(2).getNumericCellValue(); // 예: 1
+                    LocalDate date = row.getCell(3).getCellType() == CellType.NUMERIC
+                            ? row.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                            : LocalDate.parse(row.getCell(3).getStringCellValue());
+
+                    DonatedItem item = new DonatedItem();
+                    item.setItemName(itemName);
+                    item.setQuantity(quantity);
+                    item.setDonationDate(date);
+                    item.setPost(post); // 현재 생성 중인 Post와 연관지음
+
+                    items.add(item);
+                }
+
+                donatedItemRepository.saveAll(items);
+            } catch (IOException e) {
+                throw new RuntimeException("엑셀 파일 처리 중 오류 발생", e);
+            }
         }
-        Post savedPost = postRepository.save(post);
+        postRepository.save(post);
 
         return PostConverter.toBeneficiaryPostResponseDto(savedPost);
     }
