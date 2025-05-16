@@ -11,6 +11,8 @@ public class AdminResponseDto {
     @Getter
     @Builder
     public static class beneficiaryResponse{
+        private Long beneficiaryId;
+
         private String attachedImage;
 
         private String nickname;

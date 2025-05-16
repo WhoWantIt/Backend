@@ -23,6 +23,7 @@ public class BeneficiaryConverter {
     }
     public static AdminResponseDto.beneficiaryResponse toBeneficiaryListResponse (Beneficiary beneficiary){
         return AdminResponseDto.beneficiaryResponse.builder()
+                .beneficiaryId(beneficiary.getBeneficiaryId())
                 .attachedImage(beneficiary.getUser().getImage())
                 .name(beneficiary.getUser().getName())
                 .nickname(beneficiary.getUser().getNickname())
