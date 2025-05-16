@@ -24,17 +24,17 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         //리소스를 허용할 URL 지정
-        configuration.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "http://127.0.0.1:5000",
-                "http://localhost:8080",
-                "http://43.203.2.129:8080",
-                "https://43.203.2.129:8080",
-                "https://whowantit.me",
-                "https://www.whowantit.me",
-                "https://api.whowantit.me",
-                "https://who-want-it.vercel.app"
-        ));
+        ArrayList<String> allowedOriginPatterns = new ArrayList<>();
+        allowedOriginPatterns.add("http://localhost:5173");
+        allowedOriginPatterns.add("http://127.0.0.1:5000");
+        allowedOriginPatterns.add("http://localhost:8080");
+        allowedOriginPatterns.add("http://43.203.2.129:8080");
+        allowedOriginPatterns.add("https://43.203.2.129:8080");
+        allowedOriginPatterns.add("https://whowantit.me");
+        allowedOriginPatterns.add("https://www.whowantit.me");
+        allowedOriginPatterns.add("https://api.whowantit.me");
+        allowedOriginPatterns.add("https://who-want-it.vercel.app");
+        configuration.setAllowedOriginPatterns(allowedOriginPatterns);
 
         //허용하는 HTTP METHOD 지정
         ArrayList<String> allowedHttpMethods = new ArrayList<>();
