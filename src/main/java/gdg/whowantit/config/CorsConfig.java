@@ -23,8 +23,9 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        //리소스를 허용할 URL 지정
-        ArrayList<String> allowedOriginPatterns = new ArrayList<>();
+        /*
+        *
+        *ArrayList<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("http://localhost:5173");
         allowedOriginPatterns.add("http://127.0.0.1:5000");
         allowedOriginPatterns.add("http://localhost:8080");
@@ -35,6 +36,8 @@ public class CorsConfig {
         allowedOriginPatterns.add("https://api.whowantit.me");
         allowedOriginPatterns.add("https://who-want-it.vercel.app");
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
+        * *///리소스를 허용할 URL 지정
+        configuration.setAllowedOrigins(List.of("https://www.whowantit.me"));
 
         //허용하는 HTTP METHOD 지정
         ArrayList<String> allowedHttpMethods = new ArrayList<>();
