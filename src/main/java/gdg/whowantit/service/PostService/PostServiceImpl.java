@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -134,6 +135,7 @@ public class PostServiceImpl implements PostService {
         }
         if (!attachedExcelFile.isEmpty()) {
             imageService.deleteImage("posts", attachedExcelFile);
+
         }
 
         // 새로운 이미지 업로드
@@ -155,6 +157,52 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
         );
+        return PostConverter.toBeneficiaryPostResponseDto(post);
+    }
+
+    @Override
+    public PostResponseDto.BeneficiaryPostResponseDto updatePostExel(Long postId){
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
+        );
+
+        String attachedExcelFile = post.getAttachedExcelFile();
+
+        if (!attachedExcelFile.isEmpty()) {
+
+            try (
+                    InputStream is = new URL(attachedExcelFile).openStream();
+                    Workbook workbook = new XSSFWorkbook(is);
+            ) {
+                Sheet sheet = workbook.getSheetAt(0);
+                List<DonatedItem> items = new ArrayList<>();
+
+                for (Row row : sheet) {
+                    if (row.getRowNum() == 0) continue; // 헤더는 건너뜀
+                    if (row.getCell(1) == null || row.getCell(2) == null || row.getCell(3) == null) continue;
+
+                    String itemName = row.getCell(1).getStringCellValue().trim();     // 예: 타올
+                    int quantity = (int) row.getCell(2).getNumericCellValue(); // 예: 1
+                    LocalDate date = row.getCell(3).getCellType() == CellType.NUMERIC
+                            ? row.getCell(3).getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                            : LocalDate.parse(row.getCell(3).getStringCellValue());
+
+                    DonatedItem item = new DonatedItem();
+                    item.setItemName(itemName);
+                    item.setQuantity(quantity);
+                    item.setDonationDate(date);
+                    item.setPost(post); // 현재 생성 중인 Post와 연관지음
+
+                    items.add(item);
+                }
+
+                donatedItemRepository.saveAll(items);
+            } catch (IOException e) {
+                throw new RuntimeException("엑셀 파일 처리 중 오류 발생", e);
+            }
+
+
+        }
         return PostConverter.toBeneficiaryPostResponseDto(post);
     }
 
@@ -237,7 +285,7 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public void verifyApprovePost(Long postId)
+    public PostResponseDto.BeneficiaryPostResponseDto verifyApprovePost(Long postId)
     {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new TempHandler(ErrorStatus.POST_NOT_FOUND)
@@ -245,7 +293,28 @@ public class PostServiceImpl implements PostService {
         if (post.getIsVerified() == Boolean.TRUE) {
             throw new TempHandler(ErrorStatus.POST_ALREADY_VERIFIED);
         }
-        post.setIsVerified(Boolean.TRUE);
+        // 기부 물품 가져오기
+        List<DonatedItem> donatedItems = donatedItemRepository.findAllByPost_PostId(post.getPostId());
+
+        // DonatedItem → ItemDTO 변환
+        List<ItemDTO> itemDTOs = donatedItems.stream()
+                .map(DonatedItemConverter::toItem)
+                .toList();
+
+        // 이미지 기반 검증
+        boolean isMatched = geminiVisionService.verifyItemsWithImage(post.getAttachedImages(), itemDTOs);
+
+        // 승인/거절 상태 처리
+        if (isMatched) {
+            post.setApprovalStatus(ApprovalStatus.APPROVED);
+            post.setIsVerified(Boolean.TRUE);
+        } else {
+            post.setApprovalStatus(ApprovalStatus.DISAPPROVED);
+            post.setIsVerified(Boolean.FALSE);
+        }
+
+
+        return PostConverter.toBeneficiaryPostResponseDto(post);
     };
 
     @Transactional
